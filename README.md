@@ -1,4 +1,4 @@
-# A ConvNet soluction for Kaggle Statoil/C-CORE Iceberg Classifier Challenge
+# A ConvNet for Kaggle Statoil/C-CORE Iceberg Classifier Challenge
 
 This ConvNet solution implemeted for Kaggle Statoil/C-CORE Iceberg Classifier Challenge (https://www.kaggle.com/c/statoil-iceberg-classifier-challenge). It handles multi-inputs which include one meta data input and TWO channels of image data: HH (transmit/receive horizontally) and HV (transmit horizontally and receive vertically). Compared to recent approaches relying on ImageGenerator which demands image data restricted to one, three or fourth channels, this script could performimg some augmentations on images only with two channels. Currently, 'Flip', 'Rotate', 'Shift', 'Zoom' are included and they are perfomed by calling 'opencv' and 'keras.preprocessing.image'. 
 
@@ -31,7 +31,7 @@ From my limited observations, this ConvNet is able to score around 0.194~0.205+ 
 Place '*train.json*' and '*test.json*' in the '*input*' folder.
 
 ### Train, predict and submit at once
-Run `python cnn_train.py` in the '*convnets*' folder to training model, make predictions on test data and generate submission.
+Run `python cnn_train.py` in the '*scripts*' folder to training model, make predictions on test data and generate submission.
 
 ### Predict and submit
-Run `python cnn_predict.py` in the '*convnets*' folder to make predictions on test data and generate submission.
+Run `python cnn_predict.py` in the '*scripts*' folder to make predictions on test data and generate submission.
