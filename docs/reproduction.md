@@ -1,4 +1,4 @@
-# Rerun a declared profile
+# Experiment runbook
 
 Python 3.12 and `uv.lock` define the tested CPU/Linux dependency set. The local virtual environment and container environment install compatible locked dependencies independently.
 
@@ -32,14 +32,14 @@ Synthetic metrics are fixture evidence. They are not competition results.
 
 ```bash
 .venv/bin/iceberg train --data-dir "$ICEBERG_DATA_DIR" \
-  --config configs/bounded.json --run-dir .local/my-run
+  --config configs/baseline.json --run-dir .local/my-run
 .venv/bin/iceberg evaluate --checkpoint .local/my-run/model.pt \
   --data "$ICEBERG_DATA_DIR/train.json"
 .venv/bin/iceberg predict --checkpoint .local/my-run/model.pt \
   --data "$ICEBERG_DATA_DIR/test.json" --output .local/my-run/submission.csv
 ```
 
-Use a new run directory for every training invocation. The bounded profile subsets training only after forming the original holdout. `configs/reference.json` declares the larger original-shape recipe; its full execution remains a separate verification target.
+Use a new run directory for every training invocation. `configs/baseline.json` declares the complete modern image-only experiment. `configs/metadata.json` uses the same split with an angle branch.
 
 | Artifact | Purpose |
 |---|---|
@@ -51,12 +51,12 @@ Use a new run directory for every training invocation. The bounded profile subse
 | metrics.json / validation.csv | Reconstructable holdout evidence |
 | submission.csv / submission.receipt.json | Explicit test predictions and provenance |
 
-The first bounded train/evaluate run took about 10 seconds on the recorded four-thread CPU host. Full test parsing/inference adds time. Runtime is environment-specific.
+Training cost depends on the experiment profile and runtime. Measured timings and environment details are recorded with each run; full test parsing and inference add time.
 
 ## JupyterLab in Docker
 
 ```bash
-.venv/bin/python tools/create_lab_token.py
+.venv/bin/python scripts/create_lab_token.py
 docker compose up --build -d lab
 docker compose stop lab
 ```
@@ -69,7 +69,7 @@ Open the same project in the provided dev container for editor development. It u
 
 The CPU runtime target can independently evaluate a saved model:
 ```bash
-docker build --target runtime -t iceberg-runtime:0.1 .
+docker build -f docker/Dockerfile --target runtime -t iceberg-runtime:0.1 .
 docker run --rm --network none --cpus 4 --memory 8g \
   -v "$PWD:/workspace:ro" -v "$ICEBERG_DATA_DIR:/data:ro" iceberg-runtime:0.1 \
   evaluate --checkpoint /workspace/.local/my-run/model.pt --data /data/train.json
@@ -77,4 +77,4 @@ docker run --rm --network none --cpus 4 --memory 8g \
 
 ## Reproducibility limits
 
-Recorded CPU behavior does not establish identical results across arbitrary libraries, hardware or frameworks. Full reference training, cross-framework equivalence, GPU execution and remote Kaggle execution need their own evidence.
+Recorded CPU behavior does not establish identical results across arbitrary libraries, hardware or frameworks. Local holdout and leaderboard performance are separate measurements. Consult the results record for the verified experiment, inference settings and runtime evidence.

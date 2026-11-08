@@ -1,6 +1,6 @@
 {
-  "id": "cttsai1985/iceberg-modern-method-rerun",
-  "title": "Iceberg modern method rerun",
+  "id": "cttsai/kaggle-iceberg-solution-mlops",
+  "title": "Iceberg solution: reproducible PyTorch and MLOps",
   "code_file": "rerun.ipynb",
   "language": "python",
   "kernel_type": "notebook",
@@ -11,7 +11,7 @@
     "statoil-iceberg-classifier-challenge"
   ],
   "dataset_sources": [
-    "cttsai1985/iceberg-classifier-code"
+    "cttsai/kaggle-iceberg-code"
   ],
   "kernel_sources": [],
   "model_sources": []

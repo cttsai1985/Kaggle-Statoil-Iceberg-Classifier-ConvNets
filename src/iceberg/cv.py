@@ -15,9 +15,11 @@ from sklearn.metrics import brier_score_loss, log_loss, roc_auc_score
 from sklearn.model_selection import StratifiedGroupKFold, StratifiedKFold
 
 from iceberg import PROJECT_ID
-from iceberg.data import load_data, sha256
+from iceberg.data import Preprocessing, RadarDataset, load_data, sha256
 from iceberg.runtime import (
     angle_overlap,
+    load_model,
+    probabilities,
     resolve_config,
     select_device,
     source_identity,
@@ -547,3 +549,74 @@ def analyze_cv(run_dir: Path, data_path: Path | None = None) -> dict:
     if analysis != json.loads((run_dir / "analysis.json").read_text()):
         raise ValueError("Stored analysis differs from retained OOF predictions")
     return analysis
+
+
+def predict_cv(run_dir: Path, data_path: Path, output: Path, *, device: str = "auto") -> dict:
+    """Average every verified fold/seed model using its own fitted preprocessing."""
+    analyze_cv(run_dir)
+    manifest_path = run_dir / "cv-manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest_digest = sha256(manifest_path)
+    data = load_data(data_path, labeled=False)
+    training_ids = {row["id"] for row in read_csv(run_dir / "folds.csv")}
+    if training_ids.intersection(data.ids):
+        raise ValueError(
+            "Inference input IDs overlap the CV training data; use retained OOF predictions"
+        )
+    protected = {data_path.resolve(), manifest_path.resolve()}
+    protected.update((run_dir / name).resolve() for name in manifest["artifacts"])
+    for record in manifest["fold_runs"]:
+        child = run_dir / record["directory"]
+        protected.update(path.resolve() for path in child.iterdir() if path.is_file())
+    if output.resolve() in protected or output.with_suffix(".receipt.json").resolve() in protected:
+        raise ValueError("Prediction output would overwrite input or retained CV evidence")
+    combined = np.zeros(len(data.ids), dtype=np.float64)
+    checkpoints = []
+    tta = manifest["protocol"]["config"]["tta"]
+    for record in manifest["fold_runs"]:
+        checkpoint = run_dir / record["directory"] / "model.pt"
+        model, saved = load_model(checkpoint, device=device)
+        prediction = probabilities(
+            model,
+            RadarDataset(data, range(len(data.ids)), Preprocessing(**saved["preprocessing"])),
+            saved["config"]["batch_size"],
+            tta=tta,
+        )
+        if (
+            prediction.shape != combined.shape
+            or not np.isfinite(prediction).all()
+            or np.any((prediction < 0) | (prediction > 1))
+        ):
+            raise ValueError("A fold produced invalid or incomplete inference probabilities")
+        combined += prediction
+        checkpoints.append(
+            {
+                "seed": record["seed"],
+                "fold": record["fold"],
+                "directory": record["directory"],
+                "sha256": record["checkpoint_sha256"],
+            }
+        )
+        del model, saved
+    combined /= len(checkpoints)
+    write_csv(output, ["id", "is_iceberg"], zip(data.ids, combined, strict=True))
+    receipt = {
+        "schema_version": 1,
+        "project_id": PROJECT_ID,
+        "status": "cv_ensemble_predictions",
+        "cv_logical_run_id": manifest["logical_run_id"],
+        "cv_manifest_sha256": manifest_digest,
+        "training_input_sha256": manifest["input_sha256"],
+        "input_sha256": sha256(data_path),
+        "output_sha256": sha256(output),
+        "rows": len(data.ids),
+        "model_count": len(checkpoints),
+        "aggregation": "equal_weight_mean_probability_across_all_folds_and_seeds",
+        "tta": tta,
+        "device": str(select_device(device)),
+        "checkpoints": checkpoints,
+        "training_source": manifest["source"],
+        "inference_source": source_identity(),
+    }
+    write_json(output.with_suffix(".receipt.json"), receipt)
+    return receipt

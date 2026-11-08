@@ -1,9 +1,27 @@
 {
   "name": "Iceberg data science",
-  "build": {"dockerfile": "../Dockerfile", "context": "..", "target": "lab"},
+  "build": {
+    "dockerfile": "../docker/Dockerfile",
+    "context": "..",
+    "target": "lab"
+  },
   "overrideCommand": true,
   "remoteUser": "researcher",
-  "containerEnv": {"ICEBERG_DATA_DIR": "/data"},
-  "mounts": ["source=${localEnv:ICEBERG_DATA_DIR},target=/data,type=bind,readonly"],
-  "customizations": {"vscode": {"extensions": ["ms-python.python", "ms-toolsai.jupyter"]}}
+  "containerEnv": {
+    "ICEBERG_DATA_DIR": "/data"
+  },
+  "mounts": [
+    "source=${localEnv:ICEBERG_DATA_DIR},target=/data,type=bind,readonly"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/opt/venv/bin/python"
+      }
+    }
+  }
 }

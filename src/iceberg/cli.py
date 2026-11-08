@@ -104,6 +104,11 @@ def main():
     sub = commands.add_parser("analyze")
     sub.add_argument("--run-dir", type=Path, required=True)
     sub.add_argument("--data", type=Path)
+    sub = commands.add_parser("predict-cv")
+    sub.add_argument("--run-dir", type=Path, required=True)
+    sub.add_argument("--data", type=Path, required=True)
+    sub.add_argument("--output", type=Path, required=True)
+    sub.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto")
     for name in ["evaluate", "predict"]:
         sub = commands.add_parser(name)
         sub.add_argument("--checkpoint", type=Path, required=True)
@@ -114,9 +119,10 @@ def main():
     sub = commands.add_parser("verify")
     sub.add_argument("--run-dir", type=Path, required=True)
     sub.add_argument("--data", type=Path)
-    sub = commands.add_parser("track")
-    sub.add_argument("--run-dir", type=Path, required=True)
-    sub.add_argument("--tracking-uri", default=os.getenv("MLFLOW_TRACKING_URI"))
+    for name in ["track", "track-cv"]:
+        sub = commands.add_parser(name)
+        sub.add_argument("--run-dir", type=Path, required=True)
+        sub.add_argument("--tracking-uri", default=os.getenv("MLFLOW_TRACKING_URI"))
     args = parser.parse_args()
     if args.command == "fixture":
         make_fixture(args.data_dir)
@@ -164,14 +170,19 @@ def main():
         result = analyze_cv(args.run_dir, args.data)
     elif args.command == "predict":
         result = predict(args.checkpoint, args.data, args.output, device=args.device, tta=args.tta)
+    elif args.command == "predict-cv":
+        from iceberg.cv import predict_cv
+
+        result = predict_cv(args.run_dir, args.data, args.output, device=args.device)
     elif args.command == "verify":
         result = verify_run(args.run_dir, args.data)
     else:
-        from iceberg.tracking import track
+        from iceberg.tracking import track, track_cv
 
         if not args.tracking_uri:
             parser.error("Set MLFLOW_TRACKING_URI or supply --tracking-uri")
-        result = track(args.run_dir, args.tracking_uri)
+        importer = track_cv if args.command == "track-cv" else track
+        result = importer(args.run_dir, args.tracking_uri)
     print(json.dumps(result, indent=2))
 
 

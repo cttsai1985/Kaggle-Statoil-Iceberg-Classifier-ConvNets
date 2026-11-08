@@ -110,3 +110,13 @@ ENV/
 input/*.json
 input/*.csv
 kaggle-bundle/
+
+# Preserve legacy instructions without tracking legacy data or outputs.
+legacy/input/*
+!legacy/input/README.md
+legacy/logs/*
+!legacy/logs/README.md
+legacy/submit/*
+!legacy/submit/README.md
+legacy/weights/*
+!legacy/weights/README.md

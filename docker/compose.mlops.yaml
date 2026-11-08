@@ -1,0 +1,13 @@
+# Optional client access to the shared platform; no server services are deployed here.
+services:
+  lab:
+    environment:
+      MLFLOW_TRACKING_URI: ${MLFLOW_TRACKING_URI:-http://mlflow:5000}
+      MLFLOW_TRACKING_USERNAME: ${MLFLOW_TRACKING_USERNAME:-}
+      MLFLOW_TRACKING_PASSWORD: ${MLFLOW_TRACKING_PASSWORD:-}
+    networks: [default, mlops]
+
+networks:
+  mlops:
+    external: true
+    name: ${MLOPS_DOCKER_NETWORK:-mlops-platform_clients}

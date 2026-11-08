@@ -1,18 +1,34 @@
-# The initial evidence establishes a bounded rerun
+# Validation and benchmark results
 
-The 2017 README reports a score around 0.194–0.205. That remains an author-reported competition result. It was not reproduced or used as this PR's acceptance threshold.
+## Modern experiments
 
-| Observed item | Scope |
-|---|---|
-| Data | Official Kaggle train/test payloads; hashes retained |
-| Training | 128 real records, one epoch/pass, original model width |
-| Validation | Original seed-25 stratified holdout, 256 records |
-| Holdout log loss | 0.8497995872496394 in the final bounded CPU run |
-| Train/evaluate time | 10.606 seconds on the recorded four-thread host |
-| Reload | Independent local and Docker evaluation reproduced the saved metric |
-| Test prediction | All 8,424 rows; IDs/order matched the official sample |
-| Walkthrough | Executed with real data and full-test inference |
+All completed holdout experiments use the same seed-25 stratified partition: 1,348 training records and 256 held-out records. Each uses the full training partition for 30 natural epochs; checkpoint selection minimizes holdout loss.
 
-The short-budget result has weak predictive performance. It establishes execution and traceable artifacts, not a competitive model or historical reproduction. Training budget, held-out labels and leaderboard context differ from the old reported score.
+| Model | Inference | Holdout log loss |
+|---|---|---:|
+| Image-only CNN | Ordinary | 0.218330 |
+| Image-only CNN | Four-flip average | 0.227273 |
+| CNN with angle/missingness features | Ordinary | 0.208920 |
+| CNN with angle/missingness features | Four-flip average | **0.201199** |
 
-[The validation receipt](validation.json) records checks and fingerprints without publishing competition records or weights. Full reference training, numerical Keras/PyTorch equality, CUDA, connected MLflow/SeaweedFS import and remote Kaggle execution remain unverified.
+Flip averaging hurt the image-only model in this experiment; it is retained as a negative result. These are single-split model-development observations. The [grouped, repeated-seed CV protocol](cv.md) provides the broader validation analysis; its aggregate receipt records completion and scope separately.
+
+## Official competition scoring
+
+| Submission | Public log loss | Private log loss |
+|---|---:|---:|
+| Historical single model, 2017-10-30 | 0.19348 | 0.19311 |
+| Historical single model, 2017-10-30 | 0.20507 | 0.20730 |
+| Modern metadata CNN with four-flip inference, 2026-11-08 | 0.21463 | 0.19855 |
+
+Scores were retrieved from authenticated Kaggle submission history. The modern submission is **58138050**, using source **897bd39**, all 8,424 official test IDs in sample-submission order, and a fingerprinted output. It does not beat the best historical result. Local holdout loss and leaderboard loss are different evaluations.
+
+The historical trained checkpoints and complete random states are unavailable. Modern code changes are explicit; this comparison measures observed performance rather than replaying identical old weights.
+
+## Engineering verification
+
+The selected complete real-data run trained 630 optimizer steps and 40,320 sampled examples in 30 epochs. It completed in about 121 seconds on the recorded four-thread CPU host. Training drops a short final minibatch; eligible records are reshuffled each epoch.
+
+Its checkpoint reloaded independently, full test predictions preserved all official IDs, and the completed run imported into the shared `kaggle/iceberg` MLflow experiment. Repeated import returned the same run; a checkpoint downloaded through the SeaweedFS-backed artifact proxy matched its original SHA-256.
+
+[The validation receipt](validation.json) contains source/input/artifact identities and the checked runtime scope. Infrastructure operation belongs to [mlops-platform](https://github.com/cttsai1985/mlops-platform). Hosted execution and CV results are reported only once measured.

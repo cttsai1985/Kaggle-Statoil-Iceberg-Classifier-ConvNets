@@ -11,10 +11,11 @@ from iceberg.cv import (
     analyze_predictions,
     build_folds,
     cross_validate,
+    predict_cv,
     read_csv,
 )
-from iceberg.data import Preprocessing, load_data, make_fixture
-from iceberg.runtime import load_model, validate_split_indices
+from iceberg.data import Preprocessing, load_data, make_fixture, sha256
+from iceberg.runtime import load_model, predict, validate_split_indices
 
 
 def test_stratified_folds_cover_every_row_and_group_audit_is_disjoint(tmp_path):
@@ -126,3 +127,62 @@ def test_real_training_cv_fixture_keeps_last_epoch_and_train_only_transforms(tmp
         stream.write(b"altered")
     with pytest.raises(ValueError, match="checksum"):
         analyze_cv(run)
+
+
+def test_cv_inference_uses_every_model_and_preserves_input_order(tmp_path, monkeypatch):
+    import iceberg.cv as cv
+
+    data_dir = tmp_path / "data"
+    make_fixture(data_dir)
+    test_path = data_dir / "test.json"
+    test_path.write_text(json.dumps(list(reversed(json.loads(test_path.read_text())))))
+    config = json.loads(Path("configs/smoke.json").read_text()) | {"tta": "flips"}
+    run = tmp_path / "cv"
+    manifest = cross_validate(
+        data_dir / "train.json", run, config, folds=2, seeds=[1017, 2027], fixture=True
+    )
+    calls = []
+
+    def counted_load(path, *, labeled):
+        calls.append(path)
+        return load_data(path, labeled=labeled)
+
+    monkeypatch.setattr(cv, "load_data", counted_load)
+    # A later consumer can load an older verified producer without claiming identical source.
+    consumer_source = {**manifest["source"], "python_source_sha256": "new-consumer-source"}
+    monkeypatch.setattr(cv, "source_identity", lambda: consumer_source)
+    output = tmp_path / "submission.csv"
+    receipt = predict_cv(run, test_path, output, device="cpu")
+    assert calls == [test_path]
+    assert receipt["model_count"] == len(manifest["fold_runs"]) == 4
+    assert receipt["training_source"] == manifest["source"]
+    assert receipt["inference_source"] == consumer_source
+    assert receipt["cv_manifest_sha256"] == sha256(run / "cv-manifest.json")
+    assert receipt["input_sha256"] == sha256(test_path)
+    assert receipt["output_sha256"] == sha256(output)
+    assert [item["sha256"] for item in receipt["checkpoints"]] == [
+        item["checkpoint_sha256"] for item in manifest["fold_runs"]
+    ]
+    assert json.loads(output.with_suffix(".receipt.json").read_text()) == receipt
+    rows = read_csv(output)
+    assert [row["id"] for row in rows] == [row["id"] for row in json.loads(test_path.read_text())]
+    assert len(rows) == receipt["rows"] == 8
+    individual = []
+    for i, record in enumerate(manifest["fold_runs"]):
+        path = tmp_path / f"individual-{i}.csv"
+        predict(run / record["directory"] / "model.pt", test_path, path, device="cpu")
+        individual.append([float(row["is_iceberg"]) for row in read_csv(path)])
+    np.testing.assert_allclose(
+        [float(row["is_iceberg"]) for row in rows], np.mean(individual, axis=0), atol=1e-7
+    )
+    with pytest.raises(ValueError, match="overlap"):
+        predict_cv(run, data_dir / "train.json", tmp_path / "invalid.csv", device="cpu")
+    assert not (tmp_path / "invalid.csv").exists()
+    with pytest.raises(ValueError, match="overwrite"):
+        predict_cv(run, test_path, run / "oof.csv", device="cpu")
+    with pytest.raises(ValueError, match="input differs"):
+        analyze_cv(run, test_path)
+    manifest["source"]["python_source_sha256"] = "tampered-producer-source"
+    (run / "cv-manifest.json").write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="source fingerprint"):
+        predict_cv(run, test_path, tmp_path / "invalid.csv", device="cpu")
