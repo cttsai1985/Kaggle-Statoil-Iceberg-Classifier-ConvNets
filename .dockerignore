@@ -1,0 +1,14 @@
+.git
+.venv
+.local
+.env
+input
+weights
+logs
+submit
+__pycache__
+.pytest_cache
+.ruff_cache
+dist
+*.pt
+*.7z

@@ -1,0 +1,15 @@
+name: Modern implementation quality
+on: [push, pull_request]
+jobs:
+  cpu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.9.24"
+          python-version: "3.12"
+      - run: uv sync --locked --group dev --group tracking --group tracking-test
+      - run: uv run --no-sync ruff check src tests tools
+      - run: uv run --no-sync ruff format --check src tests tools
+      - run: uv run --no-sync pytest

@@ -1,0 +1,5 @@
+# An existing client-side filesystem mount; this does not deploy SeaweedFS.
+services:
+  lab:
+    volumes:
+      - ${SEAWEED_MOUNT:?Set an existing mounted SeaweedFS directory}:/shared:ro

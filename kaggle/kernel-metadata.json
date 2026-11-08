@@ -1,0 +1,18 @@
+{
+  "id": "cttsai1985/iceberg-modern-method-rerun",
+  "title": "Iceberg modern method rerun",
+  "code_file": "rerun.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "competition_sources": [
+    "statoil-iceberg-classifier-challenge"
+  ],
+  "dataset_sources": [
+    "cttsai1985/iceberg-classifier-code"
+  ],
+  "kernel_sources": [],
+  "model_sources": []
+}

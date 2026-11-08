@@ -1,0 +1,25 @@
+services:
+  lab:
+    build:
+      context: .
+      target: lab
+    image: iceberg-lab:0.1
+    ports: ["127.0.0.1:8890:8888"]
+    cpus: 4.0
+    mem_limit: 8g
+    pids_limit: 256
+    environment:
+      ICEBERG_DATA_DIR: /data
+      ICEBERG_RUN_DIR: /outputs
+      MLFLOW_TRACKING_URI: ${MLFLOW_TRACKING_URI:-}
+    volumes:
+      - .:/workspace
+      - ${ICEBERG_DATA_DIR:?Set the absolute dataset directory}:/data:ro
+      - ./.local/runs:/outputs
+    secrets: [jupyter_token]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+secrets:
+  jupyter_token:
+    file: ./.local/jupyter_token
