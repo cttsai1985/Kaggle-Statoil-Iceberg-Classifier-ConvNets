@@ -62,11 +62,11 @@ def load_data(path: Path, *, labeled: bool) -> RadarData:
 
 
 def spatial_affine(image: np.ndarray, matrix: np.ndarray) -> np.ndarray:
-    """Keras-style centered, first-order, nearest-fill transform applied to both bands."""
+    """Keras 2.0.8 centered nearest-neighbor interpolation and nearest-edge fill."""
     center = np.asarray(image.shape[-2:], dtype=float) / 2.0 + 0.5
     offset = center - matrix @ center
     return np.stack(
-        [affine_transform(band, matrix, offset, order=1, mode="nearest") for band in image]
+        [affine_transform(band, matrix, offset, order=0, mode="nearest") for band in image]
     )
 
 
@@ -84,7 +84,7 @@ def augment(image: np.ndarray, rng: np.random.Generator) -> np.ndarray:
         displacement = rng.uniform(-0.1, 0.1, size=2) * np.asarray(image.shape[-2:])
         image = np.stack(
             [
-                affine_transform(band, np.eye(2), displacement, order=1, mode="nearest")
+                affine_transform(band, np.eye(2), displacement, order=0, mode="nearest")
                 for band in image
             ]
         )

@@ -1,4 +1,4 @@
-"""Structurally faithful port of scripts/models.py; cross-framework equality is unverified."""
+"""Port of legacy/scripts/models.py; cross-framework equality is unverified."""
 
 import torch
 from torch import nn

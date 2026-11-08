@@ -1,4 +1,4 @@
-"""Bounded training, independent evaluation, and portable evidence."""
+"""Reference training, independent evaluation, and portable experiment evidence."""
 
 import csv
 import hashlib
@@ -95,6 +95,25 @@ def probabilities(model, dataset, batch_size: int) -> np.ndarray:
     return result
 
 
+def training_batches(loader):
+    """Continue across epoch boundaries like the original infinite Keras generator."""
+    while True:
+        yield from loader
+
+
+def steps_per_epoch(rows: int, batch_size: int, repeats: int) -> int:
+    """Match ceil(repeats * rows / batch_size), including short traversal batches."""
+    return (repeats * rows + batch_size - 1) // batch_size
+
+
+def legacy_adam_step(optimizer, steps_completed: int) -> None:
+    """Match Keras 2.0.8 epsilon placement before second-moment bias correction."""
+    for group in optimizer.param_groups:
+        beta2 = group["betas"][1]
+        group["eps"] = 1e-8 / (1 - beta2 ** (steps_completed + 1)) ** 0.5
+    optimizer.step()
+
+
 def train(data_path: Path, run_dir: Path, config: dict, *, fixture=False) -> dict:
     configure(config)
     run_dir.mkdir(parents=True, exist_ok=False)
@@ -160,19 +179,25 @@ def train(data_path: Path, run_dir: Path, config: dict, *, fixture=False) -> dic
         )
         loss_fn = nn.BCEWithLogitsLoss()
         history, best_loss = [], float("inf")
+        batches = training_batches(loader)
+        epoch_steps = steps_per_epoch(len(train_idx), config["batch_size"], config["epoch_repeats"])
+        examples_seen = 0
+        optimizer_steps = 0
         for epoch in range(1, config["epochs"] + 1):
             model.train()
             losses = []
-            for _ in range(config["epoch_repeats"]):
-                for images, angles, targets in loader:
-                    optimizer.zero_grad(set_to_none=True)
-                    loss = loss_fn(model(images, angles), targets.float())
-                    if not torch.isfinite(loss):
-                        raise ValueError("Training loss is non-finite")
-                    loss.backward()
-                    optimizer.step()
-                    scheduler.step()
-                    losses.append(float(loss.detach()))
+            for _ in range(epoch_steps):
+                images, angles, targets = next(batches)
+                optimizer.zero_grad(set_to_none=True)
+                loss = loss_fn(model(images, angles), targets.float())
+                if not torch.isfinite(loss):
+                    raise ValueError("Training loss is non-finite")
+                loss.backward()
+                legacy_adam_step(optimizer, optimizer_steps)
+                optimizer_steps += 1
+                scheduler.step()
+                examples_seen += len(targets)
+                losses.append(float(loss.detach()))
             prediction = probabilities(model, validation, config["batch_size"])
             score = float(log_loss(data.targets[valid_idx], prediction, labels=[0, 1]))
             history.append(
@@ -180,6 +205,8 @@ def train(data_path: Path, run_dir: Path, config: dict, *, fixture=False) -> dic
                     "epoch": epoch,
                     "training_batch_loss_mean": float(np.mean(losses)),
                     "validation_log_loss": score,
+                    "optimizer_steps": epoch * epoch_steps,
+                    "training_examples_seen": examples_seen,
                 }
             )
             print(json.dumps(history[-1]), flush=True)
@@ -201,7 +228,9 @@ def train(data_path: Path, run_dir: Path, config: dict, *, fixture=False) -> dic
             status="completed",
             train_rows=len(train_idx),
             validation_rows=len(valid_idx),
-            training_examples_seen=len(train_idx) * config["epochs"] * config["epoch_repeats"],
+            training_examples_seen=examples_seen,
+            optimizer_steps=config["epochs"] * epoch_steps,
+            steps_per_epoch=epoch_steps,
             elapsed_seconds=time.monotonic() - started,
             artifacts={
                 name: sha256(run_dir / name)
@@ -217,7 +246,7 @@ def train(data_path: Path, run_dir: Path, config: dict, *, fixture=False) -> dic
         )
         write_json(run_dir / "manifest.json", manifest)
         return manifest
-    except Exception as error:
+    except (Exception, KeyboardInterrupt) as error:
         manifest.update(
             status="failed",
             error_type=type(error).__name__,
