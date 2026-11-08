@@ -1,0 +1,23 @@
+{
+  "name": "modern-image-and-angle",
+  "seed": 1017,
+  "split_seed": 25,
+  "validation_fraction": 0.159,
+  "filters": 16,
+  "hidden": 64,
+  "use_angle": true,
+  "dropout": 0.3,
+  "batch_size": 64,
+  "epochs": 30,
+  "learning_rate": 0.001,
+  "min_learning_rate": 1e-05,
+  "weight_decay": 0.0001,
+  "gradient_clip": 1.0,
+  "augment": true,
+  "max_train_rows": null,
+  "threads": 4,
+  "device": "auto",
+  "deterministic": false,
+  "mixed_precision": true,
+  "tta": "none"
+}

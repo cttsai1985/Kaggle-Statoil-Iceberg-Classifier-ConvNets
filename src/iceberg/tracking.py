@@ -6,7 +6,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from iceberg.data import sha256
-from iceberg.runtime import write_json
+from iceberg.runtime import verify_run, write_json
 
 
 def track(run_dir: Path, tracking_uri: str) -> dict:
@@ -16,24 +16,7 @@ def track(run_dir: Path, tracking_uri: str) -> dict:
 
     if urlparse(tracking_uri).username:
         raise ValueError("Use runtime credentials, not credentials embedded in the tracking URI")
-    manifest = json.loads((run_dir / "manifest.json").read_text())
-    if manifest["status"] != "completed":
-        raise ValueError("Only completed runs can be imported")
-    allowed = {
-        "model.pt",
-        "config.json",
-        "split.csv",
-        "history.json",
-        "metrics.json",
-        "validation.csv",
-    }
-    if set(manifest["artifacts"]) != allowed:
-        raise ValueError("Unexpected artifact manifest")
-    for filename, expected in manifest["artifacts"].items():
-        if (run_dir / filename).is_symlink():
-            raise ValueError("Artifact symlinks are not accepted")
-        if sha256(run_dir / filename) != expected:
-            raise ValueError(f"Artifact checksum mismatch: {filename}")
+    manifest = verify_run(run_dir)
     logical_id = manifest["logical_run_id"]
     uuid.UUID(logical_id)
     digest = sha256(run_dir / "manifest.json")
