@@ -40,7 +40,8 @@ for config in Path("configs").glob("*.json"):
             **source_identity(),
             "lock_sha256": sha256(Path("uv.lock")),
             "config_sha256": {
-                "config-" + path.name: sha256(path) for path in sorted(Path("configs").glob("*.json"))
+                "config-" + path.name: sha256(path)
+                for path in sorted(Path("configs").glob("*.json"))
             },
         },
         indent=2,
