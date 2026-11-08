@@ -90,6 +90,20 @@ def main():
     sub.add_argument("--config", type=Path, required=True)
     sub.add_argument("--fixture", action="store_true", help="Label synthetic runs explicitly")
     sub.add_argument("--device", choices=["auto", "cpu", "cuda"])
+    sub = commands.add_parser("cv")
+    sub.add_argument("--data-dir", type=Path, required=True)
+    sub.add_argument("--run-dir", type=Path, required=True)
+    sub.add_argument("--config", type=Path, required=True)
+    sub.add_argument("--folds", type=int, default=5)
+    sub.add_argument("--strategy", choices=["stratified", "grouped"], default="stratified")
+    sub.add_argument("--split-seed", type=int, default=25)
+    sub.add_argument("--seeds", type=int, nargs="+", default=[1017, 2027])
+    sub.add_argument("--workers", type=int, default=1)
+    sub.add_argument("--fixture", action="store_true")
+    sub.add_argument("--device", choices=["auto", "cpu", "cuda"])
+    sub = commands.add_parser("analyze")
+    sub.add_argument("--run-dir", type=Path, required=True)
+    sub.add_argument("--data", type=Path)
     for name in ["evaluate", "predict"]:
         sub = commands.add_parser(name)
         sub.add_argument("--checkpoint", type=Path, required=True)
@@ -127,6 +141,27 @@ def main():
         )
     elif args.command == "evaluate":
         result = evaluate(args.checkpoint, args.data, args.output, device=args.device, tta=args.tta)
+    elif args.command == "cv":
+        from iceberg.cv import cross_validate
+
+        config = json.loads(args.config.read_text())
+        if args.device is not None:
+            config["device"] = args.device
+        result = cross_validate(
+            args.data_dir / "train.json",
+            args.run_dir,
+            config,
+            folds=args.folds,
+            strategy=args.strategy,
+            split_seed=args.split_seed,
+            seeds=args.seeds,
+            workers=args.workers,
+            fixture=args.fixture,
+        )
+    elif args.command == "analyze":
+        from iceberg.cv import analyze_cv
+
+        result = analyze_cv(args.run_dir, args.data)
     elif args.command == "predict":
         result = predict(args.checkpoint, args.data, args.output, device=args.device, tta=args.tta)
     elif args.command == "verify":

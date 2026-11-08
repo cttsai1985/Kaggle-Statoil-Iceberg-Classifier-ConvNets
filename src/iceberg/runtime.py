@@ -223,8 +223,38 @@ def angle_overlap(data, train_idx, valid_idx) -> dict:
     }
 
 
-def train(data_path: Path, run_dir: Path, config: dict, *, fixture=False) -> dict:
+def validate_split_indices(rows: int, split_indices):
+    """Require a complete, disjoint partition before fitting any transformations."""
+    if len(split_indices) != 2:
+        raise ValueError("Expected training and validation index arrays")
+    indices = tuple(np.asarray(part) for part in split_indices)
+    for part in indices:
+        if part.ndim != 1 or part.dtype.kind not in "iu" or not len(part):
+            raise ValueError("Split indices must be nonempty one-dimensional integer arrays")
+        if len(np.unique(part)) != len(part) or np.any(part < 0) or np.any(part >= rows):
+            raise ValueError("Split indices contain duplicates or out-of-range rows")
+    if np.intersect1d(*indices).size:
+        raise ValueError("Training and validation indices overlap")
+    if len(indices[0]) < 2 or len(indices[0]) + len(indices[1]) != rows:
+        raise ValueError("Explicit split must cover every row with at least two training rows")
+    return indices
+
+
+def train(
+    data_path: Path,
+    run_dir: Path,
+    config: dict,
+    *,
+    fixture=False,
+    split_indices=None,
+    checkpoint_selection: str = "best",
+    split_metadata: dict | None = None,
+) -> dict:
     config = resolve_config(config)
+    if checkpoint_selection not in {"best", "last"}:
+        raise ValueError("checkpoint_selection must be best or last")
+    if split_indices is not None and config["max_train_rows"] is not None:
+        raise ValueError("Explicit folds cannot be combined with max_train_rows")
     device = configure(config)
     run_dir.mkdir(parents=True, exist_ok=False)
     started = time.monotonic()
@@ -242,16 +272,23 @@ def train(data_path: Path, run_dir: Path, config: dict, *, fixture=False) -> dic
         "historical_public_target": 0.19348,
         "historical_score_comparison": "requires comparable Kaggle submission score",
         "model_family": "modern-two-band-cnn-v1",
+        "checkpoint_selection": checkpoint_selection,
+        "split_metadata": split_metadata,
     }
     write_json(run_dir / "config.json", config)
     manifest["config_sha256"] = sha256(run_dir / "config.json")
     write_json(run_dir / "manifest.json", manifest)
     try:
         data = load_data(data_path, labeled=True)
-        splitter = StratifiedShuffleSplit(
-            n_splits=1, test_size=config["validation_fraction"], random_state=config["split_seed"]
-        )
-        train_idx, valid_idx = next(splitter.split(data.images, data.targets))
+        if split_indices is None:
+            splitter = StratifiedShuffleSplit(
+                n_splits=1,
+                test_size=config["validation_fraction"],
+                random_state=config["split_seed"],
+            )
+            train_idx, valid_idx = next(splitter.split(data.images, data.targets))
+        else:
+            train_idx, valid_idx = validate_split_indices(len(data.ids), split_indices)
         limit = config["max_train_rows"]
         if limit is not None and limit < len(train_idx):
             train_idx, _ = train_test_split(
@@ -352,7 +389,7 @@ def train(data_path: Path, run_dir: Path, config: dict, *, fixture=False) -> dic
                 }
             )
             print(json.dumps(history[-1]), flush=True)
-            if score < best_loss:
+            if checkpoint_selection == "last" or score < best_loss:
                 best_loss = score
                 torch.save(
                     {
@@ -365,6 +402,7 @@ def train(data_path: Path, run_dir: Path, config: dict, *, fixture=False) -> dic
                         "split_sha256": manifest["split_sha256"],
                         "epoch": epoch,
                         "validation_log_loss": score,
+                        "checkpoint_selection": checkpoint_selection,
                     },
                     run_dir / "model.pt",
                 )
@@ -439,11 +477,14 @@ def evaluate(
     metrics = {
         "validation_log_loss": float(log_loss(targets, prediction, labels=[0, 1])),
         "validation_rows": len(indices),
-        "best_epoch": saved["epoch"],
         "brier_score": float(np.mean((targets - prediction) ** 2)),
         "probability_min": float(prediction.min()),
         "probability_max": float(prediction.max()),
     }
+    if saved.get("checkpoint_selection", "best") == "best":
+        metrics["best_epoch"] = saved["epoch"]
+    else:
+        metrics["selected_epoch"] = saved["epoch"]
     missing = np.isnan(data.angles[indices, 0])
     for name, mask in [("missing_angle", missing), ("known_angle", ~missing)]:
         if mask.any():
