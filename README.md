@@ -20,6 +20,16 @@ The original Keras source is preserved in [`legacy/`](legacy/). [Model and train
 
 The primary validation workflow uses five stratified folds grouped by observed incidence angle across two fixed training seeds. It retains every fold and reports pooled OOF metrics, fold dispersion, seed sensitivity and missing-metadata strata. The [CV guide](docs/cv.md) explains the protocol and analyzer.
 
+| Grouped CV diagnostic | Observed result |
+|---|---:|
+| Known-angle OOF log loss (test metadata availability) | **0.2206** |
+| All-row paired-seed OOF log loss | 0.2048 |
+| All-row training-seed pooled-loss range | 0.0045 |
+| Known-angle overlap between fit/validation | 0 in every fold |
+| OOF coverage | All 1,604 records, once per seed |
+
+All 133 missing-angle records are ships, while test records have known angles. The analyzer keeps both strata visible; known-angle performance is the more relevant test-cohort diagnostic. Folds and seeds are retained, including the weakest fold. Reported dispersion is descriptive, not a confidence interval.
+
 
 The original single-model submissions scored **0.19348** and **0.20507** on the public leaderboard. These provide the historical benchmark. Current experiment results and their evaluation scope are recorded in [benchmark results](docs/results.md), with fingerprints in the [validation receipt](docs/validation.json).
 

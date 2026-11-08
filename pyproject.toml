@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "iceberg-classifier"
 version = "0.1.0"
-description = "A reproducible PyTorch port of the two-band Statoil CNN"
+description = "Modern radar classification with grouped cross-validation and portable MLOps"
 readme = "README.md"
 license = "MIT"
 authors = [{name = "Chia-Ta Tsai"}]

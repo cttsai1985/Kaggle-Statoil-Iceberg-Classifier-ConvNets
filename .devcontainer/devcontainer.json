@@ -23,5 +23,7 @@
         "python.defaultInterpreterPath": "/opt/venv/bin/python"
       }
     }
-  }
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "workspaceFolder": "/workspace"
 }

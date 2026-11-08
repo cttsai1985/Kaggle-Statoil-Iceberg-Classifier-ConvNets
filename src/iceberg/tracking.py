@@ -10,6 +10,17 @@ from iceberg.data import sha256
 from iceberg.runtime import verify_run, write_json
 
 
+def source_commit(manifest: dict) -> str:
+    """Use a wheel build receipt only when its package fingerprint matches the producer."""
+    source = manifest["source"]
+    if source.get("git_commit"):
+        return source["git_commit"]
+    bundle = manifest.get("code_bundle", {})
+    if bundle.get("python_source_sha256") == source["python_source_sha256"]:
+        return bundle.get("git_commit") or "unavailable"
+    return "unavailable"
+
+
 def track(run_dir: Path, tracking_uri: str) -> dict:
     """Import one completed run; same logical id + manifest hash is idempotent."""
     import mlflow
@@ -51,7 +62,7 @@ def track(run_dir: Path, tracking_uri: str) -> dict:
             "run_kind": manifest["run_kind"],
             "project_id": PROJECT_ID,
             "repository": REPOSITORY,
-            "source_commit": manifest["source"]["git_commit"] or "unavailable",
+            "source_commit": source_commit(manifest),
             "source_sha256": manifest["source"]["python_source_sha256"],
             "legacy_commit": manifest["source"]["legacy_commit"],
         },
@@ -109,7 +120,7 @@ def track_cv(run_dir: Path, tracking_uri: str) -> dict:
             "logical_run_id": logical_id,
             "manifest_sha256": digest,
             "run_kind": manifest["run_kind"],
-            "source_commit": manifest["source"]["git_commit"] or "unavailable",
+            "source_commit": source_commit(manifest),
             "source_sha256": manifest["source"]["python_source_sha256"],
         },
     )

@@ -9,7 +9,8 @@ The CLI, analysis notebook, Docker image and Kaggle entry point import `iceberg`
 | `data.py` | Validate radar records; fit training-only preprocessing; apply paired augmentation |
 | `model.py` | Map radar features and optional angle metadata to a logit |
 | `runtime.py` | Train, evaluate, predict and verify portable experiment artifacts |
-| `tracking.py` | Import a verified completed run into an existing MLflow deployment |
+| `cv.py` | Fit fixed fold/seed models, audit OOF predictions and predict with the ensemble |
+| `tracking.py` | Import verified model and CV runs into an existing MLflow deployment |
 | `cli.py` | Expose those operations without implementing a second pipeline |
 
 A compact package keeps the experimental path inspectable. The [shared platform](https://github.com/cttsai1985/mlops-platform) owns service deployment, naming, credentials and storage administration. Clients use stable project IDs and preprovisioned MLflow experiments. An external scheduler can invoke the CLI; model execution does not require a scheduler or tracking server.
@@ -18,9 +19,9 @@ A compact package keeps the experimental path inspectable. The [shared platform]
 
 The fixed stratified split is constructed before fitting channel statistics or angle imputation. Checkpoints carry the preprocessing state and holdout indices; inference never refits them. Image augmentation acts only during training and shares geometry across both polarizations.
 
-The fixed holdout supports comparison with the historical approach, but repeated acquisition angles can overlap partitions. Each manifest records that overlap. A grouped acquisition split is a separate robustness experiment; the fixed holdout does not establish deployment performance on unseen acquisitions.
+The fixed holdout supports comparison with the historical approach, but repeated acquisition angles can overlap partitions. Each manifest records that overlap. The primary evaluation uses five stratified folds grouped by observed angle and two fixed training seeds. Angle is an acquisition proxy, so this still does not establish performance on independently verified unseen scenes.
 
-Local validation chooses a checkpoint. Kaggle evaluates a submission on its own scored test observations. Both metrics retain their scope. The documented historical score is a benchmark target, not evidence that a new model has already matched it.
+The separate development holdout chooses a checkpoint; primary grouped CV retains the final checkpoint after 30 fixed epochs, without using outer-fold labels to select an epoch. Kaggle evaluates a submission on its own scored test observations. Both metrics retain their scope. The documented historical score is a benchmark target, not evidence that a new model has already matched it.
 
 ## Portable artifact contract
 

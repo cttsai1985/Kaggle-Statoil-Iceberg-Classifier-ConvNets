@@ -18,6 +18,14 @@ def test_sqlite_import_is_idempotent_and_rejects_conflicting_evidence(tmp_path, 
     run_dir = tmp_path / "run"
     config = json.loads(Path("configs/smoke.json").read_text())
     train(data / "train.json", run_dir, config, fixture=True)
+    manifest_path = run_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["source"]["git_commit"] = None
+    manifest["code_bundle"] = {
+        "git_commit": "f" * 40,
+        "python_source_sha256": manifest["source"]["python_source_sha256"],
+    }
+    manifest_path.write_text(json.dumps(manifest))
     tracking_uri = f"sqlite:///{tmp_path / 'tracking.db'}"
     previous_uri = mlflow.get_tracking_uri()
     try:
@@ -31,6 +39,7 @@ def test_sqlite_import_is_idempotent_and_rejects_conflicting_evidence(tmp_path, 
         repeat = track(run_dir, tracking_uri)
         assert repeat["status"] == "already_imported"
         assert first["mlflow_run_id"] == repeat["mlflow_run_id"]
+        assert client.get_run(first["mlflow_run_id"]).data.tags["source_commit"] == "f" * 40
         assert len(client.search_runs([experiment_id])) == 1
         retrieved = Path(client.download_artifacts(first["mlflow_run_id"], "model.pt"))
         assert retrieved.read_bytes() == (run_dir / "model.pt").read_bytes()

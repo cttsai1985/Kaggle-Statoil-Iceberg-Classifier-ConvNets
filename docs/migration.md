@@ -12,13 +12,15 @@ The 2017 solution combined two radar bands and incidence angle through two convo
 | Metadata | Missing angle replaced with numeric `-1` | Optional branch with training-median imputation, scaling and missingness flag |
 | Spatial augmentation | Paired flips/rotations/shifts, occasional fixed `0.1` zoom | Paired flips/rotations and mild affine changes |
 | Optimization | Historical Adam arguments and repeated generator traversals | Standard AdamW and cosine scheduling over natural epochs |
-| Evaluation | Original stratified holdout and competition submission | Same fixed holdout for comparison; separately scored competition predictions |
+| Evaluation | Original stratified holdout and competition submission | Primary five-fold grouped CV with two training seeds and fixed final epochs; separate fixed holdout and competition scores for comparison |
 
 Progressive downsampling reduces the cost of full-data experiments. Modern normalization removes the dense head's dependence on the last training minibatch. The new preprocessing retains relative brightness between observations and fits no statistics on held-out or test rows.
 
 The extreme historical zoom is replaced with a mild range. RGB color transforms and swapping the two polarizations are not used. Metadata is a controlled experiment rather than an unconditional feature: acquisition geometry can expose grouping structure, and missingness is not a physical angle.
 
 ## Validation and interpretation
+
+The primary [CV protocol](cv.md) audits all folds and both training seeds, including class balance, group separation, OOF coverage and known-angle performance. Fold and seed dispersion are descriptive diagnostics; no uncertainty guarantee follows from two seeds.
 
 The fixed comparison split uses stratification, seed 25 and a 0.159 holdout fraction: 1,348 training records and 256 validation records. Checkpoint selection uses holdout log loss. Reported leaderboard loss is separate; matching a local holdout number does not establish reproduction of a competition score.
 

@@ -1,6 +1,6 @@
 {
   "id": "cttsai/kaggle-iceberg-solution-mlops",
-  "title": "Iceberg solution: reproducible PyTorch and MLOps",
+  "title": "Kaggle Iceberg Solution MLOps",
   "code_file": "rerun.ipynb",
   "language": "python",
   "kernel_type": "notebook",

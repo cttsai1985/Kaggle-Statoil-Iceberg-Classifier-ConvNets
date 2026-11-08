@@ -63,6 +63,7 @@ for name in ["rerun.ipynb", "kernel-metadata.json"]:
     shutil.copy2(Path("notebooks/kaggle") / name, kernel / name)
 metadata = json.loads((kernel / "kernel-metadata.json").read_text())
 metadata["id"] = f"{args.owner}/kaggle-iceberg-solution-mlops"
+metadata["title"] = "Kaggle Iceberg Solution MLOps"
 metadata["dataset_sources"] = [f"{args.owner}/kaggle-iceberg-code"]
 (kernel / "kernel-metadata.json").write_text(json.dumps(metadata, indent=2) + "\n")
 print(f"Prepared code-only assets in {args.output}; no Kaggle resources changed.")
