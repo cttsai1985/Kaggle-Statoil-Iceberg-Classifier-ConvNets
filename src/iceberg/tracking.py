@@ -25,9 +25,13 @@ def track(run_dir: Path, tracking_uri: str) -> dict:
     digest = sha256(run_dir / "manifest.json")
     mlflow.set_tracking_uri(tracking_uri)
     experiment_name = MLFLOW_EXPERIMENT
-    mlflow.set_experiment(experiment_name)
     client = MlflowClient()
     experiment = client.get_experiment_by_name(experiment_name)
+    if experiment is None:
+        raise ValueError(
+            f"Experiment {experiment_name} must be provisioned by mlops-platform first"
+        )
+    mlflow.set_experiment(experiment_id=experiment.experiment_id)
     existing = client.search_runs(
         [experiment.experiment_id], f"tags.logical_run_id = '{logical_id}'"
     )
