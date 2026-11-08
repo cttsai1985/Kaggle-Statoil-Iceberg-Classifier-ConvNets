@@ -103,4 +103,8 @@ Each experiment saves its configuration, split, source and input identities, met
 .venv/bin/pytest -q
 ```
 
-Code is licensed under [MIT](LICENSE); competition data follows its own terms. Data, trained weights, credentials and prediction rows are excluded from Git.
+Data, trained weights, credentials and prediction rows are excluded from Git.
+
+## License
+
+Source code is licensed under the [MIT License](LICENSE). Competition data follows its own terms.
