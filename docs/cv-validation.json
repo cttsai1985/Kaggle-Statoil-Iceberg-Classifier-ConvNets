@@ -1,0 +1,1124 @@
+{
+  "schema_version": 1,
+  "project_id": "iceberg",
+  "status": "completed",
+  "manifest": {
+    "schema_version": 1,
+    "project_id": "iceberg",
+    "logical_run_id": "a02b6d40-2f5a-4f08-8d2c-55c8bde19178",
+    "status": "completed",
+    "run_kind": "real_data_cross_validation",
+    "source": {
+      "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+      "git_commit": "88683b8371f2fec2f2836aede2533f15c1eb94f9",
+      "git_dirty": false,
+      "python_source_sha256": "e9b215843738efa0297971df6529abe998a03320a3f62b4b976194958410fe92"
+    },
+    "input_sha256": "a56756a2528a09b139dc2747e2e40d869f9da7a8c9df37b188b6163f6bfb8696",
+    "rows": 1604,
+    "protocol": {
+      "folds": 5,
+      "strategy": "grouped",
+      "shuffle": true,
+      "split_seed": 25,
+      "model_seeds": [
+        1017,
+        2027
+      ],
+      "workers": 2,
+      "threads_per_worker": 4,
+      "checkpoint_selection": "last",
+      "config": {
+        "name": "modern-image-and-angle",
+        "seed": 1017,
+        "split_seed": 25,
+        "validation_fraction": 0.159,
+        "filters": 16,
+        "hidden": 64,
+        "use_angle": true,
+        "dropout": 0.3,
+        "batch_size": 64,
+        "epochs": 30,
+        "learning_rate": 0.001,
+        "min_learning_rate": 1e-05,
+        "weight_decay": 0.0001,
+        "gradient_clip": 1.0,
+        "augment": true,
+        "max_train_rows": null,
+        "threads": 4,
+        "device": "cpu",
+        "deterministic": false,
+        "mixed_precision": true,
+        "tta": "flips"
+      }
+    },
+    "protocol_sha256": "509f91d60297df63b677e10c18436142144398a35a58438383b355c5134aca68",
+    "split_sha256": "ab8290b8151dff121b59a1da540353670315a8b0afef6f65b3134bae4a09ec06",
+    "split_audit": [
+      {
+        "fold": 0,
+        "train_rows": 1282,
+        "validation_rows": 322,
+        "train_positives": 602,
+        "validation_positives": 151,
+        "validation_positive_fraction": 0.46894410252571106,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 115,
+        "validation_missing_angles": 18
+      },
+      {
+        "fold": 1,
+        "train_rows": 1284,
+        "validation_rows": 320,
+        "train_positives": 603,
+        "validation_positives": 150,
+        "validation_positive_fraction": 0.46875,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 108,
+        "validation_missing_angles": 25
+      },
+      {
+        "fold": 2,
+        "train_rows": 1283,
+        "validation_rows": 321,
+        "train_positives": 602,
+        "validation_positives": 151,
+        "validation_positive_fraction": 0.4704049825668335,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 104,
+        "validation_missing_angles": 29
+      },
+      {
+        "fold": 3,
+        "train_rows": 1284,
+        "validation_rows": 320,
+        "train_positives": 603,
+        "validation_positives": 150,
+        "validation_positive_fraction": 0.46875,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 102,
+        "validation_missing_angles": 31
+      },
+      {
+        "fold": 4,
+        "train_rows": 1283,
+        "validation_rows": 321,
+        "train_positives": 602,
+        "validation_positives": 151,
+        "validation_positive_fraction": 0.4704049825668335,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 103,
+        "validation_missing_angles": 30
+      }
+    ],
+    "grouped_split_audit": [
+      {
+        "fold": 0,
+        "train_rows": 1282,
+        "validation_rows": 322,
+        "train_positives": 602,
+        "validation_positives": 151,
+        "validation_positive_fraction": 0.46894410252571106,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 115,
+        "validation_missing_angles": 18
+      },
+      {
+        "fold": 1,
+        "train_rows": 1284,
+        "validation_rows": 320,
+        "train_positives": 603,
+        "validation_positives": 150,
+        "validation_positive_fraction": 0.46875,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 108,
+        "validation_missing_angles": 25
+      },
+      {
+        "fold": 2,
+        "train_rows": 1283,
+        "validation_rows": 321,
+        "train_positives": 602,
+        "validation_positives": 151,
+        "validation_positive_fraction": 0.4704049825668335,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 104,
+        "validation_missing_angles": 29
+      },
+      {
+        "fold": 3,
+        "train_rows": 1284,
+        "validation_rows": 320,
+        "train_positives": 603,
+        "validation_positives": 150,
+        "validation_positive_fraction": 0.46875,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 102,
+        "validation_missing_angles": 31
+      },
+      {
+        "fold": 4,
+        "train_rows": 1283,
+        "validation_rows": 321,
+        "train_positives": 602,
+        "validation_positives": 151,
+        "validation_positive_fraction": 0.4704049825668335,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 103,
+        "validation_missing_angles": 30
+      }
+    ],
+    "grouped_model_evaluation": "included",
+    "grouping_limitations": "Exact incidence angle is an acquisition proxy, not a verified scene identifier; missing angles are individual groups.",
+    "interpretation": "Fixed-recipe OOF evaluation; model choices informed by earlier runs on these data, not an untouched external test.",
+    "fold_runs": [
+      {
+        "seed": 1017,
+        "fold": 0,
+        "directory": "seed-1017/fold-00",
+        "manifest_sha256": "c82103060e45629e01699b91fc6e1af4d06fcef41900e6ff459766c4bb9b4667",
+        "checkpoint_sha256": "e3da14054fb1112939b036014f3c1dbd9ed16111cb1da4c51bfd31357d852b43",
+        "logical_run_id": "6ae50e83-9e8c-4467-956d-cad6f8f2e93d"
+      },
+      {
+        "seed": 1017,
+        "fold": 1,
+        "directory": "seed-1017/fold-01",
+        "manifest_sha256": "73ffd6c39fc7a2842a2072313807b82745e787fd028bbb6ca15705d09130797e",
+        "checkpoint_sha256": "fefbc1356fd955a766e35d40f9bbf33d9faf56955e0f6c6fb90d19de009207b6",
+        "logical_run_id": "bd9e608d-8e89-4e36-9222-1c637eaa7984"
+      },
+      {
+        "seed": 1017,
+        "fold": 2,
+        "directory": "seed-1017/fold-02",
+        "manifest_sha256": "aa9061c6d2c6420646cbc7fc7a36f31288b523cd436c5c016ae1b1b919f09774",
+        "checkpoint_sha256": "b152e237f13c697bc11b1cdd4d49d4207abda51b56e979197129a80f25d2751f",
+        "logical_run_id": "4656ff21-7eb8-455f-bd10-3c6cc94bf59c"
+      },
+      {
+        "seed": 1017,
+        "fold": 3,
+        "directory": "seed-1017/fold-03",
+        "manifest_sha256": "c187bf3a49aa99dd8169d42c802d6fa4b0e7f3062053aa296e34bdeb1f77bab9",
+        "checkpoint_sha256": "6f9f10d6f7180e2c9630b22971141d1f5f0b3efcc59fec04f5a4287103d6db82",
+        "logical_run_id": "940b3bdd-4067-4d6b-bc20-5af1acbb5b72"
+      },
+      {
+        "seed": 1017,
+        "fold": 4,
+        "directory": "seed-1017/fold-04",
+        "manifest_sha256": "295d1a42de1fb948bfb789160f30c75c2ad1915e466770d5bfa92ac632e88de0",
+        "checkpoint_sha256": "7c93232da0b0e158da6637780c55d1dc8c6537d6890606f0ca8ccd159cc04699",
+        "logical_run_id": "fc68b763-92fc-4072-8fba-6e68a8ac7e08"
+      },
+      {
+        "seed": 2027,
+        "fold": 0,
+        "directory": "seed-2027/fold-00",
+        "manifest_sha256": "303e3bbed208b917240dd179659dc5a55a9b4f8ce92c6786dc006e59dfa9ab13",
+        "checkpoint_sha256": "a6be09f699f00b41a1aee4a7229055131765b0227ecc508f010dce6a88fc1ff8",
+        "logical_run_id": "4a1e99fa-48d4-47ea-9d43-06b6b318abcc"
+      },
+      {
+        "seed": 2027,
+        "fold": 1,
+        "directory": "seed-2027/fold-01",
+        "manifest_sha256": "18ae234dd4684b7ef5e424404c272c9551659d2bd976a7250d1350d3621e5780",
+        "checkpoint_sha256": "a46592489d5bb35b08c9ac111668f3c6cdb9f6bc8442424cd9365237a4a94da5",
+        "logical_run_id": "4601ce9e-c0bf-40df-bc10-c61953ef4435"
+      },
+      {
+        "seed": 2027,
+        "fold": 2,
+        "directory": "seed-2027/fold-02",
+        "manifest_sha256": "6e375d358e6ab00b5f084da490c4d046345462ac4a7c9d3120aa4ccc57005eba",
+        "checkpoint_sha256": "68acf18c131fc5eeeb8e2f3687d5f53a9498641ec1c165e763a2daec8515aedf",
+        "logical_run_id": "31032445-2fbd-4021-8cb4-799b04b2fd4c"
+      },
+      {
+        "seed": 2027,
+        "fold": 3,
+        "directory": "seed-2027/fold-03",
+        "manifest_sha256": "4ba5c33129569b48d4bba2dc8b640cb3d9954afdaa0860197d644ecde990668d",
+        "checkpoint_sha256": "5587cc8d93db0e0fe7c2f6db99011f49dc65fc76c179c34a4c1b6dc00a3cca82",
+        "logical_run_id": "340c1be5-3d88-4f97-874a-37a1d197e29d"
+      },
+      {
+        "seed": 2027,
+        "fold": 4,
+        "directory": "seed-2027/fold-04",
+        "manifest_sha256": "2cb2e382a45b4a621a305e86de489437e8cf7f2e449515e9460c8c605ab9ea44",
+        "checkpoint_sha256": "508099c13a93a8ea3ccf8d33c77346393a9108ffeb47a977fc22439ca66ab08f",
+        "logical_run_id": "51f3080b-73c3-4c81-91e4-03f2ceaf88c1"
+      }
+    ],
+    "elapsed_seconds": 1074.6926310799972,
+    "artifacts": {
+      "analysis.json": "3adc043e3f45373bffc2517ab9120d0afadb69afcc3702028b29f8640ad6a8c5",
+      "cv-config.json": "509f91d60297df63b677e10c18436142144398a35a58438383b355c5134aca68",
+      "ensemble-oof.csv": "38eb9df6d5de0c03bfcc63fac7621bd4bba8886e63731da541f4d4fd36837a5a",
+      "errors.csv": "2889d0ed2d608cc50925b97fac72a26245e164738461fa46501323ae7b6aa2ce",
+      "folds.csv": "ab8290b8151dff121b59a1da540353670315a8b0afef6f65b3134bae4a09ec06",
+      "grouped-audit-splits.csv": "ab8290b8151dff121b59a1da540353670315a8b0afef6f65b3134bae4a09ec06",
+      "oof.csv": "a0e92ccc496bd1cc41ba9823dda7441741533c768349ad0f63a8dbb5833c427b"
+    }
+  },
+  "analysis": {
+    "rows": 1604,
+    "positives": 753,
+    "negatives": 851,
+    "positive_fraction": 0.4694513715710723,
+    "missing_angle_rows": 133,
+    "pooled_oof": {
+      "log_loss": 0.20479245393810833,
+      "brier_score": 0.0606876985304574,
+      "roc_auc": 0.9747488697774511
+    },
+    "fold_metrics": [
+      {
+        "fold": 0,
+        "rows": 322,
+        "log_loss": 0.19140822230631316,
+        "brier_score": 0.05696879861902428,
+        "roc_auc": 0.9799775376631423
+      },
+      {
+        "fold": 1,
+        "rows": 320,
+        "log_loss": 0.19738468524246702,
+        "brier_score": 0.05992448291263423,
+        "roc_auc": 0.9773725490196078
+      },
+      {
+        "fold": 2,
+        "rows": 321,
+        "log_loss": 0.17611001984674768,
+        "brier_score": 0.04986160390843999,
+        "roc_auc": 0.9809115699259835
+      },
+      {
+        "fold": 3,
+        "rows": 320,
+        "log_loss": 0.21044185027254372,
+        "brier_score": 0.06530415620012384,
+        "roc_auc": 0.9757254901960783
+      },
+      {
+        "fold": 4,
+        "rows": 321,
+        "log_loss": 0.2486537096525964,
+        "brier_score": 0.07140304023936457,
+        "roc_auc": 0.9645890144137125
+      }
+    ],
+    "fold_distribution": {
+      "log_loss": {
+        "mean": 0.2047996974641336,
+        "std_ddof1": 0.027442758098808213,
+        "min": 0.17611001984674768,
+        "max": 0.2486537096525964
+      },
+      "brier_score": {
+        "mean": 0.06069241637591738,
+        "std_ddof1": 0.008181490656652362,
+        "min": 0.04986160390843999,
+        "max": 0.07140304023936457
+      },
+      "roc_auc": {
+        "mean": 0.9757152322437049,
+        "std_ddof1": 0.006551883319293612,
+        "min": 0.9645890144137125,
+        "max": 0.9809115699259835
+      }
+    },
+    "variability_interpretation": "Descriptive fold dispersion, not a confidence interval; training sets overlap.",
+    "calibration_bins": [
+      {
+        "lower": 0.0,
+        "upper": 0.1,
+        "rows": 675,
+        "mean_probability": 0.017681978050343418,
+        "observed_positive_fraction": 0.01925925925925926
+      },
+      {
+        "lower": 0.1,
+        "upper": 0.2,
+        "rows": 52,
+        "mean_probability": 0.14334111076851302,
+        "observed_positive_fraction": 0.1346153846153846
+      },
+      {
+        "lower": 0.2,
+        "upper": 0.3,
+        "rows": 43,
+        "mean_probability": 0.24652599803237027,
+        "observed_positive_fraction": 0.13953488372093023
+      },
+      {
+        "lower": 0.3,
+        "upper": 0.4,
+        "rows": 42,
+        "mean_probability": 0.3494647140836432,
+        "observed_positive_fraction": 0.4523809523809524
+      },
+      {
+        "lower": 0.4,
+        "upper": 0.5,
+        "rows": 32,
+        "mean_probability": 0.4530933075584471,
+        "observed_positive_fraction": 0.5625
+      },
+      {
+        "lower": 0.5,
+        "upper": 0.6,
+        "rows": 34,
+        "mean_probability": 0.5542706720092717,
+        "observed_positive_fraction": 0.5882352941176471
+      },
+      {
+        "lower": 0.6,
+        "upper": 0.7,
+        "rows": 37,
+        "mean_probability": 0.6465555151572099,
+        "observed_positive_fraction": 0.7297297297297297
+      },
+      {
+        "lower": 0.7,
+        "upper": 0.8,
+        "rows": 54,
+        "mean_probability": 0.7519923332664702,
+        "observed_positive_fraction": 0.7777777777777778
+      },
+      {
+        "lower": 0.8,
+        "upper": 0.9,
+        "rows": 66,
+        "mean_probability": 0.8472453378366701,
+        "observed_positive_fraction": 0.7424242424242424
+      },
+      {
+        "lower": 0.9,
+        "upper": 1.0,
+        "rows": 569,
+        "mean_probability": 0.9726548733841137,
+        "observed_positive_fraction": 0.9701230228471002
+      }
+    ],
+    "expected_calibration_error_10_bins": 0.017410217584319834,
+    "calibration_interpretation": "Diagnostic only; no calibrator was fitted to these OOF targets.",
+    "strata": {
+      "missing_angle": {
+        "rows": 133,
+        "positives": 0,
+        "log_loss": 0.029463237129361407,
+        "brier_score": 0.0030996237342860128,
+        "roc_auc": null
+      },
+      "known_angle": {
+        "rows": 1471,
+        "positives": 753,
+        "log_loss": 0.22064478965229142,
+        "brier_score": 0.06589450610890117,
+        "roc_auc": 0.9708797123483781
+      },
+      "ship": {
+        "rows": 851,
+        "positives": 0,
+        "log_loss": 0.20156329324731728,
+        "brier_score": 0.061071399650383676,
+        "roc_auc": null
+      },
+      "iceberg": {
+        "rows": 753,
+        "positives": 753,
+        "log_loss": 0.20844187724204347,
+        "brier_score": 0.060254060212984274,
+        "roc_auc": null
+      }
+    },
+    "prediction_kind": "mean_probability_across_predeclared_seeds",
+    "seed_results": [
+      {
+        "seed": 1017,
+        "rows": 1604,
+        "positives": 753,
+        "negatives": 851,
+        "positive_fraction": 0.4694513715710723,
+        "missing_angle_rows": 133,
+        "pooled_oof": {
+          "log_loss": 0.21152779125760393,
+          "brier_score": 0.06274803663948567,
+          "roc_auc": 0.9733256554666567
+        },
+        "fold_metrics": [
+          {
+            "fold": 0,
+            "rows": 322,
+            "log_loss": 0.19447807201874293,
+            "brier_score": 0.058066828317541945,
+            "roc_auc": 0.9795515278261879
+          },
+          {
+            "fold": 1,
+            "rows": 320,
+            "log_loss": 0.2090430781501042,
+            "brier_score": 0.06390321704174318,
+            "roc_auc": 0.9753333333333333
+          },
+          {
+            "fold": 2,
+            "rows": 321,
+            "log_loss": 0.18278474730341746,
+            "brier_score": 0.05214557549363907,
+            "roc_auc": 0.979703934553954
+          },
+          {
+            "fold": 3,
+            "rows": 320,
+            "log_loss": 0.21715175636571216,
+            "brier_score": 0.0674640925462144,
+            "roc_auc": 0.9736470588235294
+          },
+          {
+            "fold": 4,
+            "rows": 321,
+            "log_loss": 0.25424419644144325,
+            "brier_score": 0.0721933434575762,
+            "roc_auc": 0.9638878067783404
+          }
+        ],
+        "fold_distribution": {
+          "log_loss": {
+            "mean": 0.211540370055884,
+            "std_ddof1": 0.027291705540966046,
+            "min": 0.18278474730341746,
+            "max": 0.25424419644144325
+          },
+          "brier_score": {
+            "mean": 0.06275461137134296,
+            "std_ddof1": 0.007859947893150204,
+            "min": 0.05214557549363907,
+            "max": 0.0721933434575762
+          },
+          "roc_auc": {
+            "mean": 0.974424732263069,
+            "std_ddof1": 0.006453896887313023,
+            "min": 0.9638878067783404,
+            "max": 0.979703934553954
+          }
+        },
+        "variability_interpretation": "Descriptive fold dispersion, not a confidence interval; training sets overlap.",
+        "calibration_bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "rows": 684,
+            "mean_probability": 0.01774439974402061,
+            "observed_positive_fraction": 0.02046783625730994
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "rows": 50,
+            "mean_probability": 0.13961803540587425,
+            "observed_positive_fraction": 0.18
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "rows": 35,
+            "mean_probability": 0.24555521479674747,
+            "observed_positive_fraction": 0.2
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "rows": 38,
+            "mean_probability": 0.3495614442386125,
+            "observed_positive_fraction": 0.3684210526315789
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "rows": 30,
+            "mean_probability": 0.4476432273785273,
+            "observed_positive_fraction": 0.5
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "rows": 42,
+            "mean_probability": 0.5457714256786165,
+            "observed_positive_fraction": 0.6428571428571429
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "rows": 32,
+            "mean_probability": 0.6511055994778872,
+            "observed_positive_fraction": 0.6875
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "rows": 43,
+            "mean_probability": 0.7491222481394924,
+            "observed_positive_fraction": 0.7209302325581395
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "rows": 82,
+            "mean_probability": 0.8513301429225177,
+            "observed_positive_fraction": 0.7804878048780488
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "rows": 568,
+            "mean_probability": 0.9729665701448078,
+            "observed_positive_fraction": 0.9683098591549296
+          }
+        ],
+        "expected_calibration_error_10_bins": 0.014134844632394273,
+        "calibration_interpretation": "Diagnostic only; no calibrator was fitted to these OOF targets.",
+        "strata": {
+          "missing_angle": {
+            "rows": 133,
+            "positives": 0,
+            "log_loss": 0.030629949891084765,
+            "brier_score": 0.004188444295014135,
+            "roc_auc": null
+          },
+          "known_angle": {
+            "rows": 1471,
+            "positives": 753,
+            "log_loss": 0.22788361240087185,
+            "brier_score": 0.06804268366995116,
+            "roc_auc": 0.9693186400174604
+          },
+          "ship": {
+            "rows": 851,
+            "positives": 0,
+            "log_loss": 0.20864264871384677,
+            "brier_score": 0.06369149330749986,
+            "roc_auc": null
+          },
+          "iceberg": {
+            "rows": 753,
+            "positives": 753,
+            "log_loss": 0.2147884238004159,
+            "brier_score": 0.06168179278227441,
+            "roc_auc": null
+          }
+        }
+      },
+      {
+        "seed": 2027,
+        "rows": 1604,
+        "positives": 753,
+        "negatives": 851,
+        "positive_fraction": 0.4694513715710723,
+        "missing_angle_rows": 133,
+        "pooled_oof": {
+          "log_loss": 0.20703684071146863,
+          "brier_score": 0.06121670638916206,
+          "roc_auc": 0.9742869493432459
+        },
+        "fold_metrics": [
+          {
+            "fold": 0,
+            "rows": 322,
+            "log_loss": 0.19811624706266018,
+            "brier_score": 0.05866204656010236,
+            "roc_auc": 0.9786220518182874
+          },
+          {
+            "fold": 1,
+            "rows": 320,
+            "log_loss": 0.19383500002000967,
+            "brier_score": 0.0588520131747315,
+            "roc_auc": 0.9779215686274509
+          },
+          {
+            "fold": 2,
+            "rows": 321,
+            "log_loss": 0.17529219413232047,
+            "brier_score": 0.049885220913215754,
+            "roc_auc": 0.9824308531359564
+          },
+          {
+            "fold": 3,
+            "rows": 320,
+            "log_loss": 0.21671092194102778,
+            "brier_score": 0.0659226196269667,
+            "roc_auc": 0.9747843137254901
+          },
+          {
+            "fold": 4,
+            "rows": 321,
+            "log_loss": 0.25124664050782614,
+            "brier_score": 0.07277688363295108,
+            "roc_auc": 0.9631476431632255
+          }
+        ],
+        "fold_distribution": {
+          "log_loss": {
+            "mean": 0.20704020073276883,
+            "std_ddof1": 0.028764919452113243,
+            "min": 0.17529219413232047,
+            "max": 0.25124664050782614
+          },
+          "brier_score": {
+            "mean": 0.061219756781593485,
+            "std_ddof1": 0.008606740014623132,
+            "min": 0.049885220913215754,
+            "max": 0.07277688363295108
+          },
+          "roc_auc": {
+            "mean": 0.975381286094082,
+            "std_ddof1": 0.007359863936836087,
+            "min": 0.9631476431632255,
+            "max": 0.9824308531359564
+          }
+        },
+        "variability_interpretation": "Descriptive fold dispersion, not a confidence interval; training sets overlap.",
+        "calibration_bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.1,
+            "rows": 682,
+            "mean_probability": 0.01810777102750002,
+            "observed_positive_fraction": 0.020527859237536656
+          },
+          {
+            "lower": 0.1,
+            "upper": 0.2,
+            "rows": 48,
+            "mean_probability": 0.1428093851233522,
+            "observed_positive_fraction": 0.125
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.3,
+            "rows": 42,
+            "mean_probability": 0.2499531645859991,
+            "observed_positive_fraction": 0.2857142857142857
+          },
+          {
+            "lower": 0.3,
+            "upper": 0.4,
+            "rows": 37,
+            "mean_probability": 0.35424558616973256,
+            "observed_positive_fraction": 0.2702702702702703
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.5,
+            "rows": 39,
+            "mean_probability": 0.44697608856054455,
+            "observed_positive_fraction": 0.5384615384615384
+          },
+          {
+            "lower": 0.5,
+            "upper": 0.6,
+            "rows": 39,
+            "mean_probability": 0.5475259851186703,
+            "observed_positive_fraction": 0.6923076923076923
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.7,
+            "rows": 33,
+            "mean_probability": 0.657773247270873,
+            "observed_positive_fraction": 0.6666666666666666
+          },
+          {
+            "lower": 0.7,
+            "upper": 0.8,
+            "rows": 49,
+            "mean_probability": 0.7523601128130543,
+            "observed_positive_fraction": 0.7959183673469388
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.9,
+            "rows": 58,
+            "mean_probability": 0.848761128968206,
+            "observed_positive_fraction": 0.7931034482758621
+          },
+          {
+            "lower": 0.9,
+            "upper": 1.0,
+            "rows": 577,
+            "mean_probability": 0.9732341282909003,
+            "observed_positive_fraction": 0.9636048526863085
+          }
+        ],
+        "expected_calibration_error_10_bins": 0.017170136136890023,
+        "calibration_interpretation": "Diagnostic only; no calibrator was fitted to these OOF targets.",
+        "strata": {
+          "missing_angle": {
+            "rows": 133,
+            "positives": 0,
+            "log_loss": 0.028771872810696496,
+            "brier_score": 0.002609855009508576,
+            "roc_auc": null
+          },
+          "known_angle": {
+            "rows": 1471,
+            "positives": 753,
+            "log_loss": 0.22315461143261248,
+            "brier_score": 0.06651562633035438,
+            "roc_auc": 0.9702804381360353
+          },
+          "ship": {
+            "rows": 851,
+            "positives": 0,
+            "log_loss": 0.20340204938533493,
+            "brier_score": 0.06061877278430266,
+            "roc_auc": null
+          },
+          "iceberg": {
+            "rows": 753,
+            "positives": 753,
+            "log_loss": 0.2111446858888122,
+            "brier_score": 0.061892458710191736,
+            "roc_auc": null
+          }
+        }
+      }
+    ],
+    "seed_distribution": {
+      "log_loss": {
+        "mean": 0.20928231598453628,
+        "min": 0.20703684071146863,
+        "max": 0.21152779125760393,
+        "range": 0.004490950546135297,
+        "std_ddof1": 0.0031755815851456978
+      },
+      "brier_score": {
+        "mean": 0.06198237151432386,
+        "min": 0.06121670638916206,
+        "max": 0.06274803663948567,
+        "range": 0.0015313302503236065,
+        "std_ddof1": 0.0010828140042399156
+      },
+      "roc_auc": {
+        "mean": 0.9738063024049513,
+        "min": 0.9733256554666567,
+        "max": 0.9742869493432459,
+        "range": 0.0009612938765891643,
+        "std_ddof1": 0.0006797374188493023
+      }
+    },
+    "seed_interpretation": "Descriptive training-seed variation on identical folds, not independent replicates or a confidence interval. All seeds are retained; no fold or seed is selected.",
+    "split_audit": [
+      {
+        "fold": 0,
+        "train_rows": 1282,
+        "validation_rows": 322,
+        "train_positives": 602,
+        "validation_positives": 151,
+        "validation_positive_fraction": 0.46894410252571106,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 115,
+        "validation_missing_angles": 18
+      },
+      {
+        "fold": 1,
+        "train_rows": 1284,
+        "validation_rows": 320,
+        "train_positives": 603,
+        "validation_positives": 150,
+        "validation_positive_fraction": 0.46875,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 108,
+        "validation_missing_angles": 25
+      },
+      {
+        "fold": 2,
+        "train_rows": 1283,
+        "validation_rows": 321,
+        "train_positives": 602,
+        "validation_positives": 151,
+        "validation_positive_fraction": 0.4704049825668335,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 104,
+        "validation_missing_angles": 29
+      },
+      {
+        "fold": 3,
+        "train_rows": 1284,
+        "validation_rows": 320,
+        "train_positives": 603,
+        "validation_positives": 150,
+        "validation_positive_fraction": 0.46875,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 102,
+        "validation_missing_angles": 31
+      },
+      {
+        "fold": 4,
+        "train_rows": 1283,
+        "validation_rows": 321,
+        "train_positives": 602,
+        "validation_positives": 151,
+        "validation_positive_fraction": 0.4704049825668335,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 103,
+        "validation_missing_angles": 30
+      }
+    ],
+    "grouped_split_audit": [
+      {
+        "fold": 0,
+        "train_rows": 1282,
+        "validation_rows": 322,
+        "train_positives": 602,
+        "validation_positives": 151,
+        "validation_positive_fraction": 0.46894410252571106,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 115,
+        "validation_missing_angles": 18
+      },
+      {
+        "fold": 1,
+        "train_rows": 1284,
+        "validation_rows": 320,
+        "train_positives": 603,
+        "validation_positives": 150,
+        "validation_positive_fraction": 0.46875,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 108,
+        "validation_missing_angles": 25
+      },
+      {
+        "fold": 2,
+        "train_rows": 1283,
+        "validation_rows": 321,
+        "train_positives": 602,
+        "validation_positives": 151,
+        "validation_positive_fraction": 0.4704049825668335,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 104,
+        "validation_missing_angles": 29
+      },
+      {
+        "fold": 3,
+        "train_rows": 1284,
+        "validation_rows": 320,
+        "train_positives": 603,
+        "validation_positives": 150,
+        "validation_positive_fraction": 0.46875,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 102,
+        "validation_missing_angles": 31
+      },
+      {
+        "fold": 4,
+        "train_rows": 1283,
+        "validation_rows": 321,
+        "train_positives": 602,
+        "validation_positives": 151,
+        "validation_positive_fraction": 0.4704049825668335,
+        "shared_known_angles": 0,
+        "validation_rows_with_training_angle": 0,
+        "training_missing_angles": 103,
+        "validation_missing_angles": 30
+      }
+    ],
+    "grouped_model_evaluation": "included"
+  },
+  "independent_model_reload": {
+    "fold_models_verified": 10,
+    "maximum_metric_delta": 0.0,
+    "tolerance": 1e-12,
+    "records": [
+      {
+        "seed": 1017,
+        "fold": 0,
+        "validation_rows": 322,
+        "maximum_metric_delta": 0.0
+      },
+      {
+        "seed": 1017,
+        "fold": 1,
+        "validation_rows": 320,
+        "maximum_metric_delta": 0.0
+      },
+      {
+        "seed": 1017,
+        "fold": 2,
+        "validation_rows": 321,
+        "maximum_metric_delta": 0.0
+      },
+      {
+        "seed": 1017,
+        "fold": 3,
+        "validation_rows": 320,
+        "maximum_metric_delta": 0.0
+      },
+      {
+        "seed": 1017,
+        "fold": 4,
+        "validation_rows": 321,
+        "maximum_metric_delta": 0.0
+      },
+      {
+        "seed": 2027,
+        "fold": 0,
+        "validation_rows": 322,
+        "maximum_metric_delta": 0.0
+      },
+      {
+        "seed": 2027,
+        "fold": 1,
+        "validation_rows": 320,
+        "maximum_metric_delta": 0.0
+      },
+      {
+        "seed": 2027,
+        "fold": 2,
+        "validation_rows": 321,
+        "maximum_metric_delta": 0.0
+      },
+      {
+        "seed": 2027,
+        "fold": 3,
+        "validation_rows": 320,
+        "maximum_metric_delta": 0.0
+      },
+      {
+        "seed": 2027,
+        "fold": 4,
+        "validation_rows": 321,
+        "maximum_metric_delta": 0.0
+      }
+    ]
+  },
+  "shared_mlflow": {
+    "experiment": "kaggle/iceberg",
+    "parent_run_id": "bebfe33b39aa4e30883142902288ad2f",
+    "status": "FINISHED",
+    "finished_fold_runs": 10,
+    "analysis_sha256": "3adc043e3f45373bffc2517ab9120d0afadb69afcc3702028b29f8640ad6a8c5",
+    "checkpoint_readback_sha256": "e3da14054fb1112939b036014f3c1dbd9ed16111cb1da4c51bfd31357d852b43",
+    "repeated_import": "already_imported"
+  },
+  "full_test_prediction": {
+    "schema_version": 1,
+    "project_id": "iceberg",
+    "status": "cv_ensemble_predictions",
+    "cv_logical_run_id": "a02b6d40-2f5a-4f08-8d2c-55c8bde19178",
+    "cv_manifest_sha256": "b7b5aeddda1ea6146fe2eaa180d94a28f06b1fac0fc32c40c247600375671c3a",
+    "training_input_sha256": "a56756a2528a09b139dc2747e2e40d869f9da7a8c9df37b188b6163f6bfb8696",
+    "input_sha256": "b1334a65bd0ceb9a027c780ba222f1dfba4cc34bd6adffef2ef5ed0e22a002fd",
+    "output_sha256": "96943ffe32245774a6729f293ec0cc04a256bcc43ae2f4e37bbab3b8e0817c6b",
+    "rows": 8424,
+    "model_count": 10,
+    "aggregation": "equal_weight_mean_probability_across_all_folds_and_seeds",
+    "tta": "flips",
+    "device": "cpu",
+    "checkpoints": [
+      {
+        "seed": 1017,
+        "fold": 0,
+        "directory": "seed-1017/fold-00",
+        "sha256": "e3da14054fb1112939b036014f3c1dbd9ed16111cb1da4c51bfd31357d852b43"
+      },
+      {
+        "seed": 1017,
+        "fold": 1,
+        "directory": "seed-1017/fold-01",
+        "sha256": "fefbc1356fd955a766e35d40f9bbf33d9faf56955e0f6c6fb90d19de009207b6"
+      },
+      {
+        "seed": 1017,
+        "fold": 2,
+        "directory": "seed-1017/fold-02",
+        "sha256": "b152e237f13c697bc11b1cdd4d49d4207abda51b56e979197129a80f25d2751f"
+      },
+      {
+        "seed": 1017,
+        "fold": 3,
+        "directory": "seed-1017/fold-03",
+        "sha256": "6f9f10d6f7180e2c9630b22971141d1f5f0b3efcc59fec04f5a4287103d6db82"
+      },
+      {
+        "seed": 1017,
+        "fold": 4,
+        "directory": "seed-1017/fold-04",
+        "sha256": "7c93232da0b0e158da6637780c55d1dc8c6537d6890606f0ca8ccd159cc04699"
+      },
+      {
+        "seed": 2027,
+        "fold": 0,
+        "directory": "seed-2027/fold-00",
+        "sha256": "a6be09f699f00b41a1aee4a7229055131765b0227ecc508f010dce6a88fc1ff8"
+      },
+      {
+        "seed": 2027,
+        "fold": 1,
+        "directory": "seed-2027/fold-01",
+        "sha256": "a46592489d5bb35b08c9ac111668f3c6cdb9f6bc8442424cd9365237a4a94da5"
+      },
+      {
+        "seed": 2027,
+        "fold": 2,
+        "directory": "seed-2027/fold-02",
+        "sha256": "68acf18c131fc5eeeb8e2f3687d5f53a9498641ec1c165e763a2daec8515aedf"
+      },
+      {
+        "seed": 2027,
+        "fold": 3,
+        "directory": "seed-2027/fold-03",
+        "sha256": "5587cc8d93db0e0fe7c2f6db99011f49dc65fc76c179c34a4c1b6dc00a3cca82"
+      },
+      {
+        "seed": 2027,
+        "fold": 4,
+        "directory": "seed-2027/fold-04",
+        "sha256": "508099c13a93a8ea3ccf8d33c77346393a9108ffeb47a977fc22439ca66ab08f"
+      }
+    ],
+    "training_source": {
+      "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+      "git_commit": "88683b8371f2fec2f2836aede2533f15c1eb94f9",
+      "git_dirty": false,
+      "python_source_sha256": "e9b215843738efa0297971df6529abe998a03320a3f62b4b976194958410fe92"
+    },
+    "inference_source": {
+      "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+      "git_commit": "0e042cb8c64988923322ceddc70852f5ede9b857",
+      "git_dirty": false,
+      "python_source_sha256": "e72d971926b17ab04cfa5ce6010b06e1a75bb4a92cd7b7e7fc518f99e46af617"
+    }
+  },
+  "full_test_contract": {
+    "rows": 8424,
+    "sample_submission_id_order_match": true,
+    "finite_bounded_probabilities": true
+  },
+  "interpretation": "Known-angle OOF is the primary test-cohort diagnostic. Fold and two-seed dispersion are descriptive, not confidence intervals; observed angles are acquisition proxies."
+}

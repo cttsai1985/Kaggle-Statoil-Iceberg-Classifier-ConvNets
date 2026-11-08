@@ -9,10 +9,9 @@ import sys
 import tempfile
 from pathlib import Path, PurePosixPath
 
+from iceberg import COMPETITION
 from iceberg.data import load_data, make_fixture, sha256
-from iceberg.runtime import evaluate, predict, train, write_json
-
-COMPETITION = "statoil-iceberg-classifier-challenge"
+from iceberg.runtime import evaluate, predict, train, verify_run, write_json
 
 
 def download(directory: Path) -> dict:
@@ -90,14 +89,40 @@ def main():
     sub.add_argument("--run-dir", type=Path, required=True)
     sub.add_argument("--config", type=Path, required=True)
     sub.add_argument("--fixture", action="store_true", help="Label synthetic runs explicitly")
+    sub.add_argument("--device", choices=["auto", "cpu", "cuda"])
+    sub = commands.add_parser("cv")
+    sub.add_argument("--data-dir", type=Path, required=True)
+    sub.add_argument("--run-dir", type=Path, required=True)
+    sub.add_argument("--config", type=Path, required=True)
+    sub.add_argument("--folds", type=int, default=5)
+    sub.add_argument("--strategy", choices=["stratified", "grouped"], default="stratified")
+    sub.add_argument("--split-seed", type=int, default=25)
+    sub.add_argument("--seeds", type=int, nargs="+", default=[1017, 2027])
+    sub.add_argument("--workers", type=int, default=1)
+    sub.add_argument("--fixture", action="store_true")
+    sub.add_argument("--device", choices=["auto", "cpu", "cuda"])
+    sub = commands.add_parser("analyze")
+    sub.add_argument("--run-dir", type=Path, required=True)
+    sub.add_argument("--data", type=Path)
+    sub = commands.add_parser("predict-cv")
+    sub.add_argument("--run-dir", type=Path, required=True)
+    sub.add_argument("--data", type=Path, required=True)
+    sub.add_argument("--output", type=Path, required=True)
+    sub.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto")
     for name in ["evaluate", "predict"]:
         sub = commands.add_parser(name)
         sub.add_argument("--checkpoint", type=Path, required=True)
         sub.add_argument("--data", type=Path, required=True)
         sub.add_argument("--output", type=Path, required=name == "predict")
-    sub = commands.add_parser("track")
+        sub.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto")
+        sub.add_argument("--tta", choices=["none", "flips"])
+    sub = commands.add_parser("verify")
     sub.add_argument("--run-dir", type=Path, required=True)
-    sub.add_argument("--tracking-uri", default=os.getenv("MLFLOW_TRACKING_URI"))
+    sub.add_argument("--data", type=Path)
+    for name in ["track", "track-cv"]:
+        sub = commands.add_parser(name)
+        sub.add_argument("--run-dir", type=Path, required=True)
+        sub.add_argument("--tracking-uri", default=os.getenv("MLFLOW_TRACKING_URI"))
     args = parser.parse_args()
     if args.command == "fixture":
         make_fixture(args.data_dir)
@@ -111,22 +136,53 @@ def main():
             raise ValueError("Training and test ids overlap")
         result = {"train_rows": len(training.ids), "test_rows": len(testing.ids)}
     elif args.command == "train":
+        config = json.loads(args.config.read_text())
+        if args.device is not None:
+            config["device"] = args.device
         result = train(
             args.data_dir / "train.json",
             args.run_dir,
-            json.loads(args.config.read_text()),
+            config,
             fixture=args.fixture,
         )
     elif args.command == "evaluate":
-        result = evaluate(args.checkpoint, args.data, args.output)
+        result = evaluate(args.checkpoint, args.data, args.output, device=args.device, tta=args.tta)
+    elif args.command == "cv":
+        from iceberg.cv import cross_validate
+
+        config = json.loads(args.config.read_text())
+        if args.device is not None:
+            config["device"] = args.device
+        result = cross_validate(
+            args.data_dir / "train.json",
+            args.run_dir,
+            config,
+            folds=args.folds,
+            strategy=args.strategy,
+            split_seed=args.split_seed,
+            seeds=args.seeds,
+            workers=args.workers,
+            fixture=args.fixture,
+        )
+    elif args.command == "analyze":
+        from iceberg.cv import analyze_cv
+
+        result = analyze_cv(args.run_dir, args.data)
     elif args.command == "predict":
-        result = predict(args.checkpoint, args.data, args.output)
+        result = predict(args.checkpoint, args.data, args.output, device=args.device, tta=args.tta)
+    elif args.command == "predict-cv":
+        from iceberg.cv import predict_cv
+
+        result = predict_cv(args.run_dir, args.data, args.output, device=args.device)
+    elif args.command == "verify":
+        result = verify_run(args.run_dir, args.data)
     else:
-        from iceberg.tracking import track
+        from iceberg.tracking import track, track_cv
 
         if not args.tracking_uri:
             parser.error("Set MLFLOW_TRACKING_URI or supply --tracking-uri")
-        result = track(args.run_dir, args.tracking_uri)
+        importer = track_cv if args.command == "track-cv" else track
+        result = importer(args.run_dir, args.tracking_uri)
     print(json.dumps(result, indent=2))
 
 

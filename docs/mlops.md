@@ -1,41 +1,71 @@
-# Showcase a run while reusing shared infrastructure
+# Experiment tracking and shared storage
 
-This repository owns modeling and runtime clients. Shared MLflow, SeaweedFS, PostgreSQL and any Prefect server remain outside the competition repository. This refactor changes no shared services.
+The shared [mlops-platform](https://github.com/cttsai1985/mlops-platform) repository owns service configuration and operations. Quant research and the competition solutions are clients. This repository owns the model, experiment recipe, portable artifacts and tracking adapter.
 
-```mermaid
-flowchart LR
-  N[Notebook or CLI] --> R[Run directory and checksums]
-  R --> C[Explicit MLflow client import]
-  C --> M[Existing MLflow server]
-  M --> S[Existing SeaweedFS artifact store]
-  K[Offline Kaggle run] --> B[Portable run bundle]
-  B --> R
-```
+| Service | Role |
+|---|---|
+| Docker | Reproducible runtime and isolated service processes |
+| Prefect | Workflow orchestration and task/flow state |
+| MLflow | Experiment metrics, lineage and artifact access |
+| SeaweedFS | S3-compatible artifact storage behind the MLflow service |
+| PostgreSQL | Persistent service metadata |
 
-## Optional existing-tracker import
+## Project identity
+
+| Identifier | Value |
+|---|---|
+| Stable project ID | `iceberg` |
+| GitHub repository | `cttsai1985/kaggle-iceberg-solution-mlops` |
+| MLflow experiment | `kaggle/iceberg` |
+| Reserved model-registry name | `kaggle-iceberg` |
+| Prefect flow/deployment convention | `kaggle-iceberg/local` |
+| Portable platform artifact namespace | `projects/iceberg` |
+
+The platform's project registry is the naming authority. Run tags include `project_id`, `logical_run_id`, source revision and source fingerprint. Model registration/promotion and Prefect deployment are explicit operations; this client does not perform them during training.
+
+Existing quant-research storage and historical experiments retain their identities during adoption. The portable platform configuration is not an instruction to migrate existing buckets or volumes.
+
+## Verify and import a completed run
 
 ```bash
 uv sync --locked --group dev --group lab --group data --group tracking
-export MLFLOW_TRACKING_URI=http://your-existing-tracker:5000
+.venv/bin/iceberg verify --run-dir .local/my-run \
+  --data "$ICEBERG_DATA_DIR/train.json"
+export MLFLOW_TRACKING_URI=http://127.0.0.1:5500
 .venv/bin/iceberg track --run-dir .local/my-run
 ```
 
-The endpoint is an example. Configure a route reachable from the runtime: localhost inside a container refers to that container. The client verifies artifact checksums, detects repeated logical run IDs and refuses conflicting or incomplete imports. It does not promote a production model.
+Port 5500 is the audited existing quant-research MLflow endpoint. Configure the URI for your deployment. Supply authentication through runtime environment variables when required; keep credentials outside tracking URLs and Git.
 
-The client passes an isolated SQLite-backed MLflow integration test: artifact upload and retrieval, repeated-import detection and rejection of conflicting evidence. Run that test with `uv sync --locked --group dev --group tracking --group tracking-test` followed by `.venv/bin/pytest -q`. Import into the user's shared stack remains unverified. Training retains local evidence independently of tracking availability.
+Provision the canonical experiment through the platform bootstrap first; the client refuses to create a differently routed experiment implicitly. The adapter verifies artifact/configuration/split checksums before upload. The logical run UUID and manifest fingerprint make repeated imports idempotent; conflicting or incomplete imports are rejected. Training remains usable when tracking is unavailable.
 
-## A SeaweedFS folder visible in Lab
+An isolated SQLite-backed integration test verifies upload, byte-identical retrieval, duplicate import and conflict rejection. Install the `tracking-test` dependency group to run it. The results receipt records any separately verified shared-service import.
 
-If infrastructure already supplies a client-side mount:
+## Container access
+
+The base Lab Compose file works independently. To join an existing platform client network:
+
 ```bash
-export SEAWEED_MOUNT=/absolute/path/to/existing/client-mount
-docker compose -f compose.yaml -f compose.seaweed.yaml up -d lab
+export MLOPS_DOCKER_NETWORK=mlops-platform_clients
+export MLFLOW_TRACKING_URI=http://mlflow:5000
+docker compose -f compose.yaml -f docker/compose.mlops.yaml up -d lab
 ```
 
-It appears read-only at `/shared`. This override creates neither a FUSE mount nor a SeaweedFS deployment. Never point it at the storage server's internal volume. MLflow's artifact proxy is a separate route and need not expose S3 administration credentials to notebooks.
+For the existing quant stack, use `MLOPS_DOCKER_NETWORK=kaggle-quant-collections_ui`. This attaches the client to the MLflow-facing network; it does not change the service or connect the notebook to database/storage administration networks.
 
-## Evidence for the public case study
+Inside a container, localhost refers to that container. A host-gateway route alone cannot reach a service published only on the host's loopback address. Use the explicit client network and the correct service hostname.
 
-Show the recipe, source/input/split identities, measured validation, checkpoint reload and output checks. Screenshots can explain a connected workflow after it exists; they do not replace traceable artifacts. The first verified workflow is CPU execution and local evidence.
+## Existing SeaweedFS client mount
 
-Prefect orchestration, W&B mirroring and the shared-service/Kaggle round-trip remain follow-up integrations. They are not completed features of this PR.
+```bash
+export SEAWEED_MOUNT=/absolute/path/to/existing/client-mount
+docker compose -f compose.yaml -f docker/compose.seaweed.yaml up -d lab
+```
+
+The mount appears read-only at `/shared`. It must be an existing client-side filesystem mount, not the storage server's internal volume. This override creates neither a FUSE mount nor a server. MLflow's artifact proxy remains a separate route; notebooks need no S3 administration credentials.
+
+## Kaggle and orchestration
+
+An offline Kaggle job writes a portable run bundle. Retrieve it, verify its exact code/input/artifact identities, then import it through the same adapter from a runtime that can reach the tracker. Kaggle does not need access to the private services.
+
+The platform includes orchestration infrastructure and its own integration checks. The current model benchmark's execution context is recorded in its receipt; the presence of a Prefect server does not retroactively make a manually launched experiment a Prefect run. W&B mirroring is not implemented.

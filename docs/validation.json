@@ -1,133 +1,928 @@
 {
-  "schema_version": 1,
-  "verified_at_utc": "2026-11-08",
-  "scope": "Bounded real-data CPU verification; no historical leaderboard reproduction claim",
-  "run_manifest": {
-    "schema_version": 1,
-    "logical_run_id": "a15ab402-72db-463d-a320-8c44b31ff6f4",
-    "status": "completed",
-    "run_kind": "real_data_model_run",
-    "profile": "bounded-real-data",
-    "source": {
-      "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
-      "git_commit": "fc99f9a03680b0f05dd9a06fd8309cb4c01152c4",
-      "git_dirty": false,
-      "python_source_sha256": "88cc5598f792679d8feb4c3fe7efb4052343ec2521a97172f7f1e1eb5ea98bd3"
-    },
-    "environment": {
-      "python": "3.12.16",
-      "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
-      "device": "cpu",
-      "threads": 4,
-      "packages": {
-        "torch": "2.15.0+cpu",
-        "numpy": "2.5.4",
-        "scipy": "1.18.1",
-        "scikit-learn": "1.9.1",
-        "iceberg-classifier": "0.1.0"
+  "schema_version": 3,
+  "project_id": "iceberg",
+  "verified_at": "2026-11-08T20:26:48.939015+00:00",
+  "model_development_run": {
+    "manifest": {
+      "schema_version": 2,
+      "project_id": "iceberg",
+      "logical_run_id": "9b52be4e-2cf8-43bf-8a0c-a6ecb593c328",
+      "status": "completed",
+      "run_kind": "real_data_model_run",
+      "profile": "modern-image-and-angle",
+      "source": {
+        "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+        "git_commit": "897bd39d8ba81bc96da623e694a929fbab15eb3f",
+        "git_dirty": false,
+        "python_source_sha256": "c63dc9393577ef600dec00d0c9b8f0307a29bccf859c5dbdb0064a052115c8fe"
+      },
+      "environment": {
+        "python": "3.12.16",
+        "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+        "device": "cpu",
+        "threads": 4,
+        "cuda_runtime": null,
+        "gpu": null,
+        "packages": {
+          "torch": "2.15.0+cpu",
+          "numpy": "2.5.4",
+          "scipy": "1.18.1",
+          "scikit-learn": "1.9.1",
+          "iceberg-classifier": "0.1.0"
+        }
+      },
+      "config": {
+        "name": "modern-image-and-angle",
+        "seed": 1017,
+        "split_seed": 25,
+        "validation_fraction": 0.159,
+        "filters": 16,
+        "hidden": 64,
+        "use_angle": true,
+        "dropout": 0.3,
+        "batch_size": 64,
+        "epochs": 30,
+        "learning_rate": 0.001,
+        "min_learning_rate": 1e-05,
+        "weight_decay": 0.0001,
+        "gradient_clip": 1.0,
+        "augment": true,
+        "max_train_rows": null,
+        "threads": 4,
+        "device": "auto",
+        "deterministic": false,
+        "mixed_precision": true,
+        "tta": "flips"
+      },
+      "input_sha256": "a56756a2528a09b139dc2747e2e40d869f9da7a8c9df37b188b6163f6bfb8696",
+      "historical_public_target": 0.19348,
+      "historical_score_comparison": "requires comparable Kaggle submission score",
+      "model_family": "modern-two-band-cnn-v1",
+      "config_sha256": "3e17cd1307d96927717b7576404e3961b0bf43332458673b5beaab838f6deb3b",
+      "split_sha256": "880c8c75528c75eb1f4d3397e0b20fbad78326187b3fd45f5082d9c5cbd4e093",
+      "preprocessing": {
+        "channel_mean": [
+          -20.63327195751959,
+          -26.3422224836347
+        ],
+        "channel_std": [
+          5.1799648470085184,
+          3.3980579619014146
+        ],
+        "angle_median": 39.5027,
+        "angle_mean": 39.28766283382789,
+        "angle_std": 3.6365164910215646
+      },
+      "split_audit": {
+        "shared_known_angles": 84,
+        "validation_rows_with_training_angle": 121,
+        "training_missing_angles": 113,
+        "validation_missing_angles": 20
+      },
+      "train_rows": 1348,
+      "validation_rows": 256,
+      "training_examples_seen": 40320,
+      "optimizer_steps": 630,
+      "steps_per_epoch": 21,
+      "elapsed_seconds": 120.95500313900266,
+      "artifacts": {
+        "config.json": "3e17cd1307d96927717b7576404e3961b0bf43332458673b5beaab838f6deb3b",
+        "history.json": "06e10176609f07d80cbc4aa2c7df769435711e517f7d6f07a548dec14461e8eb",
+        "metrics.json": "4e92facf74c26b21f427d73d5e9faf92ba443370e05c61714b8bac021470bbf0",
+        "model.pt": "b31e3a261d6f720885e67a987697e9ded96b428404708401ff181999141f0317",
+        "split.csv": "880c8c75528c75eb1f4d3397e0b20fbad78326187b3fd45f5082d9c5cbd4e093",
+        "validation.csv": "ebb0376422fb35688805c362c738f3e5c4b97c5e0dbb2d02c22788e7b1ce8473"
       }
     },
-    "config": {
-      "name": "bounded-real-data",
-      "seed": 1017,
-      "split_seed": 25,
-      "validation_fraction": 0.159,
-      "filters": 8,
-      "hidden": 128,
-      "batch_size": 16,
-      "epochs": 1,
-      "epoch_repeats": 1,
-      "learning_rate": 0.0005,
-      "learning_rate_decay": 0.002,
-      "augment": true,
-      "max_train_rows": 128,
-      "threads": 4
+    "metrics": {
+      "validation_log_loss": 0.20119943330250195,
+      "validation_rows": 256,
+      "best_epoch": 23,
+      "brier_score": 0.05558571091807355,
+      "probability_min": 0.005296709015965462,
+      "probability_max": 0.986631453037262,
+      "missing_angle_log_loss": 0.06418053464769977,
+      "known_angle_log_loss": 0.21281120437494286
     },
-    "input_sha256": "a56756a2528a09b139dc2747e2e40d869f9da7a8c9df37b188b6163f6bfb8696",
-    "historical_score_comparison": "not established",
-    "framework_equivalence": "structural port; numerical equivalence not established",
-    "train_rows": 128,
-    "validation_rows": 256,
-    "training_examples_seen": 128,
-    "elapsed_seconds": 10.606189311998605,
-    "artifacts": {
-      "model.pt": "a302d8ded200e28981dc016f8a47ae163478f5c7e61b2f087bcea2433c3cd968",
-      "config.json": "916b8a0eb157d66a447be0f2cd1a162448f75bd5141449bbdb6076b735da561f",
-      "split.csv": "065da790d4f42d791f7c4b3f7a91d3cee80c22ed59006a7f9abe943331d614af",
-      "history.json": "273c227960222d450a91f6ce5c15dae74251697ccc16474d21962271f4d391f4",
-      "metrics.json": "fbb48adac84b14335c03ef48b2c8a4151250ad9a3a3cd8874220660cd8f97d48",
-      "validation.csv": "de96ee9d73a63d3d7c4b5f99775072969eaa26bd48d59499b892be3018be4dff"
+    "prediction": {
+      "rows": 8424,
+      "input_sha256": "b1334a65bd0ceb9a027c780ba222f1dfba4cc34bd6adffef2ef5ed0e22a002fd",
+      "checkpoint_sha256": "b31e3a261d6f720885e67a987697e9ded96b428404708401ff181999141f0317",
+      "output_sha256": "1a30d5ebcd188144de5706aaf6e2eb0c68beee1a4181df8693534c2f82e10520",
+      "checkpoint_profile": "modern-image-and-angle",
+      "tta": "flips",
+      "status": "model_predictions"
+    },
+    "kaggle_submission": {
+      "ref": 58138050,
+      "fileName": "submission.csv",
+      "date": "2026-11-08T18:46:04.433000",
+      "description": "Modern PyTorch CNN; train-only preprocessing; metadata; four-flip TTA; source 897bd39",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.21463",
+      "privateScore": "0.19855"
     }
   },
-  "manifest_sha256": "d81061cda85c4ffde77c63ad2f669393a8059bc77580889b89fceb7f425ae93b",
-  "metrics": {
-    "validation_log_loss": 0.8497995872496394,
-    "validation_rows": 256
-  },
-  "prediction": {
-    "rows": 8424,
-    "input_sha256": "b1334a65bd0ceb9a027c780ba222f1dfba4cc34bd6adffef2ef5ed0e22a002fd",
-    "checkpoint_sha256": "a302d8ded200e28981dc016f8a47ae163478f5c7e61b2f087bcea2433c3cd968",
-    "output_sha256": "4b43d153202a83a0ff811753b70be5f99d9a532cbce86ece1b204f9c39fe3fc3",
-    "checkpoint_profile": "bounded-real-data",
-    "status": "model_predictions"
-  },
-  "checks": {
-    "pytest": {
-      "passed": 5,
-      "upstream_warnings": [
-        "MLflow uses SQLAlchemy noload, deprecated upstream"
-      ]
-    },
-    "ruff": "check and format passed",
-    "walkthrough": {
-      "executed_code_cells": 6,
-      "errors": 0,
-      "aggregate_figures_visually_reviewed": 2
-    },
-    "independent_checkpoint_reload": {
-      "local": {
-        "validation_log_loss": 0.8497995872496394,
-        "validation_rows": 256
+  "historical_submissions": {
+    "source": "authenticated Kaggle submission history",
+    "records": [
+      {
+        "ref": 5685494,
+        "fileName": "subm_2017-10-29-12-08_f008_r01.csv",
+        "date": "2017-10-30T07:18:01.730000",
+        "publicScore": "0.19348",
+        "privateScore": "0.19311"
       },
-      "docker": {
-        "validation_log_loss": 0.8497995872496394,
-        "validation_rows": 256
+      {
+        "ref": 5685479,
+        "fileName": "subm_2017-10-30-00-44_f008_r01.csv",
+        "date": "2017-10-30T07:16:10.147000",
+        "publicScore": "0.20507",
+        "privateScore": "0.20730"
+      }
+    ]
+  },
+  "shared_mlflow": {
+    "experiment": "kaggle/iceberg",
+    "experiment_id": "5",
+    "run_id": "549fd47839d04bea8994b6da9995eb26",
+    "status": "FINISHED",
+    "artifact_uri": "mlflow-artifacts:/projects/iceberg/549fd47839d04bea8994b6da9995eb26/artifacts",
+    "model_sha256": "b31e3a261d6f720885e67a987697e9ded96b428404708401ff181999141f0317",
+    "download_hash_match": true,
+    "metrics_match": true,
+    "repeated_import": "already_imported",
+    "server_ownership": "existing quant-research MLflow; SeaweedFS-backed artifact proxy"
+  },
+  "cv": {
+    "status": "completed",
+    "logical_run_id": "a02b6d40-2f5a-4f08-8d2c-55c8bde19178",
+    "source": {
+      "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+      "git_commit": "88683b8371f2fec2f2836aede2533f15c1eb94f9",
+      "git_dirty": false,
+      "python_source_sha256": "e9b215843738efa0297971df6529abe998a03320a3f62b4b976194958410fe92"
+    },
+    "protocol": {
+      "folds": 5,
+      "strategy": "grouped",
+      "shuffle": true,
+      "split_seed": 25,
+      "model_seeds": [
+        1017,
+        2027
+      ],
+      "workers": 2,
+      "threads_per_worker": 4,
+      "checkpoint_selection": "last",
+      "config": {
+        "name": "modern-image-and-angle",
+        "seed": 1017,
+        "split_seed": 25,
+        "validation_fraction": 0.159,
+        "filters": 16,
+        "hidden": 64,
+        "use_angle": true,
+        "dropout": 0.3,
+        "batch_size": 64,
+        "epochs": 30,
+        "learning_rate": 0.001,
+        "min_learning_rate": 1e-05,
+        "weight_decay": 0.0001,
+        "gradient_clip": 1.0,
+        "augment": true,
+        "max_train_rows": null,
+        "threads": 4,
+        "device": "cpu",
+        "deterministic": false,
+        "mixed_precision": true,
+        "tta": "flips"
       }
     },
-    "submission": {
-      "official_sample_id_order_match": true,
-      "rows": 8424,
-      "probabilities_finite_and_bounded": true
+    "summary": {
+      "rows": 1604,
+      "positives": 753,
+      "negatives": 851,
+      "positive_fraction": 0.4694513715710723,
+      "missing_angle_rows": 133,
+      "pooled_oof": {
+        "log_loss": 0.20479245393810833,
+        "brier_score": 0.0606876985304574,
+        "roc_auc": 0.9747488697774511
+      },
+      "fold_metrics": [
+        {
+          "fold": 0,
+          "rows": 322,
+          "log_loss": 0.19140822230631316,
+          "brier_score": 0.05696879861902428,
+          "roc_auc": 0.9799775376631423
+        },
+        {
+          "fold": 1,
+          "rows": 320,
+          "log_loss": 0.19738468524246702,
+          "brier_score": 0.05992448291263423,
+          "roc_auc": 0.9773725490196078
+        },
+        {
+          "fold": 2,
+          "rows": 321,
+          "log_loss": 0.17611001984674768,
+          "brier_score": 0.04986160390843999,
+          "roc_auc": 0.9809115699259835
+        },
+        {
+          "fold": 3,
+          "rows": 320,
+          "log_loss": 0.21044185027254372,
+          "brier_score": 0.06530415620012384,
+          "roc_auc": 0.9757254901960783
+        },
+        {
+          "fold": 4,
+          "rows": 321,
+          "log_loss": 0.2486537096525964,
+          "brier_score": 0.07140304023936457,
+          "roc_auc": 0.9645890144137125
+        }
+      ],
+      "fold_distribution": {
+        "log_loss": {
+          "mean": 0.2047996974641336,
+          "std_ddof1": 0.027442758098808213,
+          "min": 0.17611001984674768,
+          "max": 0.2486537096525964
+        },
+        "brier_score": {
+          "mean": 0.06069241637591738,
+          "std_ddof1": 0.008181490656652362,
+          "min": 0.04986160390843999,
+          "max": 0.07140304023936457
+        },
+        "roc_auc": {
+          "mean": 0.9757152322437049,
+          "std_ddof1": 0.006551883319293612,
+          "min": 0.9645890144137125,
+          "max": 0.9809115699259835
+        }
+      },
+      "variability_interpretation": "Descriptive fold dispersion, not a confidence interval; training sets overlap.",
+      "calibration_bins": [
+        {
+          "lower": 0.0,
+          "upper": 0.1,
+          "rows": 675,
+          "mean_probability": 0.017681978050343418,
+          "observed_positive_fraction": 0.01925925925925926
+        },
+        {
+          "lower": 0.1,
+          "upper": 0.2,
+          "rows": 52,
+          "mean_probability": 0.14334111076851302,
+          "observed_positive_fraction": 0.1346153846153846
+        },
+        {
+          "lower": 0.2,
+          "upper": 0.3,
+          "rows": 43,
+          "mean_probability": 0.24652599803237027,
+          "observed_positive_fraction": 0.13953488372093023
+        },
+        {
+          "lower": 0.3,
+          "upper": 0.4,
+          "rows": 42,
+          "mean_probability": 0.3494647140836432,
+          "observed_positive_fraction": 0.4523809523809524
+        },
+        {
+          "lower": 0.4,
+          "upper": 0.5,
+          "rows": 32,
+          "mean_probability": 0.4530933075584471,
+          "observed_positive_fraction": 0.5625
+        },
+        {
+          "lower": 0.5,
+          "upper": 0.6,
+          "rows": 34,
+          "mean_probability": 0.5542706720092717,
+          "observed_positive_fraction": 0.5882352941176471
+        },
+        {
+          "lower": 0.6,
+          "upper": 0.7,
+          "rows": 37,
+          "mean_probability": 0.6465555151572099,
+          "observed_positive_fraction": 0.7297297297297297
+        },
+        {
+          "lower": 0.7,
+          "upper": 0.8,
+          "rows": 54,
+          "mean_probability": 0.7519923332664702,
+          "observed_positive_fraction": 0.7777777777777778
+        },
+        {
+          "lower": 0.8,
+          "upper": 0.9,
+          "rows": 66,
+          "mean_probability": 0.8472453378366701,
+          "observed_positive_fraction": 0.7424242424242424
+        },
+        {
+          "lower": 0.9,
+          "upper": 1.0,
+          "rows": 569,
+          "mean_probability": 0.9726548733841137,
+          "observed_positive_fraction": 0.9701230228471002
+        }
+      ],
+      "expected_calibration_error_10_bins": 0.017410217584319834,
+      "calibration_interpretation": "Diagnostic only; no calibrator was fitted to these OOF targets.",
+      "strata": {
+        "missing_angle": {
+          "rows": 133,
+          "positives": 0,
+          "log_loss": 0.029463237129361407,
+          "brier_score": 0.0030996237342860128,
+          "roc_auc": null
+        },
+        "known_angle": {
+          "rows": 1471,
+          "positives": 753,
+          "log_loss": 0.22064478965229142,
+          "brier_score": 0.06589450610890117,
+          "roc_auc": 0.9708797123483781
+        },
+        "ship": {
+          "rows": 851,
+          "positives": 0,
+          "log_loss": 0.20156329324731728,
+          "brier_score": 0.061071399650383676,
+          "roc_auc": null
+        },
+        "iceberg": {
+          "rows": 753,
+          "positives": 753,
+          "log_loss": 0.20844187724204347,
+          "brier_score": 0.060254060212984274,
+          "roc_auc": null
+        }
+      },
+      "prediction_kind": "mean_probability_across_predeclared_seeds",
+      "seed_results": [
+        {
+          "seed": 1017,
+          "rows": 1604,
+          "positives": 753,
+          "negatives": 851,
+          "positive_fraction": 0.4694513715710723,
+          "missing_angle_rows": 133,
+          "pooled_oof": {
+            "log_loss": 0.21152779125760393,
+            "brier_score": 0.06274803663948567,
+            "roc_auc": 0.9733256554666567
+          },
+          "fold_metrics": [
+            {
+              "fold": 0,
+              "rows": 322,
+              "log_loss": 0.19447807201874293,
+              "brier_score": 0.058066828317541945,
+              "roc_auc": 0.9795515278261879
+            },
+            {
+              "fold": 1,
+              "rows": 320,
+              "log_loss": 0.2090430781501042,
+              "brier_score": 0.06390321704174318,
+              "roc_auc": 0.9753333333333333
+            },
+            {
+              "fold": 2,
+              "rows": 321,
+              "log_loss": 0.18278474730341746,
+              "brier_score": 0.05214557549363907,
+              "roc_auc": 0.979703934553954
+            },
+            {
+              "fold": 3,
+              "rows": 320,
+              "log_loss": 0.21715175636571216,
+              "brier_score": 0.0674640925462144,
+              "roc_auc": 0.9736470588235294
+            },
+            {
+              "fold": 4,
+              "rows": 321,
+              "log_loss": 0.25424419644144325,
+              "brier_score": 0.0721933434575762,
+              "roc_auc": 0.9638878067783404
+            }
+          ],
+          "fold_distribution": {
+            "log_loss": {
+              "mean": 0.211540370055884,
+              "std_ddof1": 0.027291705540966046,
+              "min": 0.18278474730341746,
+              "max": 0.25424419644144325
+            },
+            "brier_score": {
+              "mean": 0.06275461137134296,
+              "std_ddof1": 0.007859947893150204,
+              "min": 0.05214557549363907,
+              "max": 0.0721933434575762
+            },
+            "roc_auc": {
+              "mean": 0.974424732263069,
+              "std_ddof1": 0.006453896887313023,
+              "min": 0.9638878067783404,
+              "max": 0.979703934553954
+            }
+          },
+          "variability_interpretation": "Descriptive fold dispersion, not a confidence interval; training sets overlap.",
+          "calibration_bins": [
+            {
+              "lower": 0.0,
+              "upper": 0.1,
+              "rows": 684,
+              "mean_probability": 0.01774439974402061,
+              "observed_positive_fraction": 0.02046783625730994
+            },
+            {
+              "lower": 0.1,
+              "upper": 0.2,
+              "rows": 50,
+              "mean_probability": 0.13961803540587425,
+              "observed_positive_fraction": 0.18
+            },
+            {
+              "lower": 0.2,
+              "upper": 0.3,
+              "rows": 35,
+              "mean_probability": 0.24555521479674747,
+              "observed_positive_fraction": 0.2
+            },
+            {
+              "lower": 0.3,
+              "upper": 0.4,
+              "rows": 38,
+              "mean_probability": 0.3495614442386125,
+              "observed_positive_fraction": 0.3684210526315789
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.5,
+              "rows": 30,
+              "mean_probability": 0.4476432273785273,
+              "observed_positive_fraction": 0.5
+            },
+            {
+              "lower": 0.5,
+              "upper": 0.6,
+              "rows": 42,
+              "mean_probability": 0.5457714256786165,
+              "observed_positive_fraction": 0.6428571428571429
+            },
+            {
+              "lower": 0.6,
+              "upper": 0.7,
+              "rows": 32,
+              "mean_probability": 0.6511055994778872,
+              "observed_positive_fraction": 0.6875
+            },
+            {
+              "lower": 0.7,
+              "upper": 0.8,
+              "rows": 43,
+              "mean_probability": 0.7491222481394924,
+              "observed_positive_fraction": 0.7209302325581395
+            },
+            {
+              "lower": 0.8,
+              "upper": 0.9,
+              "rows": 82,
+              "mean_probability": 0.8513301429225177,
+              "observed_positive_fraction": 0.7804878048780488
+            },
+            {
+              "lower": 0.9,
+              "upper": 1.0,
+              "rows": 568,
+              "mean_probability": 0.9729665701448078,
+              "observed_positive_fraction": 0.9683098591549296
+            }
+          ],
+          "expected_calibration_error_10_bins": 0.014134844632394273,
+          "calibration_interpretation": "Diagnostic only; no calibrator was fitted to these OOF targets.",
+          "strata": {
+            "missing_angle": {
+              "rows": 133,
+              "positives": 0,
+              "log_loss": 0.030629949891084765,
+              "brier_score": 0.004188444295014135,
+              "roc_auc": null
+            },
+            "known_angle": {
+              "rows": 1471,
+              "positives": 753,
+              "log_loss": 0.22788361240087185,
+              "brier_score": 0.06804268366995116,
+              "roc_auc": 0.9693186400174604
+            },
+            "ship": {
+              "rows": 851,
+              "positives": 0,
+              "log_loss": 0.20864264871384677,
+              "brier_score": 0.06369149330749986,
+              "roc_auc": null
+            },
+            "iceberg": {
+              "rows": 753,
+              "positives": 753,
+              "log_loss": 0.2147884238004159,
+              "brier_score": 0.06168179278227441,
+              "roc_auc": null
+            }
+          }
+        },
+        {
+          "seed": 2027,
+          "rows": 1604,
+          "positives": 753,
+          "negatives": 851,
+          "positive_fraction": 0.4694513715710723,
+          "missing_angle_rows": 133,
+          "pooled_oof": {
+            "log_loss": 0.20703684071146863,
+            "brier_score": 0.06121670638916206,
+            "roc_auc": 0.9742869493432459
+          },
+          "fold_metrics": [
+            {
+              "fold": 0,
+              "rows": 322,
+              "log_loss": 0.19811624706266018,
+              "brier_score": 0.05866204656010236,
+              "roc_auc": 0.9786220518182874
+            },
+            {
+              "fold": 1,
+              "rows": 320,
+              "log_loss": 0.19383500002000967,
+              "brier_score": 0.0588520131747315,
+              "roc_auc": 0.9779215686274509
+            },
+            {
+              "fold": 2,
+              "rows": 321,
+              "log_loss": 0.17529219413232047,
+              "brier_score": 0.049885220913215754,
+              "roc_auc": 0.9824308531359564
+            },
+            {
+              "fold": 3,
+              "rows": 320,
+              "log_loss": 0.21671092194102778,
+              "brier_score": 0.0659226196269667,
+              "roc_auc": 0.9747843137254901
+            },
+            {
+              "fold": 4,
+              "rows": 321,
+              "log_loss": 0.25124664050782614,
+              "brier_score": 0.07277688363295108,
+              "roc_auc": 0.9631476431632255
+            }
+          ],
+          "fold_distribution": {
+            "log_loss": {
+              "mean": 0.20704020073276883,
+              "std_ddof1": 0.028764919452113243,
+              "min": 0.17529219413232047,
+              "max": 0.25124664050782614
+            },
+            "brier_score": {
+              "mean": 0.061219756781593485,
+              "std_ddof1": 0.008606740014623132,
+              "min": 0.049885220913215754,
+              "max": 0.07277688363295108
+            },
+            "roc_auc": {
+              "mean": 0.975381286094082,
+              "std_ddof1": 0.007359863936836087,
+              "min": 0.9631476431632255,
+              "max": 0.9824308531359564
+            }
+          },
+          "variability_interpretation": "Descriptive fold dispersion, not a confidence interval; training sets overlap.",
+          "calibration_bins": [
+            {
+              "lower": 0.0,
+              "upper": 0.1,
+              "rows": 682,
+              "mean_probability": 0.01810777102750002,
+              "observed_positive_fraction": 0.020527859237536656
+            },
+            {
+              "lower": 0.1,
+              "upper": 0.2,
+              "rows": 48,
+              "mean_probability": 0.1428093851233522,
+              "observed_positive_fraction": 0.125
+            },
+            {
+              "lower": 0.2,
+              "upper": 0.3,
+              "rows": 42,
+              "mean_probability": 0.2499531645859991,
+              "observed_positive_fraction": 0.2857142857142857
+            },
+            {
+              "lower": 0.3,
+              "upper": 0.4,
+              "rows": 37,
+              "mean_probability": 0.35424558616973256,
+              "observed_positive_fraction": 0.2702702702702703
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.5,
+              "rows": 39,
+              "mean_probability": 0.44697608856054455,
+              "observed_positive_fraction": 0.5384615384615384
+            },
+            {
+              "lower": 0.5,
+              "upper": 0.6,
+              "rows": 39,
+              "mean_probability": 0.5475259851186703,
+              "observed_positive_fraction": 0.6923076923076923
+            },
+            {
+              "lower": 0.6,
+              "upper": 0.7,
+              "rows": 33,
+              "mean_probability": 0.657773247270873,
+              "observed_positive_fraction": 0.6666666666666666
+            },
+            {
+              "lower": 0.7,
+              "upper": 0.8,
+              "rows": 49,
+              "mean_probability": 0.7523601128130543,
+              "observed_positive_fraction": 0.7959183673469388
+            },
+            {
+              "lower": 0.8,
+              "upper": 0.9,
+              "rows": 58,
+              "mean_probability": 0.848761128968206,
+              "observed_positive_fraction": 0.7931034482758621
+            },
+            {
+              "lower": 0.9,
+              "upper": 1.0,
+              "rows": 577,
+              "mean_probability": 0.9732341282909003,
+              "observed_positive_fraction": 0.9636048526863085
+            }
+          ],
+          "expected_calibration_error_10_bins": 0.017170136136890023,
+          "calibration_interpretation": "Diagnostic only; no calibrator was fitted to these OOF targets.",
+          "strata": {
+            "missing_angle": {
+              "rows": 133,
+              "positives": 0,
+              "log_loss": 0.028771872810696496,
+              "brier_score": 0.002609855009508576,
+              "roc_auc": null
+            },
+            "known_angle": {
+              "rows": 1471,
+              "positives": 753,
+              "log_loss": 0.22315461143261248,
+              "brier_score": 0.06651562633035438,
+              "roc_auc": 0.9702804381360353
+            },
+            "ship": {
+              "rows": 851,
+              "positives": 0,
+              "log_loss": 0.20340204938533493,
+              "brier_score": 0.06061877278430266,
+              "roc_auc": null
+            },
+            "iceberg": {
+              "rows": 753,
+              "positives": 753,
+              "log_loss": 0.2111446858888122,
+              "brier_score": 0.061892458710191736,
+              "roc_auc": null
+            }
+          }
+        }
+      ],
+      "seed_distribution": {
+        "log_loss": {
+          "mean": 0.20928231598453628,
+          "min": 0.20703684071146863,
+          "max": 0.21152779125760393,
+          "range": 0.004490950546135297,
+          "std_ddof1": 0.0031755815851456978
+        },
+        "brier_score": {
+          "mean": 0.06198237151432386,
+          "min": 0.06121670638916206,
+          "max": 0.06274803663948567,
+          "range": 0.0015313302503236065,
+          "std_ddof1": 0.0010828140042399156
+        },
+        "roc_auc": {
+          "mean": 0.9738063024049513,
+          "min": 0.9733256554666567,
+          "max": 0.9742869493432459,
+          "range": 0.0009612938765891643,
+          "std_ddof1": 0.0006797374188493023
+        }
+      },
+      "seed_interpretation": "Descriptive training-seed variation on identical folds, not independent replicates or a confidence interval. All seeds are retained; no fold or seed is selected.",
+      "split_audit": [
+        {
+          "fold": 0,
+          "train_rows": 1282,
+          "validation_rows": 322,
+          "train_positives": 602,
+          "validation_positives": 151,
+          "validation_positive_fraction": 0.46894410252571106,
+          "shared_known_angles": 0,
+          "validation_rows_with_training_angle": 0,
+          "training_missing_angles": 115,
+          "validation_missing_angles": 18
+        },
+        {
+          "fold": 1,
+          "train_rows": 1284,
+          "validation_rows": 320,
+          "train_positives": 603,
+          "validation_positives": 150,
+          "validation_positive_fraction": 0.46875,
+          "shared_known_angles": 0,
+          "validation_rows_with_training_angle": 0,
+          "training_missing_angles": 108,
+          "validation_missing_angles": 25
+        },
+        {
+          "fold": 2,
+          "train_rows": 1283,
+          "validation_rows": 321,
+          "train_positives": 602,
+          "validation_positives": 151,
+          "validation_positive_fraction": 0.4704049825668335,
+          "shared_known_angles": 0,
+          "validation_rows_with_training_angle": 0,
+          "training_missing_angles": 104,
+          "validation_missing_angles": 29
+        },
+        {
+          "fold": 3,
+          "train_rows": 1284,
+          "validation_rows": 320,
+          "train_positives": 603,
+          "validation_positives": 150,
+          "validation_positive_fraction": 0.46875,
+          "shared_known_angles": 0,
+          "validation_rows_with_training_angle": 0,
+          "training_missing_angles": 102,
+          "validation_missing_angles": 31
+        },
+        {
+          "fold": 4,
+          "train_rows": 1283,
+          "validation_rows": 321,
+          "train_positives": 602,
+          "validation_positives": 151,
+          "validation_positive_fraction": 0.4704049825668335,
+          "shared_known_angles": 0,
+          "validation_rows_with_training_angle": 0,
+          "training_missing_angles": 103,
+          "validation_missing_angles": 30
+        }
+      ],
+      "grouped_split_audit": [
+        {
+          "fold": 0,
+          "train_rows": 1282,
+          "validation_rows": 322,
+          "train_positives": 602,
+          "validation_positives": 151,
+          "validation_positive_fraction": 0.46894410252571106,
+          "shared_known_angles": 0,
+          "validation_rows_with_training_angle": 0,
+          "training_missing_angles": 115,
+          "validation_missing_angles": 18
+        },
+        {
+          "fold": 1,
+          "train_rows": 1284,
+          "validation_rows": 320,
+          "train_positives": 603,
+          "validation_positives": 150,
+          "validation_positive_fraction": 0.46875,
+          "shared_known_angles": 0,
+          "validation_rows_with_training_angle": 0,
+          "training_missing_angles": 108,
+          "validation_missing_angles": 25
+        },
+        {
+          "fold": 2,
+          "train_rows": 1283,
+          "validation_rows": 321,
+          "train_positives": 602,
+          "validation_positives": 151,
+          "validation_positive_fraction": 0.4704049825668335,
+          "shared_known_angles": 0,
+          "validation_rows_with_training_angle": 0,
+          "training_missing_angles": 104,
+          "validation_missing_angles": 29
+        },
+        {
+          "fold": 3,
+          "train_rows": 1284,
+          "validation_rows": 320,
+          "train_positives": 603,
+          "validation_positives": 150,
+          "validation_positive_fraction": 0.46875,
+          "shared_known_angles": 0,
+          "validation_rows_with_training_angle": 0,
+          "training_missing_angles": 102,
+          "validation_missing_angles": 31
+        },
+        {
+          "fold": 4,
+          "train_rows": 1283,
+          "validation_rows": 321,
+          "train_positives": 602,
+          "validation_positives": 151,
+          "validation_positive_fraction": 0.4704049825668335,
+          "shared_known_angles": 0,
+          "validation_rows_with_training_angle": 0,
+          "training_missing_angles": 103,
+          "validation_missing_angles": 30
+        }
+      ],
+      "grouped_model_evaluation": "included"
     },
-    "lab_authentication": {
-      "lab_started": true,
-      "anonymous_rejected": true,
-      "authenticated_contents": true
+    "evidence": "cv-validation.json",
+    "independent_checkpoints_reloaded": 10,
+    "maximum_metric_delta": 0.0,
+    "shared_mlflow": {
+      "experiment": "kaggle/iceberg",
+      "parent_run_id": "bebfe33b39aa4e30883142902288ad2f",
+      "status": "FINISHED",
+      "finished_fold_runs": 10,
+      "analysis_sha256": "3adc043e3f45373bffc2517ab9120d0afadb69afcc3702028b29f8640ad6a8c5",
+      "checkpoint_readback_sha256": "e3da14054fb1112939b036014f3c1dbd9ed16111cb1da4c51bfd31357d852b43",
+      "repeated_import": "already_imported"
     },
-    "compose_configuration": "validated",
-    "mlflow": "Isolated SQLite artifact round-trip, duplicate import and conflict rejection passed"
+    "test_rows": 8424,
+    "sample_submission_id_order_match": true
   },
-  "container": {
-    "image": "iceberg-lab:0.1",
-    "image_id": "sha256:4dae44f9dc2fa9c34b20e20914d907b337c19ee74bbf2e0449691c413ec8a6f8",
-    "network_for_runtime_checks": "none"
+  "quality_checks": {
+    "pytest": {
+      "passed": 21,
+      "scope": "modern package, artifact contracts, CV/inference and MLflow idempotence"
+    },
+    "ruff": "check and format passed",
+    "python_ci_matrix": [
+      "3.12",
+      "3.13"
+    ],
+    "notebook": {
+      "executed_code_cells": 7,
+      "errors": 0,
+      "aggregate_figures": 4,
+      "execution_mode": "verify/reuse completed real model and grouped CV artifacts; verify retained full-test predictions"
+    },
+    "docker": {
+      "image_id": "sha256:b3f3644df271342c9cf6f4c9544b427286c91f4089f341c0006a9f10d644797f",
+      "checks": [
+        "synthetic training without Git",
+        "real saved-model evaluation",
+        "writable dev-container environment and workspace imports",
+        "authenticated JupyterLab",
+        "shared MLflow client-network artifact download"
+      ]
+    },
+    "provenance_scope": "Producer commits and input/model hashes are preserved per run. Later documentation and artifact-import changes do not relabel historical producers."
   },
-  "kaggle_package": {
-    "wheel": "iceberg_classifier-0.1.0-py3-none-any.whl",
-    "sha256": "8013066c98e1953c107de97a20cf293e6d37711326a3469acfcee85c8ad55187",
-    "staged_only": true
-  },
-  "unverified": [
-    "full reference training",
-    "historical score parity",
-    "numerical Keras/PyTorch equivalence",
-    "CUDA execution",
-    "shared MLflow/SeaweedFS import",
-    "Prefect integration",
-    "W&B integration",
-    "hosted Kaggle execution",
-    "leaderboard submission",
-    "interactive VS Code dev-container session"
-  ]
+  "interpretation": "Closure prioritizes reproducible, leakage-aware CV and engineering evidence; historical leaderboard gaps are retained and are not release gates.",
+  "hosted_kaggle": {
+    "status": "completed",
+    "evidence": "hosted-validation.json",
+    "scope": "Full-data single-holdout training and full-test prediction; separate from grouped CV",
+    "canonical_notebook": "https://www.kaggle.com/code/cttsai/kaggle-iceberg-solution-mlops"
+  }
 }

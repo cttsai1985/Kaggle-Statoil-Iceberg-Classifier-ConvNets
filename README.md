@@ -1,57 +1,106 @@
-# Two radar bands and an incidence angle: a reproducible Iceberg CNN
+# Iceberg and Ship Classification
 
-A maintained PyTorch implementation of Chia-Ta Tsai's 2017 Kaggle Statoil/C-CORE solution. The model combines two radar polarizations with incidence-angle metadata. An executable notebook explains the method; the original Keras scripts remain the historical reference.
+Distinguish icebergs from ships using two radar image bands. This project revisits Chia-Ta Tsai's 2017 Statoil/C-CORE Kaggle solution with a modern PyTorch training pipeline and evaluates it against the original competition results.
 
-The initial modern run trained on **128 real records**, evaluated on the original **256-record holdout**, reloaded its checkpoint, and predicted **all 8,424 test records**. This bounded run verifies execution. Historical score parity and Keras/PyTorch numerical equivalence remain unverified. See [observed results](docs/results.md).
+## Problem and data
 
-## Follow the reasoning
+Each observation contains two **75 × 75** radar bands, HH and HV polarization, and an incidence angle. The target is the probability that the observation contains an iceberg. The official dataset provides **1,604 labeled observations** and **8,424 test observations**. Predictions are evaluated with log loss, so confident mistakes are costly.
 
-Open [the data science walkthrough](notebooks/01-method-and-rerun.ipynb): inputs → validation rationale → architecture → bounded training → checkpoint reload → error inspection → predictions. Important computations have an explanation before the code and an interpretation after the output.
+See the [competition data description](https://www.kaggle.com/competitions/statoil-iceberg-classifier-challenge/data) for field definitions and data access.
 
-[Migration rationale](docs/migration.md) identifies preserved behavior and changes. The [original README](docs/legacy-readme.md) and untouched `scripts/` retain the historical workflow at commit [d7f9f46](https://github.com/cttsai1985/Kaggle-Statoil-Iceberg-Classifier-ConvNets/tree/d7f9f46145f067a82d3ddf3a9e6ca134bd098083).
+## Model
 
-The [portfolio modernization contract](docs/modernization-contract.md) defines the shared format and rollout across Iceberg, Home Credit and Google QUEST.
+A compact convolutional network learns spatial features from both radar bands together. Four progressively downsampled stages feed global average and maximum pooling; a dense head produces an iceberg probability. Native batch normalization, LayerNorm and AdamW replace the historical training implementation.
 
-## Rerun locally
+Channel scaling is fitted on training records only. Spatial augmentation transforms both channels together. An optional metadata branch combines the image features with a training-imputed, standardized incidence angle and a missingness indicator. The image-only and metadata variants share the same validation split.
 
-Install [uv](https://docs.astral.sh/uv/) and Python 3.12:
+The original Keras source is preserved in [`legacy/`](legacy/). [Model and training changes](docs/migration.md) describe the differences from the 2017 method.
+
+## Validation and results
+
+The primary validation workflow uses five stratified folds grouped by observed incidence angle across two fixed training seeds. It retains every fold and reports pooled OOF metrics, fold dispersion, seed sensitivity and missing-metadata strata. The [CV guide](docs/cv.md) explains the protocol and analyzer.
+
+| Grouped CV diagnostic | Observed result |
+|---|---:|
+| Known-angle OOF log loss (test metadata availability) | **0.2206** |
+| All-row paired-seed OOF log loss | 0.2048 |
+| All-row training-seed pooled-loss range | 0.0045 |
+| Known-angle overlap between fit/validation | 0 in every fold |
+| OOF coverage | All 1,604 records, once per seed |
+
+All 133 missing-angle records are ships, while test records have known angles. The analyzer keeps both strata visible; known-angle performance is the more relevant test-cohort diagnostic. Folds and seeds are retained, including the weakest fold. Reported dispersion is descriptive, not a confidence interval.
+
+
+The original single-model submissions scored **0.19348** and **0.20507** on the public leaderboard. These provide the historical benchmark. Current experiment results and their evaluation scope are recorded in [benchmark results](docs/results.md), with fingerprints in the [validation receipt](docs/validation.json).
+
+A separate model-development experiment uses the original **256-record holdout**. Its metadata CNN scored **0.2012 holdout log loss**, followed by **0.21463 public / 0.19855 private** on Kaggle. It does not beat the best historical result; these scores are reported separately from the grouped CV.
+
+## Analysis notebook
+
+The [data-science notebook](notebooks/01-method-and-rerun.ipynb) examines radar inputs, missing metadata, validation, model training, holdout predictions and test inference. It uses the same package as the command-line workflow.
+
+## Reproduce an experiment
+
+Install Python 3.12 and [uv](https://docs.astral.sh/uv/), then run from the repository root:
 
 ```bash
 uv sync --locked --group dev --group lab --group data
 export ICEBERG_DATA_DIR=/absolute/path/outside/git/iceberg
+.venv/bin/kaggle auth login
 .venv/bin/iceberg download --data-dir "$ICEBERG_DATA_DIR"
 .venv/bin/iceberg validate --data-dir "$ICEBERG_DATA_DIR"
-.venv/bin/iceberg train --data-dir "$ICEBERG_DATA_DIR" \
-  --config configs/bounded.json --run-dir .local/my-run
-.venv/bin/iceberg evaluate --checkpoint .local/my-run/model.pt \
+.venv/bin/iceberg cv --data-dir "$ICEBERG_DATA_DIR" \
+  --config configs/metadata.json --run-dir .local/my-cv \
+  --strategy grouped --folds 5 --split-seed 25 \
+  --seeds 1017 2027 --workers 2 --device cpu
+.venv/bin/iceberg analyze --run-dir .local/my-cv \
   --data "$ICEBERG_DATA_DIR/train.json"
-.venv/bin/iceberg predict --checkpoint .local/my-run/model.pt \
-  --data "$ICEBERG_DATA_DIR/test.json" --output .local/my-run/submission.csv
+.venv/bin/iceberg predict-cv --run-dir .local/my-cv \
+  --data "$ICEBERG_DATA_DIR/test.json" --output .local/my-cv/submission.csv
 ```
 
-Download requires Kaggle authentication and accepted rules. Every training run needs a new directory. The locked environment currently targets CPU/Linux/Python 3.12. `configs/reference.json` declares the larger three-epoch/eight-pass recipe; its full execution is not verified in this first change.
+Download requires Kaggle authentication and accepted competition rules. Each training invocation needs a new run directory. The [runbook](docs/reproduction.md) covers profiles, runtime requirements and saved artifacts.
 
-## Open Docker JupyterLab
+### Docker JupyterLab and dev container
+
+With `ICEBERG_DATA_DIR` set:
 
 ```bash
-.venv/bin/python tools/create_lab_token.py
+.venv/bin/python scripts/create_lab_token.py
 docker compose up --build -d lab
 ```
 
-Set `ICEBERG_DATA_DIR` first. Open http://127.0.0.1:8890/lab and use the token stored in the ignored `.local/jupyter_token`. Source/notebooks, read-only data and writable outputs are mounted into the container. The [runbook](docs/reproduction.md) covers Docker, the dev container, local `.venv` and the offline smoke.
+Open http://127.0.0.1:8890/lab using the token in the ignored `.local/jupyter_token` file. The container mounts project files, read-only data and writable experiment outputs. The dev container uses the same Docker image.
 
-Shared infrastructure stays outside this repository. [MLOps connections](docs/mlops.md) use an existing MLflow/SeaweedFS deployment; an optional Compose override exposes an existing client-side SeaweedFS mount. No shared servers are deployed.
+### Kaggle notebook
 
-## Prepare Kaggle execution
+The [Kaggle entry notebook](notebooks/kaggle/rerun.ipynb) runs the package from an attached code wheel and saves predictions and experiment artifacts. See [Kaggle execution](docs/kaggle.md) for packaging, execution and scoring instructions.
 
-The [thin offline entry point](kaggle/rerun.ipynb) uses the same package. [Packaging instructions](docs/kaggle.md) prepare a code wheel, notebook metadata and portable outputs. Remote execution and competition submission are separate, unverified steps and never automatic.
+## Engineering and experiment lifecycle
 
-## Check the maintained implementation
+The [architecture guide](docs/architecture.md) explains package boundaries, training-only preprocessing, portable artifacts, failure recovery and the release process. Local notebooks, CLI commands, Docker and Kaggle use the same implementation.
+
+### Project layout
+
+```text
+src/iceberg/     Data preparation, model, training, evaluation and CLI
+configs/         Experiment recipes
+notebooks/       Analysis and Kaggle entry notebooks
+docs/            Results, methodology and operating guides
+tests/           Data, model and workflow checks
+docker/          Runtime image and shared-storage mount configuration
+scripts/         Small packaging and runtime helpers
+legacy/          Preserved 2017 implementation
+```
+
+Each experiment saves its configuration, split, source and input identities, metrics and checkpoint checksums. An optional MLflow import connects completed runs to an existing tracker. Shared storage and service deployment remain external; [tracking and storage](docs/mlops.md) explains the integration.
+
+## Development
 
 ```bash
-.venv/bin/ruff check src tests tools
-.venv/bin/ruff format --check src tests tools
+.venv/bin/ruff check src tests scripts
+.venv/bin/ruff format --check src tests scripts
 .venv/bin/pytest -q
 ```
 
-Tests protect preprocessing, paired transforms, normalization, holdout identity, reload and output ordering. Legacy scripts are outside the modern lint scope. Data, checkpoints, credentials and prediction rows stay outside Git. Code retains the [MIT license](LICENSE); competition data follows its own terms.
+Code is licensed under [MIT](LICENSE); competition data follows its own terms. Data, trained weights, credentials and prediction rows are excluded from Git.

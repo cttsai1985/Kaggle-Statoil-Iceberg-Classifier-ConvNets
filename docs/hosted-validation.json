@@ -1,0 +1,169 @@
+{
+  "verified_at": "2026-11-08T19:48:33.664381+00:00",
+  "status": "verified",
+  "kernel_id": 143481450,
+  "executed_kernel_ref": "cttsai/iceberg-solution-reproducible-pytorch-and-mlops",
+  "executed_kernel_version": 1,
+  "code_dataset": "cttsai/kaggle-iceberg-code",
+  "code_dataset_version": 1,
+  "launch_source": {
+    "wheel": "iceberg_classifier-0.1.0-py3-none-any.whl",
+    "sha256": "ed386693812658d6ed8241152bdb92395c2e6c0bf5779b0987f8378cfc87724f",
+    "source": "https://github.com/cttsai1985/kaggle-iceberg-solution-mlops",
+    "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+    "git_commit": "0e042cb8c64988923322ceddc70852f5ede9b857",
+    "git_dirty": false,
+    "python_source_sha256": "e72d971926b17ab04cfa5ce6010b06e1a75bb4a92cd7b7e7fc518f99e46af617",
+    "lock_sha256": "4e884629b877985bd8653dbc0c667647e2f87f3760f52e59791d12601e9a8d7e",
+    "config_sha256": {
+      "config-baseline.json": "d79f5a4ca4a54af00b86b084aead7b986171c45f789289b27fc5f75cb2119c5b",
+      "config-metadata.json": "3e17cd1307d96927717b7576404e3961b0bf43332458673b5beaab838f6deb3b",
+      "config-smoke.json": "cf6ec7137b802e799dbd5c2081382873c90e329d26ad01b2f2d1f4965d3ddd20"
+    }
+  },
+  "run_bundle_sha256": "a81b81c77a987f63fbf488c291284de322315bfdf11248bf4ee6f7754cbf3622",
+  "producer_manifest_sha256": "5c81945aa2e6bcace52d3da9c08436a44f3ba0e91f878d03cb679d468d72a378",
+  "checkpoint_sha256": "d2e03be21fe3b7c6e31eb11994c0fee0ca3a70d3253ccd115ecaddad27bf1618",
+  "train_input_sha256": "a56756a2528a09b139dc2747e2e40d869f9da7a8c9df37b188b6163f6bfb8696",
+  "test_input_sha256": "b1334a65bd0ceb9a027c780ba222f1dfba4cc34bd6adffef2ef5ed0e22a002fd",
+  "submission_sha256": "504daf38022c1fac775499d4201504c0803a7298614a369d5385b7a088f48d7e",
+  "submission_rows": 8424,
+  "submission_ids_order_verified": true,
+  "artifact_checksums_verified": true,
+  "producer_environment": {
+    "python": "3.13.18",
+    "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+    "device": "cpu",
+    "threads": 4,
+    "cuda_runtime": null,
+    "gpu": null,
+    "packages": {
+      "torch": "2.11.0+cpu",
+      "numpy": "2.1.3",
+      "scipy": "1.16.3",
+      "scikit-learn": "1.6.1",
+      "iceberg-classifier": "0.1.0"
+    }
+  },
+  "local_reload_environment": {
+    "python": "3.12.16",
+    "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+    "device": "cpu",
+    "threads": 4,
+    "cuda_runtime": null,
+    "gpu": null,
+    "packages": {
+      "torch": "2.15.0+cpu",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "iceberg-classifier": "0.1.0"
+    }
+  },
+  "hosted_metrics": {
+    "validation_log_loss": 0.20595180275227035,
+    "validation_rows": 256,
+    "brier_score": 0.05579190904730089,
+    "probability_min": 0.00493577029556036,
+    "probability_max": 0.9862356185913086,
+    "best_epoch": 30,
+    "missing_angle_log_loss": 0.08214765794907511,
+    "known_angle_log_loss": 0.2164436794305072
+  },
+  "local_reload_metrics": {
+    "validation_log_loss": 0.20595180275227035,
+    "validation_rows": 256,
+    "brier_score": 0.05579190904730089,
+    "probability_min": 0.00493577029556036,
+    "probability_max": 0.9862356185913086,
+    "best_epoch": 30,
+    "missing_angle_log_loss": 0.08214765794907511,
+    "known_angle_log_loss": 0.2164436794305072
+  },
+  "metric_absolute_deltas": {
+    "validation_log_loss": 0.0,
+    "validation_rows": 0.0,
+    "brier_score": 0.0,
+    "probability_min": 0.0,
+    "probability_max": 0.0,
+    "best_epoch": 0.0,
+    "missing_angle_log_loss": 0.0,
+    "known_angle_log_loss": 0.0
+  },
+  "numeric_tolerance": 1e-05,
+  "producer_manifest_modified": false,
+  "code_assets_independently_verified": true,
+  "model_scope": "single 30-epoch metadata-model holdout run; independent hosted portability check, not the 10-model grouped CV ensemble",
+  "code_dataset_download": "cttsai/kaggle-iceberg-code/1",
+  "code_wheel_sha256": "ed386693812658d6ed8241152bdb92395c2e6c0bf5779b0987f8378cfc87724f",
+  "canonical_kernel_ref": "cttsai/kaggle-iceberg-solution-mlops",
+  "metadata_only_version": 2,
+  "metadata_update_executed": false,
+  "canonical_name_verified": true,
+  "completed_v1_bundle_preserved": true,
+  "attachments_verified_after_rename": true,
+  "notebook_source_unchanged": true,
+  "mlflow": {
+    "tracking_uri": "http://127.0.0.1:5500",
+    "experiment_id": "5",
+    "experiment_name": "kaggle/iceberg",
+    "run_id": "a57c4e647094453abacbca481cae38d9",
+    "first_import_status": "imported",
+    "second_import_status": "already_imported",
+    "download_checkpoint_sha256": "d2e03be21fe3b7c6e31eb11994c0fee0ca3a70d3253ccd115ecaddad27bf1618",
+    "download_verified": true,
+    "source_commit": "0e042cb8c64988923322ceddc70852f5ede9b857",
+    "source_commit_binding": "producer package fingerprint matches verified code-wheel receipt"
+  },
+  "local_holdout_comparison": {
+    "local_run_directory": ".local/runs/model-9b52be4e",
+    "local_logical_run_id": "9b52be4e-2cf8-43bf-8a0c-a6ecb593c328",
+    "hosted_split_sha256": "880c8c75528c75eb1f4d3397e0b20fbad78326187b3fd45f5082d9c5cbd4e093",
+    "local_split_sha256": "880c8c75528c75eb1f4d3397e0b20fbad78326187b3fd45f5082d9c5cbd4e093",
+    "split_identical": true,
+    "input_identical": true,
+    "configuration_identical": true,
+    "local_source": {
+      "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+      "git_commit": "897bd39d8ba81bc96da623e694a929fbab15eb3f",
+      "git_dirty": false,
+      "python_source_sha256": "c63dc9393577ef600dec00d0c9b8f0307a29bccf859c5dbdb0064a052115c8fe"
+    },
+    "hosted_source": {
+      "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+      "git_commit": null,
+      "git_dirty": null,
+      "python_source_sha256": "e72d971926b17ab04cfa5ce6010b06e1a75bb4a92cd7b7e7fc518f99e46af617"
+    },
+    "local_environment": {
+      "python": "3.12.16",
+      "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+      "device": "cpu",
+      "threads": 4,
+      "cuda_runtime": null,
+      "gpu": null,
+      "packages": {
+        "torch": "2.15.0+cpu",
+        "numpy": "2.5.4",
+        "scipy": "1.18.1",
+        "scikit-learn": "1.9.1",
+        "iceberg-classifier": "0.1.0"
+      }
+    },
+    "hosted_environment": {
+      "python": "3.13.18",
+      "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+      "device": "cpu",
+      "threads": 4,
+      "cuda_runtime": null,
+      "gpu": null,
+      "packages": {
+        "torch": "2.11.0+cpu",
+        "numpy": "2.1.3",
+        "scipy": "1.16.3",
+        "scikit-learn": "1.6.1",
+        "iceberg-classifier": "0.1.0"
+      }
+    }
+  }
+}

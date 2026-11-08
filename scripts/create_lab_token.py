@@ -6,6 +6,7 @@ from pathlib import Path
 
 directory = Path(".local")
 directory.mkdir(exist_ok=True)
+(directory / "runs").mkdir(exist_ok=True)
 token = directory / "jupyter_token"
 if not token.exists():
     descriptor = os.open(token, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
