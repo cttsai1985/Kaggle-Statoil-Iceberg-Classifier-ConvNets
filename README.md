@@ -10,6 +10,8 @@ Open [the data science walkthrough](notebooks/01-method-and-rerun.ipynb): inputs
 
 [Migration rationale](docs/migration.md) identifies preserved behavior and changes. The [original README](docs/legacy-readme.md) and untouched `scripts/` retain the historical workflow at commit [d7f9f46](https://github.com/cttsai1985/Kaggle-Statoil-Iceberg-Classifier-ConvNets/tree/d7f9f46145f067a82d3ddf3a9e6ca134bd098083).
 
+The [portfolio modernization contract](docs/modernization-contract.md) defines the shared format and rollout across Iceberg, Home Credit and Google QUEST.
+
 ## Rerun locally
 
 Install [uv](https://docs.astral.sh/uv/) and Python 3.12:
