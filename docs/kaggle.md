@@ -31,4 +31,3 @@ The entry point expects extracted `train.json` and `test.json` in the competitio
 The notebook writes `submission.csv` and `run-bundle.zip`. Before importing, retrieve the exact notebook version, record its version/wheel identity, safely extract into a fresh local directory and verify manifest/artifact hashes. Remote-version receipts and safe bundle extraction are not automated yet.
 
 Remote Kaggle execution is unverified. Leaderboard submission is separate and depends on this closed competition's current eligibility. No Kaggle publication, execution or submission was performed in this PR.
-

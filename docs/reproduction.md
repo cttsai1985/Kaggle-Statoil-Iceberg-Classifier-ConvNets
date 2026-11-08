@@ -78,4 +78,3 @@ docker run --rm --network none --cpus 4 --memory 8g \
 ## Reproducibility limits
 
 Recorded CPU behavior does not establish identical results across arbitrary libraries, hardware or frameworks. Full reference training, cross-framework equivalence, GPU execution and remote Kaggle execution need their own evidence.
-

@@ -39,4 +39,3 @@ It appears read-only at `/shared`. This override creates neither a FUSE mount no
 Show the recipe, source/input/split identities, measured validation, checkpoint reload and output checks. Screenshots can explain a connected workflow after it exists; they do not replace traceable artifacts. The first verified workflow is CPU execution and local evidence.
 
 Prefect orchestration, W&B mirroring and the shared-service/Kaggle round-trip remain follow-up integrations. They are not completed features of this PR.
-

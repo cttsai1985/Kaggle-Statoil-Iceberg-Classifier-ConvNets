@@ -32,4 +32,3 @@ The maintained implementation runs on real data, reloads checkpoints and produce
 The walkthrough explains data modalities, missing metadata, validation, architecture, error distributions and saved artifacts. One-factor experiments are suggestions for learning; no improvement claim is inferred from one short run.
 
 Source: [original scripts](https://github.com/cttsai1985/Kaggle-Statoil-Iceberg-Classifier-ConvNets/tree/d7f9f46145f067a82d3ddf3a9e6ca134bd098083/scripts).
-

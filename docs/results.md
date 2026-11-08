@@ -16,4 +16,3 @@ The 2017 README reports a score around 0.194–0.205. That remains an author-rep
 The short-budget result has weak predictive performance. It establishes execution and traceable artifacts, not a competitive model or historical reproduction. Training budget, held-out labels and leaderboard context differ from the old reported score.
 
 [The validation receipt](validation.json) records checks and fingerprints without publishing competition records or weights. Full reference training, numerical Keras/PyTorch equality, CUDA, connected MLflow/SeaweedFS import and remote Kaggle execution remain unverified.
-
