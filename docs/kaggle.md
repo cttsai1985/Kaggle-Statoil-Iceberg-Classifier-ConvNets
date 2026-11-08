@@ -16,7 +16,7 @@ Inspect staged files first. The following commands write to Kaggle; preparation 
 
 ```bash
 # First code dataset version, private by default:
-.venv/bin/kaggle datasets create -p .local/kaggle-bundle/code-dataset
+.venv/bin/kaggle datasets create --keep-tabular -p .local/kaggle-bundle/code-dataset
 # Wait for the dataset status to become ready before pushing the kernel.
 .venv/bin/kaggle datasets status cttsai/kaggle-iceberg-code
 # Use datasets version for later versions of an existing dataset.

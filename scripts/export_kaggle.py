@@ -29,7 +29,8 @@ with tempfile.TemporaryDirectory(prefix="iceberg-wheel-") as temporary:
     wheel = assets / wheels[0].name
     shutil.copy2(wheels[0], wheel)
 shutil.copy2("LICENSE", assets / "LICENSE")
-shutil.copytree("configs", assets / "configs", dirs_exist_ok=True)
+for config in Path("configs").glob("*.json"):
+    shutil.copy2(config, assets / ("config-" + config.name))
 (assets / "source.json").write_text(
     json.dumps(
         {
@@ -39,7 +40,7 @@ shutil.copytree("configs", assets / "configs", dirs_exist_ok=True)
             **source_identity(),
             "lock_sha256": sha256(Path("uv.lock")),
             "config_sha256": {
-                path.name: sha256(path) for path in sorted(Path("configs").glob("*.json"))
+                "config-" + path.name: sha256(path) for path in sorted(Path("configs").glob("*.json"))
             },
         },
         indent=2,
