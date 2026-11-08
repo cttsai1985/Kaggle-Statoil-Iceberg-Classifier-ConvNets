@@ -19,6 +19,7 @@ from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
 from torch import nn
 from torch.utils.data import DataLoader
 
+from iceberg import PROJECT_ID
 from iceberg.data import Preprocessing, RadarDataset, load_data, sha256
 from iceberg.model import IcebergCNN
 
@@ -143,7 +144,10 @@ def source_identity() -> dict:
     def git(*args):
         if not (root / ".git").exists():
             return None
-        result = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True)
+        try:
+            result = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True)
+        except FileNotFoundError:
+            return None
         return result.stdout.strip() if result.returncode == 0 else None
 
     status = git("status", "--porcelain")
@@ -226,6 +230,7 @@ def train(data_path: Path, run_dir: Path, config: dict, *, fixture=False) -> dic
     started = time.monotonic()
     manifest = {
         "schema_version": 2,
+        "project_id": PROJECT_ID,
         "logical_run_id": str(uuid.uuid4()),
         "status": "running",
         "run_kind": "synthetic_fixture" if fixture else "real_data_model_run",

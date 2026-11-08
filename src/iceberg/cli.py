@@ -9,10 +9,9 @@ import sys
 import tempfile
 from pathlib import Path, PurePosixPath
 
+from iceberg import COMPETITION
 from iceberg.data import load_data, make_fixture, sha256
 from iceberg.runtime import evaluate, predict, train, verify_run, write_json
-
-COMPETITION = "statoil-iceberg-classifier-challenge"
 
 
 def download(directory: Path) -> dict:

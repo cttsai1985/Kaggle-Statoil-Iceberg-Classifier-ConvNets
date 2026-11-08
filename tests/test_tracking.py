@@ -24,7 +24,7 @@ def test_sqlite_import_is_idempotent_and_rejects_conflicting_evidence(tmp_path, 
         mlflow.set_tracking_uri(tracking_uri)
         client = mlflow.MlflowClient()
         experiment_id = client.create_experiment(
-            "kaggle/statoil-iceberg-classifier-challenge",
+            "kaggle/iceberg",
             artifact_location=(tmp_path / "artifacts").as_uri(),
         )
         first = track(run_dir, tracking_uri)

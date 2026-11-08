@@ -183,3 +183,16 @@ def test_source_fingerprint_is_identical_in_an_installed_package_layout(tmp_path
     identity = source_identity()
     assert identity["python_source_sha256"] == original
     assert identity["git_commit"] is None
+
+
+def test_source_fingerprint_survives_a_runtime_without_git(monkeypatch):
+    import iceberg.runtime as runtime
+
+    def missing_git(*args, **kwargs):
+        raise FileNotFoundError("git is not installed")
+
+    monkeypatch.setattr(runtime.subprocess, "run", missing_git)
+    identity = source_identity()
+    assert identity["git_commit"] is None
+    assert identity["git_dirty"] is None
+    assert len(identity["python_source_sha256"]) == 64

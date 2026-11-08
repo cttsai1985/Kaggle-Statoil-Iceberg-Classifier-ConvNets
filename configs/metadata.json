@@ -19,5 +19,5 @@
   "device": "auto",
   "deterministic": false,
   "mixed_precision": true,
-  "tta": "none"
+  "tta": "flips"
 }
