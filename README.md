@@ -1,37 +1,57 @@
-# A ConvNet for Kaggle Statoil/C-CORE Iceberg Classifier Challenge
+# Two radar bands and an incidence angle: a reproducible Iceberg CNN
 
-This ConvNet solution is written for Kaggle Statoil/C-CORE Iceberg Classifier Challenge (https://www.kaggle.com/c/statoil-iceberg-classifier-challenge). It handles multi-inputs which are one meta data input and one image input for image data with TWO channels: HH (transmit/receive horizontally) and HV (transmit horizontally and receive vertically). Compared to recent approaches relying on ImageGenerator which demands channels of image data restricted to one, three or fourth, this script could performing some augmentations on images only consisted of two channels or other numbers of channels. Currently, four types of augmentations such as 'Flip', 'Rotate', 'Shift', 'Zoom' are provided and they are perfomed by calling 'opencv' and 'keras.preprocessing.image'. 
+A maintained PyTorch implementation of Chia-Ta Tsai's 2017 Kaggle Statoil/C-CORE solution. The model combines two radar polarizations with incidence-angle metadata. An executable notebook explains the method; the original Keras scripts remain the historical reference.
 
+The initial modern run trained on **128 real records**, evaluated on the original **256-record holdout**, reloaded its checkpoint, and predicted **all 8,424 test records**. This bounded run verifies execution. Historical score parity and Keras/PyTorch numerical equivalence remain unverified. See [observed results](docs/results.md).
 
-From my limited observations, this ConvNet is able to score around 0.194~0.205+ and should have the potential to go deep by further optimizing such as to extend the training epochs, adjust early stopping, tweak optimizer, etc. Last but not least, I would like to thank petrosgk for his solution implemented for Carvana Image Masking Challenge (https://github.com/petrosgk/Kaggle-Carvana-Image-Masking-Challenge). I learnt a lot for how to build a pipeline with augmentation from there.
+## Follow the reasoning
 
+Open [the data science walkthrough](notebooks/01-method-and-rerun.ipynb): inputs → validation rationale → architecture → bounded training → checkpoint reload → error inspection → predictions. Important computations have an explanation before the code and an interpretation after the output.
 
----
+[Migration rationale](docs/migration.md) identifies preserved behavior and changes. The [original README](docs/legacy-readme.md) and untouched `scripts/` retain the historical workflow at commit [d7f9f46](https://github.com/cttsai1985/Kaggle-Statoil-Iceberg-Classifier-ConvNets/tree/d7f9f46145f067a82d3ddf3a9e6ca134bd098083).
 
-## Updates
+The [portfolio modernization contract](docs/modernization-contract.md) defines the shared format and rollout across Iceberg, Home Credit and Google QUEST.
 
-### Update Oct-30, 2017
-* Repo opened *
+## Rerun locally
 
----
+Install [uv](https://docs.astral.sh/uv/) and Python 3.12:
 
-## Requirements
-* keras 2.0 w/ TF backend
-* pandas
-* numpy
-* sklearn
-* cv2
-* h5py
+```bash
+uv sync --locked --group dev --group lab --group data
+export ICEBERG_DATA_DIR=/absolute/path/outside/git/iceberg
+.venv/bin/iceberg download --data-dir "$ICEBERG_DATA_DIR"
+.venv/bin/iceberg validate --data-dir "$ICEBERG_DATA_DIR"
+.venv/bin/iceberg train --data-dir "$ICEBERG_DATA_DIR" \
+  --config configs/bounded.json --run-dir .local/my-run
+.venv/bin/iceberg evaluate --checkpoint .local/my-run/model.pt \
+  --data "$ICEBERG_DATA_DIR/train.json"
+.venv/bin/iceberg predict --checkpoint .local/my-run/model.pt \
+  --data "$ICEBERG_DATA_DIR/test.json" --output .local/my-run/submission.csv
+```
 
----
+Download requires Kaggle authentication and accepted rules. Every training run needs a new directory. The locked environment currently targets CPU/Linux/Python 3.12. `configs/reference.json` declares the larger three-epoch/eight-pass recipe; its full execution is not verified in this first change.
 
-## Usage
+## Open Docker JupyterLab
 
-### Data
-Place '*train.json*' and '*test.json*' in the '*input*' folder.
+```bash
+.venv/bin/python tools/create_lab_token.py
+docker compose up --build -d lab
+```
 
-### Train, predict and submit at once
-Run `python cnn_train.py` in the '*scripts*' folder to training model, make predictions on test data and generate submission.
+Set `ICEBERG_DATA_DIR` first. Open http://127.0.0.1:8890/lab and use the token stored in the ignored `.local/jupyter_token`. Source/notebooks, read-only data and writable outputs are mounted into the container. The [runbook](docs/reproduction.md) covers Docker, the dev container, local `.venv` and the offline smoke.
 
-### Predict and submit
-Run `python cnn_predict.py` in the '*scripts*' folder to make predictions on test data and generate submission.
+Shared infrastructure stays outside this repository. [MLOps connections](docs/mlops.md) use an existing MLflow/SeaweedFS deployment; an optional Compose override exposes an existing client-side SeaweedFS mount. No shared servers are deployed.
+
+## Prepare Kaggle execution
+
+The [thin offline entry point](kaggle/rerun.ipynb) uses the same package. [Packaging instructions](docs/kaggle.md) prepare a code wheel, notebook metadata and portable outputs. Remote execution and competition submission are separate, unverified steps and never automatic.
+
+## Check the maintained implementation
+
+```bash
+.venv/bin/ruff check src tests tools
+.venv/bin/ruff format --check src tests tools
+.venv/bin/pytest -q
+```
+
+Tests protect preprocessing, paired transforms, normalization, holdout identity, reload and output ordering. Legacy scripts are outside the modern lint scope. Data, checkpoints, credentials and prediction rows stay outside Git. Code retains the [MIT license](LICENSE); competition data follows its own terms.

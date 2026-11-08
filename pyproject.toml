@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "iceberg-classifier"
+version = "0.1.0"
+description = "A reproducible PyTorch port of the two-band Statoil CNN"
+readme = "README.md"
+license = "MIT"
+authors = [{name = "Chia-Ta Tsai"}]
+requires-python = ">=3.12,<3.13"
+dependencies = ["numpy>=2,<3", "scipy>=1.14,<2", "scikit-learn>=1.6,<2", "torch>=2.8,<3"]
+
+[project.scripts]
+iceberg = "iceberg.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "ruff>=0.11,<1"]
+lab = ["jupyterlab>=4,<5", "nbclient>=0.10,<1", "nbconvert>=7,<8", "matplotlib>=3.10,<4"]
+data = ["kaggle>=2,<3", "py7zr>=1,<2"]
+tracking = ["mlflow-skinny>=3,<4"]
+tracking-test = ["sqlalchemy>=2,<3", "alembic>=1.15,<2"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/iceberg"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+include = ["src/**/*.py", "tests/**/*.py", "tools/**/*.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

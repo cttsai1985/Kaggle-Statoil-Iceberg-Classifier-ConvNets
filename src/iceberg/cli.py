@@ -1,0 +1,134 @@
+"""Explicit commands; publishing and competition submission are never automatic."""
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+from pathlib import Path, PurePosixPath
+
+from iceberg.data import load_data, make_fixture, sha256
+from iceberg.runtime import evaluate, predict, train, write_json
+
+COMPETITION = "statoil-iceberg-classifier-challenge"
+
+
+def download(directory: Path) -> dict:
+    import py7zr
+
+    sibling = Path(sys.executable).with_name("kaggle")
+    executable = str(sibling) if sibling.is_file() else shutil.which("kaggle")
+    if executable is None:
+        raise RuntimeError("Install the data dependency group to use Kaggle CLI")
+    env = os.environ.copy()
+    if not env.get("KAGGLE_API_TOKEN"):
+        auth = subprocess.run(
+            [executable, "auth", "print-access-token"], capture_output=True, text=True
+        )
+        if auth.returncode or not auth.stdout.strip() or "\n" in auth.stdout.strip():
+            raise RuntimeError("Authenticate with `kaggle auth login` and accept competition rules")
+        env["KAGGLE_API_TOKEN"] = auth.stdout.strip()
+    directory.mkdir(parents=True, exist_ok=True)
+    receipts = {}
+    for filename in ["train.json", "test.json", "sample_submission.csv"]:
+        archive_path = directory / (filename + ".7z")
+        if not archive_path.exists():
+            # Capture errors so credentials returned by an unexpected client are never printed.
+            result = subprocess.run(
+                [
+                    executable,
+                    "competitions",
+                    "download",
+                    "-c",
+                    COMPETITION,
+                    "-f",
+                    archive_path.name,
+                    "-p",
+                    str(directory),
+                    "-q",
+                ],
+                env=env,
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode:
+                raise RuntimeError(
+                    f"Kaggle download failed for {filename}; check login/rule access"
+                )
+        destination = directory / filename
+        if not destination.exists():
+            with tempfile.TemporaryDirectory(dir=directory) as staging:
+                with py7zr.SevenZipFile(archive_path) as archive:
+                    names = archive.getnames()
+                    if any(
+                        PurePosixPath(n).is_absolute() or ".." in PurePosixPath(n).parts
+                        for n in names
+                    ):
+                        raise ValueError("Unsafe archive path")
+                    archive.extractall(staging)
+                candidates = list(Path(staging).rglob(filename))
+                if len(candidates) != 1 or candidates[0].is_symlink():
+                    raise ValueError(f"Expected exactly one regular {filename} in archive")
+                shutil.copyfile(candidates[0], destination)
+        receipts[filename] = {"sha256": sha256(destination), "archive_sha256": sha256(archive_path)}
+    write_json(
+        directory / "download-manifest.json", {"competition": COMPETITION, "files": receipts}
+    )
+    return receipts
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    commands = parser.add_subparsers(dest="command", required=True)
+    for name in ["download", "validate", "fixture"]:
+        sub = commands.add_parser(name)
+        sub.add_argument("--data-dir", type=Path, required=True)
+    sub = commands.add_parser("train")
+    sub.add_argument("--data-dir", type=Path, required=True)
+    sub.add_argument("--run-dir", type=Path, required=True)
+    sub.add_argument("--config", type=Path, required=True)
+    sub.add_argument("--fixture", action="store_true", help="Label synthetic runs explicitly")
+    for name in ["evaluate", "predict"]:
+        sub = commands.add_parser(name)
+        sub.add_argument("--checkpoint", type=Path, required=True)
+        sub.add_argument("--data", type=Path, required=True)
+        sub.add_argument("--output", type=Path, required=name == "predict")
+    sub = commands.add_parser("track")
+    sub.add_argument("--run-dir", type=Path, required=True)
+    sub.add_argument("--tracking-uri", default=os.getenv("MLFLOW_TRACKING_URI"))
+    args = parser.parse_args()
+    if args.command == "fixture":
+        make_fixture(args.data_dir)
+        result = {"status": "synthetic_fixture_created"}
+    elif args.command == "download":
+        result = download(args.data_dir)
+    elif args.command == "validate":
+        training = load_data(args.data_dir / "train.json", labeled=True)
+        testing = load_data(args.data_dir / "test.json", labeled=False)
+        if set(training.ids) & set(testing.ids):
+            raise ValueError("Training and test ids overlap")
+        result = {"train_rows": len(training.ids), "test_rows": len(testing.ids)}
+    elif args.command == "train":
+        result = train(
+            args.data_dir / "train.json",
+            args.run_dir,
+            json.loads(args.config.read_text()),
+            fixture=args.fixture,
+        )
+    elif args.command == "evaluate":
+        result = evaluate(args.checkpoint, args.data, args.output)
+    elif args.command == "predict":
+        result = predict(args.checkpoint, args.data, args.output)
+    else:
+        from iceberg.tracking import track
+
+        if not args.tracking_uri:
+            parser.error("Set MLFLOW_TRACKING_URI or supply --tracking-uri")
+        result = track(args.run_dir, args.tracking_uri)
+    print(json.dumps(result, indent=2))
+
+
+if __name__ == "__main__":
+    main()

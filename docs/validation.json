@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "verified_at_utc": "2026-11-08",
+  "scope": "Bounded real-data CPU verification; no historical leaderboard reproduction claim",
+  "run_manifest": {
+    "schema_version": 1,
+    "logical_run_id": "a15ab402-72db-463d-a320-8c44b31ff6f4",
+    "status": "completed",
+    "run_kind": "real_data_model_run",
+    "profile": "bounded-real-data",
+    "source": {
+      "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+      "git_commit": "fc99f9a03680b0f05dd9a06fd8309cb4c01152c4",
+      "git_dirty": false,
+      "python_source_sha256": "88cc5598f792679d8feb4c3fe7efb4052343ec2521a97172f7f1e1eb5ea98bd3"
+    },
+    "environment": {
+      "python": "3.12.16",
+      "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+      "device": "cpu",
+      "threads": 4,
+      "packages": {
+        "torch": "2.15.0+cpu",
+        "numpy": "2.5.4",
+        "scipy": "1.18.1",
+        "scikit-learn": "1.9.1",
+        "iceberg-classifier": "0.1.0"
+      }
+    },
+    "config": {
+      "name": "bounded-real-data",
+      "seed": 1017,
+      "split_seed": 25,
+      "validation_fraction": 0.159,
+      "filters": 8,
+      "hidden": 128,
+      "batch_size": 16,
+      "epochs": 1,
+      "epoch_repeats": 1,
+      "learning_rate": 0.0005,
+      "learning_rate_decay": 0.002,
+      "augment": true,
+      "max_train_rows": 128,
+      "threads": 4
+    },
+    "input_sha256": "a56756a2528a09b139dc2747e2e40d869f9da7a8c9df37b188b6163f6bfb8696",
+    "historical_score_comparison": "not established",
+    "framework_equivalence": "structural port; numerical equivalence not established",
+    "train_rows": 128,
+    "validation_rows": 256,
+    "training_examples_seen": 128,
+    "elapsed_seconds": 10.606189311998605,
+    "artifacts": {
+      "model.pt": "a302d8ded200e28981dc016f8a47ae163478f5c7e61b2f087bcea2433c3cd968",
+      "config.json": "916b8a0eb157d66a447be0f2cd1a162448f75bd5141449bbdb6076b735da561f",
+      "split.csv": "065da790d4f42d791f7c4b3f7a91d3cee80c22ed59006a7f9abe943331d614af",
+      "history.json": "273c227960222d450a91f6ce5c15dae74251697ccc16474d21962271f4d391f4",
+      "metrics.json": "fbb48adac84b14335c03ef48b2c8a4151250ad9a3a3cd8874220660cd8f97d48",
+      "validation.csv": "de96ee9d73a63d3d7c4b5f99775072969eaa26bd48d59499b892be3018be4dff"
+    }
+  },
+  "manifest_sha256": "d81061cda85c4ffde77c63ad2f669393a8059bc77580889b89fceb7f425ae93b",
+  "metrics": {
+    "validation_log_loss": 0.8497995872496394,
+    "validation_rows": 256
+  },
+  "prediction": {
+    "rows": 8424,
+    "input_sha256": "b1334a65bd0ceb9a027c780ba222f1dfba4cc34bd6adffef2ef5ed0e22a002fd",
+    "checkpoint_sha256": "a302d8ded200e28981dc016f8a47ae163478f5c7e61b2f087bcea2433c3cd968",
+    "output_sha256": "4b43d153202a83a0ff811753b70be5f99d9a532cbce86ece1b204f9c39fe3fc3",
+    "checkpoint_profile": "bounded-real-data",
+    "status": "model_predictions"
+  },
+  "checks": {
+    "pytest": {
+      "passed": 5,
+      "upstream_warnings": [
+        "MLflow uses SQLAlchemy noload, deprecated upstream"
+      ]
+    },
+    "ruff": "check and format passed",
+    "walkthrough": {
+      "executed_code_cells": 6,
+      "errors": 0,
+      "aggregate_figures_visually_reviewed": 2
+    },
+    "independent_checkpoint_reload": {
+      "local": {
+        "validation_log_loss": 0.8497995872496394,
+        "validation_rows": 256
+      },
+      "docker": {
+        "validation_log_loss": 0.8497995872496394,
+        "validation_rows": 256
+      }
+    },
+    "submission": {
+      "official_sample_id_order_match": true,
+      "rows": 8424,
+      "probabilities_finite_and_bounded": true
+    },
+    "lab_authentication": {
+      "lab_started": true,
+      "anonymous_rejected": true,
+      "authenticated_contents": true
+    },
+    "compose_configuration": "validated",
+    "mlflow": "Isolated SQLite artifact round-trip, duplicate import and conflict rejection passed"
+  },
+  "container": {
+    "image": "iceberg-lab:0.1",
+    "image_id": "sha256:4dae44f9dc2fa9c34b20e20914d907b337c19ee74bbf2e0449691c413ec8a6f8",
+    "network_for_runtime_checks": "none"
+  },
+  "kaggle_package": {
+    "wheel": "iceberg_classifier-0.1.0-py3-none-any.whl",
+    "sha256": "8013066c98e1953c107de97a20cf293e6d37711326a3469acfcee85c8ad55187",
+    "staged_only": true
+  },
+  "unverified": [
+    "full reference training",
+    "historical score parity",
+    "numerical Keras/PyTorch equivalence",
+    "CUDA execution",
+    "shared MLflow/SeaweedFS import",
+    "Prefect integration",
+    "W&B integration",
+    "hosted Kaggle execution",
+    "leaderboard submission",
+    "interactive VS Code dev-container session"
+  ]
+}

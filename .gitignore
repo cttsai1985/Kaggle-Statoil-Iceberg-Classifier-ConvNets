@@ -99,3 +99,14 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Modern execution artifacts and credentials
+.local/
+.pytest_cache/
+.ruff_cache/
+*.pt
+*.7z
+*.json.zip
+input/*.json
+input/*.csv
+kaggle-bundle/
