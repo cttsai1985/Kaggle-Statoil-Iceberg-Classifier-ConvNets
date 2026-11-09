@@ -30,6 +30,6 @@ The historical source does not fully specify all random states or preserve train
 
 ## Historical source
 
-The original files remain under [`legacy/`](../legacy/), including their relative directory structure. Their provenance is [commit d7f9f46](https://github.com/cttsai1985/kaggle-statoil-iceberg/tree/d7f9f46145f067a82d3ddf3a9e6ca134bd098083/scripts).
+The original files remain under [`legacy/`](../legacy/), including their relative directory structure. Their provenance is [commit d7f9f46](https://github.com/cttsai1985/kaggle-statoil-iceberg-solution/tree/d7f9f46145f067a82d3ddf3a9e6ca134bd098083/scripts).
 
 [Benchmark results](results.md) · [Experiment runbook](reproduction.md)

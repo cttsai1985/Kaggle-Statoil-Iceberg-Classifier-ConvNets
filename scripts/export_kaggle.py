@@ -36,7 +36,7 @@ for config in Path("configs").glob("*.json"):
         {
             "wheel": wheel.name,
             "sha256": sha256(wheel),
-            "source": "https://github.com/cttsai1985/kaggle-statoil-iceberg",
+            "source": "https://github.com/cttsai1985/kaggle-statoil-iceberg-solution",
             **source_identity(),
             "lock_sha256": sha256(Path("uv.lock")),
             "config_sha256": {

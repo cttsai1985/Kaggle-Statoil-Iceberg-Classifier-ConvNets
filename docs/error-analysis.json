@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "project_id": "iceberg",
+  "analysis_kind": "retained_oof_hard_cases",
+  "producer_manifest_sha256": "b7b5aeddda1ea6146fe2eaa180d94a28f06b1fac0fc32c40c247600375671c3a",
+  "producer_source": {
+    "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+    "git_commit": "88683b8371f2fec2f2836aede2533f15c1eb94f9",
+    "git_dirty": false,
+    "python_source_sha256": "e9b215843738efa0297971df6529abe998a03320a3f62b4b976194958410fe92"
+  },
+  "input_sha256": "a56756a2528a09b139dc2747e2e40d869f9da7a8c9df37b188b6163f6bfb8696",
+  "split_sha256": "ab8290b8151dff121b59a1da540353670315a8b0afef6f65b3134bae4a09ec06",
+  "oof_sha256": "38eb9df6d5de0c03bfcc63fac7621bd4bba8886e63731da541f4d4fd36837a5a",
+  "analyzer_sha256": "a9b5bf1496d38abf86fd9eb59d5e1519922b663506654d55f510247f97e93b05",
+  "prediction_reconciliation": "two-seed mean verified",
+  "results": {
+    "rows": 1604,
+    "pooled_log_loss": 0.20479245393810833,
+    "cohort_rule": {
+      "loss": "binary cross-entropy",
+      "fraction": 0.1,
+      "count_rule": "ceiling",
+      "tie_break": "retained OOF order"
+    },
+    "hard_cohort": {
+      "rows": 161,
+      "iceberg_rows": 79,
+      "mean_log_loss": 1.4897770792581437,
+      "hard_rows": 161,
+      "hard_rate": 1.0,
+      "share_of_total_loss": 0.7301781792832756,
+      "minimum_selected_row_loss": 0.5385252412321085,
+      "ship_rows": 82,
+      "known_angle_rows": 160
+    },
+    "strata": {
+      "known_angle": {
+        "rows": 1471,
+        "iceberg_rows": 753,
+        "mean_log_loss": 0.22064478965229142,
+        "hard_rows": 160,
+        "hard_rate": 0.10876954452753229,
+        "share_of_total_loss": 0.9880707322006566
+      },
+      "missing_angle": {
+        "rows": 133,
+        "iceberg_rows": 0,
+        "mean_log_loss": 0.029463237129361407,
+        "hard_rows": 1,
+        "hard_rate": 0.007518796992481203,
+        "share_of_total_loss": 0.01192926779934337
+      },
+      "ship": {
+        "rows": 851,
+        "iceberg_rows": 0,
+        "mean_log_loss": 0.20156329324731728,
+        "hard_rows": 82,
+        "hard_rate": 0.0963572267920094,
+        "share_of_total_loss": 0.5221829550726547
+      },
+      "iceberg": {
+        "rows": 753,
+        "iceberg_rows": 753,
+        "mean_log_loss": 0.20844187724204347,
+        "hard_rows": 79,
+        "hard_rate": 0.1049136786188579,
+        "share_of_total_loss": 0.4778170449273452
+      },
+      "known_angle_below_35": {
+        "rows": 259,
+        "iceberg_rows": 122,
+        "mean_log_loss": 0.11209246316747823,
+        "hard_rows": 12,
+        "hard_rate": 0.04633204633204633,
+        "share_of_total_loss": 0.08838078665367284
+      },
+      "known_angle_35_to_below_40": {
+        "rows": 572,
+        "iceberg_rows": 318,
+        "mean_log_loss": 0.21399749770061088,
+        "hard_rows": 62,
+        "hard_rate": 0.10839160839160839,
+        "share_of_total_loss": 0.372637373375705
+      },
+      "known_angle_at_least_40": {
+        "rows": 640,
+        "iceberg_rows": 313,
+        "mean_log_loss": 0.2705155764584287,
+        "hard_rows": 86,
+        "hard_rate": 0.134375,
+        "share_of_total_loss": 0.5270525721712788
+      }
+    },
+    "folds": [
+      {
+        "fold": 0,
+        "rows": 322,
+        "iceberg_rows": 151,
+        "mean_log_loss": 0.19140822230631316,
+        "hard_rows": 32,
+        "hard_rate": 0.09937888198757763,
+        "share_of_total_loss": 0.18762821526703685
+      },
+      {
+        "fold": 1,
+        "rows": 320,
+        "iceberg_rows": 150,
+        "mean_log_loss": 0.19738468524246702,
+        "hard_rows": 31,
+        "hard_rate": 0.096875,
+        "share_of_total_loss": 0.1922848721434855
+      },
+      {
+        "fold": 2,
+        "rows": 321,
+        "iceberg_rows": 151,
+        "mean_log_loss": 0.17611001984674768,
+        "hard_rows": 29,
+        "hard_rate": 0.09034267912772585,
+        "share_of_total_loss": 0.17209600328019573
+      },
+      {
+        "fold": 3,
+        "rows": 320,
+        "iceberg_rows": 150,
+        "mean_log_loss": 0.21044185027254372,
+        "hard_rows": 37,
+        "hard_rate": 0.115625,
+        "share_of_total_loss": 0.2050046801938444
+      },
+      {
+        "fold": 4,
+        "rows": 321,
+        "iceberg_rows": 151,
+        "mean_log_loss": 0.2486537096525964,
+        "hard_rows": 32,
+        "hard_rate": 0.09968847352024922,
+        "share_of_total_loss": 0.24298622911543744
+      }
+    ],
+    "seed_error_overlap": {
+      "seed_ids": [
+        "1017",
+        "2027"
+      ],
+      "hard_rows_per_seed": 161,
+      "intersection_rows": 134,
+      "union_rows": 188,
+      "jaccard": 0.7127659574468085,
+      "ensemble_hard_rows_in_both_seed_cohorts": 134
+    }
+  },
+  "limitations": [
+    "Error-selected diagnostic cohort, not new test performance or an improvement.",
+    "Exact angle is an acquisition proxy, not a verified scene ID.",
+    "Two seeds share one fold plan; overlap is descriptive, not a confidence estimate.",
+    "No data filtering, relabelling, retraining or model promotion performed."
+  ]
+}
