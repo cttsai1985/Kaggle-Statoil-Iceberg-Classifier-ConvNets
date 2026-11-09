@@ -123,6 +123,11 @@ def main():
         sub = commands.add_parser(name)
         sub.add_argument("--run-dir", type=Path, required=True)
         sub.add_argument("--tracking-uri", default=os.getenv("MLFLOW_TRACKING_URI"))
+        sub.add_argument(
+            "--resume",
+            action="store_true",
+            help="Resume an incomplete import after its previous writer has stopped",
+        )
     args = parser.parse_args()
     if args.command == "fixture":
         make_fixture(args.data_dir)
@@ -182,7 +187,7 @@ def main():
         if not args.tracking_uri:
             parser.error("Set MLFLOW_TRACKING_URI or supply --tracking-uri")
         importer = track_cv if args.command == "track-cv" else track
-        result = importer(args.run_dir, args.tracking_uri)
+        result = importer(args.run_dir, args.tracking_uri, resume=args.resume)
     print(json.dumps(result, indent=2))
 
 
