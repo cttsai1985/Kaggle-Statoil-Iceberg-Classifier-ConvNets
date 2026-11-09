@@ -20,13 +20,19 @@ The [recorded drill](https://github.com/cttsai1985/mlops-platform/blob/main/docs
 | Delivery | Verified checkpoint and ordered batch outputs | Artifact transfer with checksummed readback; explicit failure/recovery |
 | Troubleshooting | A portable local run bundle and project-specific validation errors | Stage/flow correlation, owner-visible status and safe retry semantics |
 
-The canonical tracking experiment is `kaggle/iceberg`. The platform provisions it; this client does not silently create a different namespace. The run retains its own logical identity and source/input/model fingerprints, including when it originates in an offline Kaggle notebook.
+This repository owns project ID `iceberg`, tracking experiment `kaggle/iceberg` and artifact namespace `projects/iceberg`. These existing identities remain unchanged. An authorized operator provisions the experiment through MLflow using this client-declared configuration; the importer requires it to exist and never chooses a fallback experiment. The operator checks the intended artifact route before provisioning. Shared services do not need a catalog entry or source-code change for this solution. Run identities and source/input/model fingerprints remain valid across local and offline Kaggle execution.
 
 ## Failure behavior matters to research
 
 A transient tracker outage must not require retraining an expensive completed experiment. `track --resume` recovers the same logical/remote run only after the operator confirms the earlier importer has stopped. A conflicting manifest or duplicate logical identity fails closed. Artifact delivery is marked finished only after byte-hash readback. [Project-specific commands and recovery details](mlops.md).
 
 A poor model remains an experiment worth recording. A delivery gate may reject a candidate without hiding its metrics. Acceptance thresholds must be declared for the intended use and evaluated on the right population; a convenient competition holdout threshold is not production approval.
+
+## Online serving handoff
+
+The solution owns its inference interface and model acceptance criteria. A serving release must package a supported MLflow Model with an input/output signature, compatible dependencies and all fitted preprocessing. For Iceberg, that includes radar channel order, training-fitted scaling, angle imputation/missingness and the declared inference-augmentation recipe. A raw checkpoint or an artifact uploaded to MLflow is not by itself an MLflow serving package; packaging and serving validation remain implementation work in this repository.
+
+The handoff supplies a verified immutable model version or image digest, prediction checks, resource requirements and declared evaluation gates. The shared platform owns deployment, access control, health/latency/error monitoring, traffic switching and rollback. A registry alias may select a release candidate, but a running release must record the resolved version; changing an alias does not establish that serving processes have reloaded it. The solution links to the [shared infrastructure requirements](https://github.com/cttsai1985/mlops-platform/blob/main/docs/requirements.md); the infrastructure does not import this repository or maintain its project identity.
 
 ## Evidence and limits
 

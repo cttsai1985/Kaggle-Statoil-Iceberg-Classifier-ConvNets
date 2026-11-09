@@ -59,6 +59,6 @@ Fold standard deviation is **not a confidence interval**: training partitions ov
 
 For OOF analysis, a record is averaged only over models that held it out. For new test data, `predict-cv` uses all retained fold/seed models with their own preprocessing and the recorded inference policy. Its receipt binds the input, output, CV manifest, every checkpoint and the consumer code revision.
 
-`iceberg track-cv` imports the verified aggregate and its fold runs into `kaggle/iceberg`, with parent/child links, source tags and artifact checksums. The platform provisions that experiment; training does not need a live tracker.
+`iceberg track-cv` imports the verified aggregate and its fold runs into `kaggle/iceberg`, with parent/child links, source tags and artifact checksums. The experiment is provisioned through MLflow from this repository's declared namespace; training does not need a live tracker or a platform project-catalog entry.
 
 [Observed results](results.md) · [Architecture](architecture.md) · [Tracking](mlops.md)

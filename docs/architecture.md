@@ -13,7 +13,7 @@ The CLI, analysis notebook, Docker image and Kaggle entry point import `iceberg`
 | `tracking.py` | Import verified model and CV runs into an existing MLflow deployment |
 | `cli.py` | Expose those operations without implementing a second pipeline |
 
-A compact package keeps the experimental path inspectable. The [shared platform](https://github.com/cttsai1985/mlops-platform) owns service deployment, naming, credentials and storage administration. Clients use stable project IDs and preprovisioned MLflow experiments. An external scheduler can invoke the CLI; model execution does not require a scheduler or tracking server.
+A compact package keeps the experimental path inspectable. The [shared platform](https://github.com/cttsai1985/mlops-platform) owns service deployment, access control, credentials and storage administration. Each client owns its project/experiment names and supplies its configuration through generic interfaces. This importer requires its declared MLflow experiment to exist, without requiring a platform project-catalog entry. An external scheduler can invoke the CLI; model execution does not require a scheduler or tracking server.
 
 ## Data and evaluation boundaries
 
