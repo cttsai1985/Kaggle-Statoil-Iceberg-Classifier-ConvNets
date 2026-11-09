@@ -122,6 +122,7 @@ Each experiment saves its configuration, split, source and input identities, met
 ## Development
 
 ```bash
+uv sync --locked --group dev --group serving --group tracking --group tracking-test
 .venv/bin/ruff check src tests scripts
 .venv/bin/ruff format --check src tests scripts
 .venv/bin/pytest -q
