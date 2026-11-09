@@ -1,5 +1,7 @@
 # Validation and benchmark results
 
+[Hard-case diagnostics and next experiments](error-analysis.md) · [Acceptance audit](requirements-audit.md)
+
 ## Grouped cross-validation
 
 The fixed grouped-stratified protocol evaluated all 1,604 observations across five folds and two training seeds. All ten models retained their final epoch rather than selecting epochs on outer-fold labels. Known-angle groups have no fit/validation overlap in any fold.

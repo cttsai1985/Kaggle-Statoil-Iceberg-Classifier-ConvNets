@@ -15,7 +15,7 @@ The shared [ML infrastructure](https://github.com/cttsai1985/ml-infrastructure) 
 | Identifier | Value |
 |---|---|
 | Stable project ID | `iceberg` |
-| GitHub repository | `cttsai1985/kaggle-statoil-iceberg` |
+| GitHub repository | `cttsai1985/kaggle-statoil-iceberg-solution` |
 | MLflow experiment | `kaggle/iceberg` |
 | Reserved model-registry name | `kaggle-iceberg` |
 | Prefect flow/deployment convention | `kaggle-iceberg/local` |

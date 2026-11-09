@@ -8,6 +8,26 @@ The potential operating role is to support an analyst's candidate-review queue. 
 
 [Model comparison](docs/modeling-study.md) · [Results](docs/results.md) · [Run the solution](#run-it-yourself)
 
+<!-- portfolio-results:start -->
+## Results
+
+**Public leaderboard — log loss ↓.**
+
+| Model / submission | Public score | Public reference rank / teams | Top % | Reference ties |
+|---|---:|---:|---:|---:|
+| Historical single model, 2017-10-30 | 0.19348 | 1,657 / 3,330 | **49.76%** | 0 |
+| Historical second single model, 2017-10-30 | 0.20507 | 1,863 / 3,330 | **55.95%** | 0 |
+| Modern metadata CNN with four-flip inference | 0.21463 | 1,980 / 3,330 | **59.46%** | 0 |
+
+Reference: **2026-11-09T00:02:25Z**, **3,330 unique scored teams**. Ranks are score-equivalent comparisons with the dated public export, not awarded final ranks. Lower Top % is better. A zero tie count denotes an insertion position; ties occupy the shown interval.
+
+**OOF/holdout rank and Top %: not applicable. Private leaderboard rank and Top %: unavailable without a matching private reference population.** Internal validation and private scores remain separately reported in [detailed results](docs/results.md). [Reference data and calculation](docs/leaderboard-context.json).
+<!-- portfolio-results:end -->
+
+## Concentrated, repeatable errors
+
+The hardest 161 of 1,604 retained OOF examples contribute 73.02% of total log loss; 134 remain in the hardest cohort across both training seeds. Most have known incidence angles, so missing metadata alone does not explain the failures. This motivates inspecting image and acquisition conditions before adding model capacity. [Hard-case concentration, angle slices and next experiment](docs/error-analysis.md).
+
 ## Model
 
 A compact convolutional network learns spatial features from both radar bands together. Four progressively downsampled stages feed global average and maximum pooling; a dense head produces an iceberg probability. Native batch normalization, LayerNorm and AdamW replace the historical training implementation.
