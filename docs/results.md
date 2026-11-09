@@ -48,7 +48,7 @@ The selected complete real-data run trained 630 optimizer steps and 40,320 sampl
 
 Its checkpoint reloaded independently, full test predictions preserved all official IDs, and the completed run imported into the shared `kaggle/iceberg` MLflow experiment. Repeated import returned the same run; a checkpoint downloaded through the SeaweedFS-backed artifact proxy matched its original SHA-256.
 
-[The validation receipt](validation.json) contains source/input/artifact identities and the checked runtime scope. Infrastructure operation belongs to [mlops-platform](https://github.com/cttsai1985/mlops-platform). Hosted execution and CV results are reported only once measured.
+[The validation receipt](validation.json) contains source/input/artifact identities and the checked runtime scope. Infrastructure operation belongs to [ML infrastructure](https://github.com/cttsai1985/ml-infrastructure). Hosted execution and CV results are reported only once measured.
 
 ## Hosted and container execution
 

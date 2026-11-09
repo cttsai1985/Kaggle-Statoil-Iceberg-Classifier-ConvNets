@@ -1,28 +1,12 @@
-# Iceberg and Ship Classification
+# Statoil: Iceberg and Ship Classification
 
-A historical Kaggle baseline used as a **case study in reliable ML engineering**: keep evaluation honest, preserve an experiment across runtimes, and recover delivery without silently creating a different experiment. The model is a practical workload for these controls; research novelty is not the contribution.
+Remote marine operations need timely information about possible ice hazards. The [Statoil/C-CORE challenge](https://www.kaggle.com/c/statoil-iceberg-classifier-challenge) focuses on one step: distinguish ships from icebergs in supplied radar image candidates. This solution uses paired HH/HV channels, a compact PyTorch CNN and grouped validation to produce iceberg probabilities.
 
-The historical public score **0.19348** corresponds to approximately **top 49.8%** of the downloaded public leaderboard; the modern rerun's **0.21463** corresponds to **top 59.5%**. [Percentile method and snapshot](docs/results.md#leaderboard-percentile-context). These are score-equivalent positions, separate from official late-entry ranks.
+The inference study finds a useful improvement: **four-flip averaging lowers known-angle OOF log loss for both model variants**. Adding incidence-angle metadata looks stronger on the aggregate metric, but **95% of that gain comes from missing-angle training records**, a cohort absent from the test set. That difference changes which result should guide the inference recipe.
 
-## An evaluation gate needs the right population
+The potential operating role is to support an analyst's candidate-review queue. [Problem and value](docs/problem-and-value.md) connects model probabilities to review decisions; the retained workflow generates all **8,424 test predictions** and verifies the saved preprocessing and weights used to produce them.
 
-A lower aggregate loss initially makes the angle branch look useful. Checking where that improvement comes from changes what the result can support: **95% of the all-row gain comes from 133 missing-angle ships**, while test observations have known angles. On known-angle rows, the small benefit reverses sign between training seeds.
-
-The engineering lesson is to make the evaluation population part of the acceptance contract. A single favorable number would approve a broader claim than the evidence supports. The report therefore retains known-angle and all-row results, both seeds and every fold; the metadata recipe stays a frozen reference alongside the simpler comparison. [Evidence and reasoning](docs/modeling-study.md) · [Executed checks](notebooks/02-controlled-ablations.ipynb).
-
-## A completed model is not yet a completed delivery
-
-In the [controlled batch drill](https://github.com/cttsai1985/mlops-platform/blob/main/docs/batch-operations.md), model verification and evaluation completed before an unavailable dependency blocked prediction and delivery. Repeating the entire job would mix an external failure with already completed scientific computation.
-
-The runner instead preserves stage identities and output hashes. After the dependency is repaired, it reuses the evaluation, produces all **8,424** predictions in the expected ID order and verifies model bytes retrieved from storage. A separately rejected quality gate blocks delivery while retaining the original evaluation. This explains the separate evaluation, readiness and delivery states—and why retries must have an explicit scope.
-
-This solution consumes shared orchestration, tracking and storage services. The evidence is a saved-model batch drill and client recovery tests, rather than a deployed maritime service. [Consumer contract](docs/consumer-contract.md) · [Capability boundaries](https://github.com/cttsai1985/mlops-platform/blob/main/docs/mlops-assessment.md) · [Original walkthrough](notebooks/01-method-and-rerun.ipynb).
-
-## Problem and data
-
-Each observation contains two **75 × 75** radar bands, HH and HV polarization, and an incidence angle. The target is the probability that the observation contains an iceberg. The official dataset provides **1,604 labeled observations** and **8,424 test observations**. Predictions are evaluated with log loss, so confident mistakes are costly.
-
-See the [competition data description](https://www.kaggle.com/competitions/statoil-iceberg-classifier-challenge/data) for field definitions and data access.
+[Model comparison](docs/modeling-study.md) · [Results](docs/results.md) · [Run the solution](#run-it-yourself)
 
 ## Model
 
@@ -51,9 +35,25 @@ The original single-model submissions scored **0.19348** and **0.20507** on the 
 
 A separate model-development experiment uses the original **256-record holdout**. Its metadata CNN scored **0.2012 holdout log loss**, followed by **0.21463 public / 0.19855 private** on Kaggle. It does not beat the best historical result; these scores are reported separately from the grouped CV.
 
-## Analysis notebook
+The historical public score **0.19348** corresponds to approximately **top 49.8%** of the downloaded public leaderboard; the modern rerun's **0.21463** corresponds to **top 59.5%**. [Percentile method and snapshot](docs/results.md#leaderboard-percentile-context). These are score-equivalent positions, separate from official late-entry ranks.
 
-The [data-science notebook](notebooks/01-method-and-rerun.ipynb) examines radar inputs, missing metadata, validation, model training, holdout predictions and test inference. It uses the same package as the command-line workflow.
+## Use the saved model
+
+The [model packaging and serving guide](docs/serving.md) explains the actual input/output contract, export from saved artifacts and the shared HTTP parity check. A canary release retains the tested source, dependency lock and aggregate verification evidence; private model weights and request rows are not release assets.
+
+[Real-model canary verification](docs/canary-validation.json) records the source, package/runtime identity, native-to-HTTP parity and rejected invalid request.
+
+## Which observations drive the improvement
+
+A lower aggregate loss initially makes the angle branch look useful. Checking where that improvement comes from changes what the result can support: **95% of the all-row gain comes from 133 missing-angle ships**, while test observations have known angles. On known-angle rows, the small benefit reverses sign between training seeds.
+
+The model comparison therefore follows the population expected at inference. The report therefore retains known-angle and all-row results, both seeds and every fold; the metadata recipe stays a frozen reference alongside the simpler comparison. [Evidence and reasoning](docs/modeling-study.md) · [Executed checks](notebooks/02-controlled-ablations.ipynb).
+
+## Problem and data
+
+Each observation contains two **75 × 75** radar bands, HH and HV polarization, and an incidence angle. The target is the probability that the observation contains an iceberg. The official dataset provides **1,604 labeled observations** and **8,424 test observations**. Predictions are evaluated with log loss, so confident mistakes are costly.
+
+See the [competition data description](https://www.kaggle.com/competitions/statoil-iceberg-classifier-challenge/data) for field definitions and data access.
 
 ## Run it yourself
 
@@ -94,7 +94,19 @@ Open http://127.0.0.1:8890/lab using the token in the ignored `.local/jupyter_to
 
 The [Kaggle entry notebook](notebooks/kaggle/rerun.ipynb) runs the package from an attached code wheel and saves predictions and experiment artifacts. See [Kaggle execution](docs/kaggle.md) for packaging, execution and scoring instructions.
 
-## Engineering and experiment lifecycle
+## Analysis notebook
+
+The [data-science notebook](notebooks/01-method-and-rerun.ipynb) examines radar inputs, missing metadata, validation, model training, holdout predictions and test inference. It uses the same package as the command-line workflow.
+
+## Recovering a prediction batch
+
+In the [controlled batch drill](https://github.com/cttsai1985/ml-infrastructure/blob/main/docs/batch-operations.md), model verification and evaluation completed before an unavailable dependency blocked prediction and delivery. Repeating the entire job would mix an external failure with already completed scientific computation.
+
+The runner instead preserves stage identities and output hashes. After the dependency is repaired, it reuses the evaluation, produces all **8,424** predictions in the expected ID order and verifies model bytes retrieved from storage. A separately rejected quality gate blocks delivery while retaining the original evaluation. This explains the separate evaluation, readiness and delivery states—and why retries must have an explicit scope.
+
+This solution consumes shared orchestration, tracking and storage services. The evidence is a saved-model batch drill and client recovery tests, rather than a deployed maritime service. [Consumer contract](docs/consumer-contract.md) · [Capability boundaries](https://github.com/cttsai1985/ml-infrastructure/blob/main/docs/mlops-assessment.md) · [Original walkthrough](notebooks/01-method-and-rerun.ipynb).
+
+## Model artifacts and delivery
 
 The [architecture guide](docs/architecture.md) explains package boundaries, training-only preprocessing, portable artifacts, failure recovery and the release process. Local notebooks, CLI commands, Docker and Kaggle use the same implementation.
 
@@ -116,6 +128,7 @@ Each experiment saves its configuration, split, source and input identities, met
 ## Development
 
 ```bash
+uv sync --locked --group dev --group serving --group tracking --group tracking-test
 .venv/bin/ruff check src tests scripts
 .venv/bin/ruff format --check src tests scripts
 .venv/bin/pytest -q

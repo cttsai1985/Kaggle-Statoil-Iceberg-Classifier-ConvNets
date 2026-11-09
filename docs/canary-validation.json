@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "release": "v0.2.0-canary.1",
+  "package_version": "0.2.0.dev1",
+  "status": "verified_real_model_canary",
+  "adapter_source_commit": "e96d2dd4570ffca1cdabee3f554996e24fd27a18",
+  "adapter_source_dirty_at_export": false,
+  "controller_source_commit": "f6d9fe64aeec6aec04edca3e368875a7a3b270fe",
+  "client_lock_sha256": "d999df8f81cb82b2d1abedd8a938b0f6dff82e69ae03bd3181b6b9ea1a509166",
+  "producer_manifest_sha256": "c48c426e5e3d137f9844f46e0272222e97d5ab391f240fd8b639d273f8830c2e",
+  "model_training_repeated": false,
+  "quality_evaluation_reference": "results.md",
+  "validation_scope": "A small real-input inference parity and input-contract check; existing full-data evaluation remains separately recorded.",
+  "unit_tests_passed": 27,
+  "http_verification": {
+    "started_at": "2026-11-09T16:26:59.270075+00:00",
+    "finished_at": "2026-11-09T16:27:05.358603+00:00",
+    "engine": "MLflow Model Serving",
+    "model_package_sha256": "2e91b557eb60b9f0b9d512b10e2047af6531857a0e4c5b9c5ccbdc1cfc2dbe15",
+    "controller_sha256": "c217c809003ea189485f127bbe305d57c2e0e6695335eb905156fdb49019fe5a",
+    "runtime": {
+      "python": "3.12.16",
+      "mlflow": "3.18.0"
+    },
+    "runtime_packages_sha256": "fc5e5f4080228714791ad2a09332e5e868670691696686b760bfd4712d4d47c6",
+    "request_sha256": "89568fc5fe8170fe5b87a29f6aad89eb7e2e692793edd3457f3ae6cbd290baf4",
+    "expected_sha256": "58d9e356328d94acbc3cec088404b1419ecee7fec9e1f26a09f20ab0e92b264e",
+    "health_status": 200,
+    "parity": {
+      "numeric_values": 4,
+      "maximum_absolute_error": 0.0,
+      "atol": 1e-07,
+      "rtol": 0.0
+    },
+    "prediction_rows": 4,
+    "schema_rejection": {
+      "status": 400,
+      "scope": "client_supplied_invalid_request"
+    },
+    "prediction_parity": true,
+    "package_integrity_verified": true,
+    "cleanup_complete": true,
+    "declared_digest_checked": true,
+    "production_ingress_verified": false,
+    "container_image_verified": false,
+    "zero_downtime_claimed": false,
+    "shared_services_modified": false
+  },
+  "private_assets_published": false,
+  "model_boundary": "retained single holdout checkpoint with recorded flips; not the multi-model grouped-CV ensemble"
+}
