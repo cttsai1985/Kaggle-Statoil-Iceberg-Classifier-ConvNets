@@ -53,3 +53,25 @@ Its checkpoint reloaded independently, full test predictions preserved all offic
 ## Hosted and container execution
 
 The offline Kaggle metadata-model run completed on Python 3.13 / PyTorch 2.11 / scikit-learn 1.6. Its saved checkpoint reloaded locally with identical retained metrics. That run is an independent single-holdout portability check, not the grouped CV ensemble. Code/config/input identities, exact notebook version and package differences are recorded in [the hosted receipt](hosted-validation.json). Docker independently trained a fixture, evaluated a real checkpoint, enforced Lab authentication and retrieved the shared artifact through its client network.
+
+## Leaderboard percentile context
+
+A score becomes easier to interpret when compared with other teams. The official **public** leaderboard export provides this reference population; the private leaderboard is not included in that download.
+
+| Submission | Public score | Score-equivalent position | Top share of reference teams | Strictly outperforms |
+|---|---:|---:|---:|---:|
+| Historical single model, 2017-10-30 | 0.19348 | 1657 / 3,330 | 49.76% | 50.27% |
+| Historical second single model, 2017-10-30 | 0.20507 | 1863 / 3,330 | 55.95% | 44.08% |
+| Modern metadata CNN with four-flip inference | 0.21463 | 1980 / 3,330 | 59.46% | 40.57% |
+
+Snapshot: **2026-11-09T00:02:25Z**, **3,330 unique scored teams** in the [official public leaderboard](https://www.kaggle.com/competitions/statoil-iceberg-classifier-challenge/leaderboard?tab=public). Smaller top-share percentages and larger outperformed percentages are better.
+
+Position is `1 + teams with a strictly better displayed score`; equal scores share the starting position and the table retains the full tie interval. Top share is that starting position divided by the reference-team count. The outperformed percentile counts only strictly worse scores, so tied teams are excluded. Comparisons use the exported decimal scores without a tolerance.
+
+These are **score-equivalent placements**, not awarded final ranks for late submissions. The dated snapshot is the denominator; it may differ from competition-era participant counts. Public/private leaderboard populations and internal OOF/holdout populations are separate: no private or CV percentile is inferred. The [aggregate receipt](leaderboard-context.json) records source hashes, tie counts, formulas and scope.
+
+## Controlled component study
+
+The matched angle-branch and inference-augmentation study keeps the same five grouped folds, two training seeds and 30-epoch budget. Adding angle metadata lowers known-angle ensemble loss by only 0.000838 and reverses sign between seeds; its much larger all-row gain is dominated by missing-angle ships absent from test. Four-flip inference improves known-angle loss for both seeds in each architecture, while some folds still worsen.
+
+These are post-development diagnostics, not a new leaderboard result or an automatic model-selection rule. [The study](modeling-study.md) reports every condition, paired seed/fold effect and stratum; [the executed notebook](../notebooks/02-controlled-ablations.ipynb) visualizes the comparisons.

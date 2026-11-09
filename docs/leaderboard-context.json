@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "project_id": "iceberg",
+  "metric": "log_loss",
+  "higher_is_better": false,
+  "leaderboard": "public",
+  "verified_at_utc": "2026-11-09T00:04:04.242167+00:00",
+  "source": {
+    "kind": "official Kaggle CLI full leaderboard export",
+    "competition": "statoil-iceberg-classifier-challenge",
+    "url": "https://www.kaggle.com/competitions/statoil-iceberg-classifier-challenge/leaderboard?tab=public",
+    "command": "kaggle competitions leaderboard statoil-iceberg-classifier-challenge --download --path .local/leaderboard-research --quiet",
+    "archive_filename": "statoil-iceberg-classifier-challenge.zip",
+    "archive_sha256": "e02e241178ca00af532d5821f6db320c4547c303fc99d1e7f4966d53feaffb50",
+    "csv_filename": "statoil-iceberg-classifier-challenge-publicleaderboard-2026-11-09T00:02:25.csv",
+    "csv_sha256": "4d70eba9a97bfa7ed297b07b765f7096c325afdc78c324c0853646efe637a081",
+    "export_snapshot_utc": "2026-11-09T00:02:25Z",
+    "reference_teams": 3330,
+    "unique_team_ids": 3330,
+    "all_scores_finite": true,
+    "score_order_verified": true
+  },
+  "method": {
+    "arithmetic": "Exact Decimal comparison of displayed scores; no floating-point tolerance.",
+    "position": "1 + number of reference teams with strictly better displayed score. Tied-position interval ends at better + max(equal, 1).",
+    "top_percent": "100 * score_equivalent_best_position / reference_teams; smaller is better. This rank-based descriptor can exceed 100 for a hypothetical score below every reference score.",
+    "percentile": "100 * strictly_worse / reference_teams; higher is better. Tied reference teams are excluded; weak percentile including ties is also retained.",
+    "denominator": "Unique scored teams present in this dated public export, not an assumed historical registration count.",
+    "scope": "Score-equivalent comparison with the downloaded public reference population. It is not an awarded final competition rank or percentile of late entrants. Public scores are compared only with public leaderboard scores."
+  },
+  "limitations": [
+    "The export contains the public leaderboard only. Private leaderboard percentiles are not inferred.",
+    "Displayed scores are rounded; tie counts and positions use exactly those rounded values.",
+    "Snapshots may omit deleted or otherwise unavailable historical teams and may differ from the competition-era participant count.",
+    "Internal OOF/holdout metrics have different populations and are never mapped to leaderboard percentiles.",
+    "Account-best leaderboard positions can come from other submissions; score context does not establish that the preserved source produced the account-best result."
+  ],
+  "scores": [
+    {
+      "id": "historical-single-model-1",
+      "label": "Historical single model, 2017-10-30",
+      "public_score": "0.19348",
+      "reference_teams": 3330,
+      "teams_with_strictly_better_score": 1656,
+      "teams_with_equal_displayed_score": 0,
+      "teams_with_strictly_worse_score": 1674,
+      "score_equivalent_best_position": 1657,
+      "score_equivalent_last_tied_position": 1657,
+      "top_percent_by_best_position": 49.75975975975976,
+      "strictly_outperformed_percent": 50.270270270270274,
+      "weak_percentile_including_ties": 50.270270270270274
+    },
+    {
+      "id": "historical-single-model-2",
+      "label": "Historical second single model, 2017-10-30",
+      "public_score": "0.20507",
+      "reference_teams": 3330,
+      "teams_with_strictly_better_score": 1862,
+      "teams_with_equal_displayed_score": 0,
+      "teams_with_strictly_worse_score": 1468,
+      "score_equivalent_best_position": 1863,
+      "score_equivalent_last_tied_position": 1863,
+      "top_percent_by_best_position": 55.945945945945944,
+      "strictly_outperformed_percent": 44.08408408408408,
+      "weak_percentile_including_ties": 44.08408408408408
+    },
+    {
+      "id": "modern-metadata-cnn",
+      "label": "Modern metadata CNN with four-flip inference",
+      "public_score": "0.21463",
+      "reference_teams": 3330,
+      "teams_with_strictly_better_score": 1979,
+      "teams_with_equal_displayed_score": 0,
+      "teams_with_strictly_worse_score": 1351,
+      "score_equivalent_best_position": 1980,
+      "score_equivalent_last_tied_position": 1980,
+      "top_percent_by_best_position": 59.45945945945946,
+      "strictly_outperformed_percent": 40.570570570570574,
+      "weak_percentile_including_ties": 40.570570570570574
+    }
+  ]
+}

@@ -37,7 +37,7 @@ export MLFLOW_TRACKING_URI=http://127.0.0.1:5500
 
 Port 5500 is the audited existing quant-research MLflow endpoint. Configure the URI for your deployment. Supply authentication through runtime environment variables when required; keep credentials outside tracking URLs and Git.
 
-Provision the canonical experiment through the platform bootstrap first; the client refuses to create a differently routed experiment implicitly. The adapter verifies artifact/configuration/split checksums before upload. The logical run UUID and manifest fingerprint make repeated imports idempotent; conflicting or incomplete imports are rejected. Training remains usable when tracking is unavailable.
+Provision the canonical experiment through the platform bootstrap first; the client refuses to create a differently routed experiment implicitly. The adapter verifies artifact/configuration/split checksums before upload. The logical run UUID and manifest fingerprint make repeated imports idempotent; conflicting imports are rejected and incomplete imports require explicit recovery. Training remains usable when tracking is unavailable.
 
 An isolated SQLite-backed integration test verifies upload, byte-identical retrieval, duplicate import and conflict rejection. Install the `tracking-test` dependency group to run it. The results receipt records any separately verified shared-service import.
 
@@ -69,3 +69,35 @@ The mount appears read-only at `/shared`. It must be an existing client-side fil
 An offline Kaggle job writes a portable run bundle. Retrieve it, verify its exact code/input/artifact identities, then import it through the same adapter from a runtime that can reach the tracker. Kaggle does not need access to the private services.
 
 The platform includes orchestration infrastructure and its own integration checks. The current model benchmark's execution context is recorded in its receipt; the presence of a Prefect server does not retroactively make a manually launched experiment a Prefect run. W&B mirroring is not implemented.
+
+## Recover an interrupted tracking import
+
+A tracker outage does not require retraining. The importer validates the unchanged local
+bundle, uploads it, and downloads every artifact to verify its SHA-256 before marking the
+MLflow run `FINISHED`. A normal repeat also verifies the remote bytes. This adds an artifact
+read-back cost, including the full model checkpoint.
+
+If an upload fails, `tracking.json` records its remote run ID and exception type;
+`tracking-events.jsonl` retains timestamped attempt transitions. Confirm that the previous
+importer has stopped, then explicitly recover the same bundle:
+
+```bash
+.venv/bin/iceberg track --run-dir .local/my-run --resume
+```
+
+Recovery reuses the original MLflow run ID and uploads the same immutable artifact paths;
+changed manifests and duplicate remote identities are rejected. `RUNNING` can mean a live
+writer or a crashed importer, so it is never resumed implicitly. This is a single-writer
+consumer contract, not a distributed lock. A supplied `PREFECT_FLOW_RUN_ID` links the import
+attempt to its orchestrator. Training manifests and checkpoints are not rewritten.
+
+The isolated SQLite integration tests inject a partial-upload interruption and corrupt
+read-back bytes, check that completion is blocked, then recover with the same run ID.
+These tests verify client behavior; they do not establish availability or recovery
+objectives for the shared infrastructure.
+
+For cross-validation, use `iceberg track-cv --run-dir .local/my-cv --resume`.
+The existing parent and child IDs are retained; already completed folds are verified and
+partially uploaded folds are recovered. Parent completion requires all children to finish.
+The parent receipt and attempt journal are `cv-tracking.json` and
+`cv-tracking-events.jsonl`.

@@ -1,0 +1,1811 @@
+{
+  "schema_version": 1,
+  "project_id": "iceberg",
+  "study_kind": "matched_component_ablation",
+  "hypotheses": [
+    "Does the optional incidence-angle branch help on held-out angle groups?",
+    "Does four-flip inference improve the same saved weights?"
+  ],
+  "protocol": {
+    "folds": 5,
+    "strategy": "grouped",
+    "shuffle": true,
+    "split_seed": 25,
+    "model_seeds": [
+      1017,
+      2027
+    ],
+    "workers": 1,
+    "threads_per_worker": 4,
+    "checkpoint_selection": "last",
+    "config": {
+      "name": "modern-image-only-controlled-ablation",
+      "seed": 1017,
+      "split_seed": 25,
+      "validation_fraction": 0.159,
+      "filters": 16,
+      "hidden": 64,
+      "use_angle": false,
+      "dropout": 0.3,
+      "batch_size": 64,
+      "epochs": 30,
+      "learning_rate": 0.001,
+      "min_learning_rate": 1e-05,
+      "weight_decay": 0.0001,
+      "gradient_clip": 1.0,
+      "augment": true,
+      "max_train_rows": null,
+      "threads": 4,
+      "device": "cpu",
+      "deterministic": false,
+      "mixed_precision": true,
+      "tta": "flips"
+    }
+  },
+  "input_sha256": "a56756a2528a09b139dc2747e2e40d869f9da7a8c9df37b188b6163f6bfb8696",
+  "split_sha256": "ab8290b8151dff121b59a1da540353670315a8b0afef6f65b3134bae4a09ec06",
+  "source": {
+    "image_only": {
+      "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+      "git_commit": "88683b8371f2fec2f2836aede2533f15c1eb94f9",
+      "git_dirty": false,
+      "python_source_sha256": "e9b215843738efa0297971df6529abe998a03320a3f62b4b976194958410fe92"
+    },
+    "image_and_angle": {
+      "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+      "git_commit": "88683b8371f2fec2f2836aede2533f15c1eb94f9",
+      "git_dirty": false,
+      "python_source_sha256": "e9b215843738efa0297971df6529abe998a03320a3f62b4b976194958410fe92"
+    }
+  },
+  "training_execution": {
+    "image_only": {
+      "workers": 1,
+      "threads_per_worker": 4
+    },
+    "image_and_angle": {
+      "workers": 2,
+      "threads_per_worker": 4
+    }
+  },
+  "parameter_counts": {
+    "image_only": 310497,
+    "image_and_angle": 311569
+  },
+  "analysis_environment": {
+    "python": "3.12.16",
+    "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+    "device": "cpu",
+    "threads": 4,
+    "cuda_runtime": null,
+    "gpu": null,
+    "packages": {
+      "torch": "2.15.0+cpu",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "iceberg-classifier": "0.1.0"
+    }
+  },
+  "producer_manifests": {
+    "image_only": "bc6a4d91a225abead977561bb01b0089cdbdd72b38769d4b7b931e7109cf9872",
+    "image_and_angle": "b7b5aeddda1ea6146fe2eaa180d94a28f06b1fac0fc32c40c247600375671c3a"
+  },
+  "analysis_script_sha256": "111e8e166544a22afe59efcd65fb06b725045c6a746bfd99dbeade0d7bdd34ba",
+  "training_config_differences": [
+    "name",
+    "use_angle"
+  ],
+  "variants": {
+    "image_only_flips": {
+      "rows": 1604,
+      "pooled_oof": {
+        "log_loss": 0.22029579470831828,
+        "brier_score": 0.06652710394799388,
+        "roc_auc": 0.971190834000465
+      },
+      "fold_metrics": [
+        {
+          "fold": 0,
+          "rows": 322,
+          "log_loss": 0.20186280490600808,
+          "brier_score": 0.05944845415756689,
+          "roc_auc": 0.9774989349754076
+        },
+        {
+          "fold": 1,
+          "rows": 320,
+          "log_loss": 0.23967243207767824,
+          "brier_score": 0.07504799960855138,
+          "roc_auc": 0.9665098039215685
+        },
+        {
+          "fold": 2,
+          "rows": 321,
+          "log_loss": 0.17858999852498494,
+          "brier_score": 0.050765660531021134,
+          "roc_auc": 0.9801324503311258
+        },
+        {
+          "fold": 3,
+          "rows": 320,
+          "log_loss": 0.22490218030554696,
+          "brier_score": 0.06993138501436047,
+          "roc_auc": 0.9719607843137255
+        },
+        {
+          "fold": 4,
+          "rows": 321,
+          "log_loss": 0.2565836948388028,
+          "brier_score": 0.07750122238023698,
+          "roc_auc": 0.9627970393455395
+        }
+      ],
+      "fold_distribution": {
+        "log_loss": {
+          "mean": 0.2203222221306042,
+          "std_ddof1": 0.03079216465348214,
+          "min": 0.17858999852498494,
+          "max": 0.2565836948388028
+        },
+        "brier_score": {
+          "mean": 0.06653894433834737,
+          "std_ddof1": 0.01121556672965698,
+          "min": 0.050765660531021134,
+          "max": 0.07750122238023698
+        },
+        "roc_auc": {
+          "mean": 0.9717798025774733,
+          "std_ddof1": 0.007262418250568743,
+          "min": 0.9627970393455395,
+          "max": 0.9801324503311258
+        }
+      },
+      "strata": {
+        "missing_angle": {
+          "rows": 133,
+          "positives": 0,
+          "log_loss": 0.20716303868137478,
+          "brier_score": 0.06203577114331017,
+          "roc_auc": null
+        },
+        "known_angle": {
+          "rows": 1471,
+          "positives": 753,
+          "log_loss": 0.2214831886930793,
+          "brier_score": 0.06693318638376747,
+          "roc_auc": 0.9714364454900916
+        },
+        "ship": {
+          "rows": 851,
+          "positives": 0,
+          "log_loss": 0.20662646960037337,
+          "brier_score": 0.06188285335356443,
+          "roc_auc": null
+        },
+        "iceberg": {
+          "rows": 753,
+          "positives": 753,
+          "log_loss": 0.23574412892725735,
+          "brier_score": 0.07177578556268106,
+          "roc_auc": null
+        }
+      },
+      "seed_distribution": {
+        "log_loss": {
+          "mean": 0.22492882945091824,
+          "min": 0.22474798584183442,
+          "max": 0.22510967306000207,
+          "range": 0.00036168721816765004,
+          "std_ddof1": 0.00025575148463484357
+        },
+        "brier_score": {
+          "mean": 0.06798912571205522,
+          "min": 0.06760304018722775,
+          "max": 0.06837521123688269,
+          "range": 0.000772171049654935,
+          "std_ddof1": 0.0005460073854469388
+        },
+        "roc_auc": {
+          "mean": 0.9701499524814958,
+          "min": 0.9699205528064007,
+          "max": 0.970379352156591,
+          "range": 0.0004587993501903309,
+          "std_ddof1": 0.0003244201317235645
+        }
+      },
+      "known_angle_fold_metrics": [
+        {
+          "fold": 0,
+          "rows": 322,
+          "known_angle_rows": 304,
+          "all_row_log_loss": 0.20186280490600808,
+          "known_angle_log_loss": 0.20715193305179588
+        },
+        {
+          "fold": 1,
+          "rows": 320,
+          "known_angle_rows": 295,
+          "all_row_log_loss": 0.23967243207767824,
+          "known_angle_log_loss": 0.22987559593215523
+        },
+        {
+          "fold": 2,
+          "rows": 321,
+          "known_angle_rows": 292,
+          "all_row_log_loss": 0.17858999852498494,
+          "known_angle_log_loss": 0.17768110370772847
+        },
+        {
+          "fold": 3,
+          "rows": 320,
+          "known_angle_rows": 289,
+          "all_row_log_loss": 0.22490218030554696,
+          "known_angle_log_loss": 0.23525098727697732
+        },
+        {
+          "fold": 4,
+          "rows": 321,
+          "known_angle_rows": 291,
+          "all_row_log_loss": 0.2565836948388028,
+          "known_angle_log_loss": 0.25822633853637383
+        }
+      ],
+      "seed_fold_metrics": [
+        {
+          "seed": 1017,
+          "fold": 0,
+          "rows": 322,
+          "known_angle_rows": 304,
+          "all_row_log_loss": 0.19921900109239105,
+          "known_angle_log_loss": 0.20419307965186131
+        },
+        {
+          "seed": 1017,
+          "fold": 1,
+          "rows": 320,
+          "known_angle_rows": 295,
+          "all_row_log_loss": 0.25102396790630294,
+          "known_angle_log_loss": 0.2387860331202261
+        },
+        {
+          "seed": 1017,
+          "fold": 2,
+          "rows": 321,
+          "known_angle_rows": 292,
+          "all_row_log_loss": 0.18708674451338697,
+          "known_angle_log_loss": 0.18865023246870358
+        },
+        {
+          "seed": 1017,
+          "fold": 3,
+          "rows": 320,
+          "known_angle_rows": 289,
+          "all_row_log_loss": 0.23204115201172967,
+          "known_angle_log_loss": 0.24241935065438758
+        },
+        {
+          "seed": 1017,
+          "fold": 4,
+          "rows": 321,
+          "known_angle_rows": 291,
+          "all_row_log_loss": 0.2563604793580242,
+          "known_angle_log_loss": 0.2602664562319704
+        },
+        {
+          "seed": 2027,
+          "fold": 0,
+          "rows": 322,
+          "known_angle_rows": 304,
+          "all_row_log_loss": 0.2130378141740059,
+          "known_angle_log_loss": 0.21880729573791627
+        },
+        {
+          "seed": 2027,
+          "fold": 1,
+          "rows": 320,
+          "known_angle_rows": 295,
+          "all_row_log_loss": 0.23713195536615483,
+          "known_angle_log_loss": 0.23016001473857822
+        },
+        {
+          "seed": 2027,
+          "fold": 2,
+          "rows": 321,
+          "known_angle_rows": 292,
+          "all_row_log_loss": 0.17694662568826225,
+          "known_angle_log_loss": 0.1735471530325948
+        },
+        {
+          "seed": 2027,
+          "fold": 3,
+          "rows": 320,
+          "known_angle_rows": 289,
+          "all_row_log_loss": 0.2285906504522443,
+          "known_angle_log_loss": 0.2399597757639555
+        },
+        {
+          "seed": 2027,
+          "fold": 4,
+          "rows": 321,
+          "known_angle_rows": 291,
+          "all_row_log_loss": 0.2681199140761764,
+          "known_angle_log_loss": 0.26771713695124755
+        }
+      ],
+      "seed_results": [
+        {
+          "seed": 1017,
+          "pooled_oof": {
+            "log_loss": 0.22510967306000207,
+            "brier_score": 0.06760304018722775,
+            "roc_auc": 0.9699205528064007
+          },
+          "strata": {
+            "missing_angle": {
+              "rows": 133,
+              "positives": 0,
+              "log_loss": 0.20809579413630033,
+              "brier_score": 0.06235486710709231,
+              "roc_auc": null
+            },
+            "known_angle": {
+              "rows": 1471,
+              "positives": 753,
+              "log_loss": 0.22664797754460597,
+              "brier_score": 0.0680775520972604,
+              "roc_auc": 0.9702212505595076
+            },
+            "ship": {
+              "rows": 851,
+              "positives": 0,
+              "log_loss": 0.2096820754472495,
+              "brier_score": 0.062425562380521014,
+              "roc_auc": null
+            },
+            "iceberg": {
+              "rows": 753,
+              "positives": 753,
+              "log_loss": 0.24254511206193094,
+              "brier_score": 0.07345434644686576,
+              "roc_auc": null
+            }
+          }
+        },
+        {
+          "seed": 2027,
+          "pooled_oof": {
+            "log_loss": 0.22474798584183442,
+            "brier_score": 0.06837521123688269,
+            "roc_auc": 0.970379352156591
+          },
+          "strata": {
+            "missing_angle": {
+              "rows": 133,
+              "positives": 0,
+              "log_loss": 0.21166403236076312,
+              "brier_score": 0.06448284149881528,
+              "roc_auc": null
+            },
+            "known_angle": {
+              "rows": 1471,
+              "positives": 753,
+              "log_loss": 0.22593096735983753,
+              "brier_score": 0.06872713861632726,
+              "roc_auc": 0.9706799542775971
+            },
+            "ship": {
+              "rows": 851,
+              "positives": 0,
+              "log_loss": 0.2122610679935878,
+              "brier_score": 0.06414652929563973,
+              "roc_auc": null
+            },
+            "iceberg": {
+              "rows": 753,
+              "positives": 753,
+              "log_loss": 0.23886002712849833,
+              "brier_score": 0.07315423956622899,
+              "roc_auc": null
+            }
+          }
+        }
+      ]
+    },
+    "image_and_angle_flips": {
+      "rows": 1604,
+      "pooled_oof": {
+        "log_loss": 0.20479245393810833,
+        "brier_score": 0.0606876985304574,
+        "roc_auc": 0.9747488697774511
+      },
+      "fold_metrics": [
+        {
+          "fold": 0,
+          "rows": 322,
+          "log_loss": 0.19140822230631316,
+          "brier_score": 0.05696879861902428,
+          "roc_auc": 0.9799775376631423
+        },
+        {
+          "fold": 1,
+          "rows": 320,
+          "log_loss": 0.19738468524246702,
+          "brier_score": 0.05992448291263423,
+          "roc_auc": 0.9773725490196078
+        },
+        {
+          "fold": 2,
+          "rows": 321,
+          "log_loss": 0.17611001984674768,
+          "brier_score": 0.04986160390843999,
+          "roc_auc": 0.9809115699259835
+        },
+        {
+          "fold": 3,
+          "rows": 320,
+          "log_loss": 0.21044185027254372,
+          "brier_score": 0.06530415620012384,
+          "roc_auc": 0.9757254901960783
+        },
+        {
+          "fold": 4,
+          "rows": 321,
+          "log_loss": 0.2486537096525964,
+          "brier_score": 0.07140304023936457,
+          "roc_auc": 0.9645890144137125
+        }
+      ],
+      "fold_distribution": {
+        "log_loss": {
+          "mean": 0.2047996974641336,
+          "std_ddof1": 0.027442758098808213,
+          "min": 0.17611001984674768,
+          "max": 0.2486537096525964
+        },
+        "brier_score": {
+          "mean": 0.06069241637591738,
+          "std_ddof1": 0.008181490656652362,
+          "min": 0.04986160390843999,
+          "max": 0.07140304023936457
+        },
+        "roc_auc": {
+          "mean": 0.9757152322437049,
+          "std_ddof1": 0.006551883319293612,
+          "min": 0.9645890144137125,
+          "max": 0.9809115699259835
+        }
+      },
+      "strata": {
+        "missing_angle": {
+          "rows": 133,
+          "positives": 0,
+          "log_loss": 0.029463237129361407,
+          "brier_score": 0.0030996237342860128,
+          "roc_auc": null
+        },
+        "known_angle": {
+          "rows": 1471,
+          "positives": 753,
+          "log_loss": 0.22064478965229142,
+          "brier_score": 0.06589450610890117,
+          "roc_auc": 0.9708797123483781
+        },
+        "ship": {
+          "rows": 851,
+          "positives": 0,
+          "log_loss": 0.20156329324731728,
+          "brier_score": 0.061071399650383676,
+          "roc_auc": null
+        },
+        "iceberg": {
+          "rows": 753,
+          "positives": 753,
+          "log_loss": 0.20844187724204347,
+          "brier_score": 0.060254060212984274,
+          "roc_auc": null
+        }
+      },
+      "seed_distribution": {
+        "log_loss": {
+          "mean": 0.20928231598453628,
+          "min": 0.20703684071146863,
+          "max": 0.21152779125760393,
+          "range": 0.004490950546135297,
+          "std_ddof1": 0.0031755815851456978
+        },
+        "brier_score": {
+          "mean": 0.06198237151432386,
+          "min": 0.06121670638916206,
+          "max": 0.06274803663948567,
+          "range": 0.0015313302503236065,
+          "std_ddof1": 0.0010828140042399156
+        },
+        "roc_auc": {
+          "mean": 0.9738063024049513,
+          "min": 0.9733256554666567,
+          "max": 0.9742869493432459,
+          "range": 0.0009612938765891643,
+          "std_ddof1": 0.0006797374188493023
+        }
+      },
+      "known_angle_fold_metrics": [
+        {
+          "fold": 0,
+          "rows": 322,
+          "known_angle_rows": 304,
+          "all_row_log_loss": 0.19140822230631316,
+          "known_angle_log_loss": 0.20175035123524282
+        },
+        {
+          "fold": 1,
+          "rows": 320,
+          "known_angle_rows": 295,
+          "all_row_log_loss": 0.19738468524246702,
+          "known_angle_log_loss": 0.2111189349188256
+        },
+        {
+          "fold": 2,
+          "rows": 321,
+          "known_angle_rows": 292,
+          "all_row_log_loss": 0.17611001984674768,
+          "known_angle_log_loss": 0.18874355168827786
+        },
+        {
+          "fold": 3,
+          "rows": 320,
+          "known_angle_rows": 289,
+          "all_row_log_loss": 0.21044185027254372,
+          "known_angle_log_loss": 0.23090957591214642
+        },
+        {
+          "fold": 4,
+          "rows": 321,
+          "known_angle_rows": 291,
+          "all_row_log_loss": 0.2486537096525964,
+          "known_angle_log_loss": 0.27185673013871436
+        }
+      ],
+      "seed_fold_metrics": [
+        {
+          "seed": 1017,
+          "fold": 0,
+          "rows": 322,
+          "known_angle_rows": 304,
+          "all_row_log_loss": 0.19447807201874293,
+          "known_angle_log_loss": 0.2050321448596782
+        },
+        {
+          "seed": 1017,
+          "fold": 1,
+          "rows": 320,
+          "known_angle_rows": 295,
+          "all_row_log_loss": 0.2090430781501042,
+          "known_angle_log_loss": 0.22315669760109366
+        },
+        {
+          "seed": 1017,
+          "fold": 2,
+          "rows": 321,
+          "known_angle_rows": 292,
+          "all_row_log_loss": 0.18278474730341746,
+          "known_angle_log_loss": 0.19547127043023776
+        },
+        {
+          "seed": 1017,
+          "fold": 3,
+          "rows": 320,
+          "known_angle_rows": 289,
+          "all_row_log_loss": 0.21715175636571216,
+          "known_angle_log_loss": 0.23882012145582673
+        },
+        {
+          "seed": 1017,
+          "fold": 4,
+          "rows": 321,
+          "known_angle_rows": 291,
+          "all_row_log_loss": 0.25424419644144325,
+          "known_angle_log_loss": 0.2782102059988122
+        },
+        {
+          "seed": 2027,
+          "fold": 0,
+          "rows": 322,
+          "known_angle_rows": 304,
+          "all_row_log_loss": 0.19811624706266018,
+          "known_angle_log_loss": 0.20882398960221257
+        },
+        {
+          "seed": 2027,
+          "fold": 1,
+          "rows": 320,
+          "known_angle_rows": 295,
+          "all_row_log_loss": 0.19383500002000967,
+          "known_angle_log_loss": 0.20778542352332138
+        },
+        {
+          "seed": 2027,
+          "fold": 2,
+          "rows": 321,
+          "known_angle_rows": 292,
+          "all_row_log_loss": 0.17529219413232047,
+          "known_angle_log_loss": 0.18836783577930316
+        },
+        {
+          "seed": 2027,
+          "fold": 3,
+          "rows": 320,
+          "known_angle_rows": 289,
+          "all_row_log_loss": 0.21671092194102778,
+          "known_angle_log_loss": 0.23735672134535413
+        },
+        {
+          "seed": 2027,
+          "fold": 4,
+          "rows": 321,
+          "known_angle_rows": 291,
+          "all_row_log_loss": 0.25124664050782614,
+          "known_angle_log_loss": 0.2745076980156588
+        }
+      ],
+      "seed_results": [
+        {
+          "seed": 1017,
+          "pooled_oof": {
+            "log_loss": 0.21152779125760393,
+            "brier_score": 0.06274803663948567,
+            "roc_auc": 0.9733256554666567
+          },
+          "strata": {
+            "missing_angle": {
+              "rows": 133,
+              "positives": 0,
+              "log_loss": 0.030629949891084765,
+              "brier_score": 0.004188444295014135,
+              "roc_auc": null
+            },
+            "known_angle": {
+              "rows": 1471,
+              "positives": 753,
+              "log_loss": 0.22788361240087185,
+              "brier_score": 0.06804268366995116,
+              "roc_auc": 0.9693186400174604
+            },
+            "ship": {
+              "rows": 851,
+              "positives": 0,
+              "log_loss": 0.20864264871384677,
+              "brier_score": 0.06369149330749986,
+              "roc_auc": null
+            },
+            "iceberg": {
+              "rows": 753,
+              "positives": 753,
+              "log_loss": 0.2147884238004159,
+              "brier_score": 0.06168179278227441,
+              "roc_auc": null
+            }
+          }
+        },
+        {
+          "seed": 2027,
+          "pooled_oof": {
+            "log_loss": 0.20703684071146863,
+            "brier_score": 0.06121670638916206,
+            "roc_auc": 0.9742869493432459
+          },
+          "strata": {
+            "missing_angle": {
+              "rows": 133,
+              "positives": 0,
+              "log_loss": 0.028771872810696496,
+              "brier_score": 0.002609855009508576,
+              "roc_auc": null
+            },
+            "known_angle": {
+              "rows": 1471,
+              "positives": 753,
+              "log_loss": 0.22315461143261248,
+              "brier_score": 0.06651562633035438,
+              "roc_auc": 0.9702804381360353
+            },
+            "ship": {
+              "rows": 851,
+              "positives": 0,
+              "log_loss": 0.20340204938533493,
+              "brier_score": 0.06061877278430266,
+              "roc_auc": null
+            },
+            "iceberg": {
+              "rows": 753,
+              "positives": 753,
+              "log_loss": 0.2111446858888122,
+              "brier_score": 0.061892458710191736,
+              "roc_auc": null
+            }
+          }
+        }
+      ]
+    },
+    "image_only_none": {
+      "rows": 1604,
+      "pooled_oof": {
+        "log_loss": 0.22287415094957883,
+        "brier_score": 0.06794386001069931,
+        "roc_auc": 0.9709942057075263
+      },
+      "fold_metrics": [
+        {
+          "fold": 0,
+          "rows": 322,
+          "log_loss": 0.20488195915693538,
+          "brier_score": 0.06095772495151905,
+          "roc_auc": 0.977924944812362
+        },
+        {
+          "fold": 1,
+          "rows": 320,
+          "log_loss": 0.2488119235522673,
+          "brier_score": 0.07862364603534,
+          "roc_auc": 0.9638431372549021
+        },
+        {
+          "fold": 2,
+          "rows": 321,
+          "log_loss": 0.19032253672542546,
+          "brier_score": 0.05505737355810206,
+          "roc_auc": 0.9779509154655239
+        },
+        {
+          "fold": 3,
+          "rows": 320,
+          "log_loss": 0.22502638207220507,
+          "brier_score": 0.07004181068902876,
+          "roc_auc": 0.9728235294117646
+        },
+        {
+          "fold": 4,
+          "rows": 321,
+          "log_loss": 0.2454715114825499,
+          "brier_score": 0.07510031451346977,
+          "roc_auc": 0.9653681340085702
+        }
+      ],
+      "fold_distribution": {
+        "log_loss": {
+          "mean": 0.22290286259787662,
+          "std_ddof1": 0.025354305757398915,
+          "min": 0.19032253672542546,
+          "max": 0.2488119235522673
+        },
+        "brier_score": {
+          "mean": 0.06795617394949192,
+          "std_ddof1": 0.009804857541337282,
+          "min": 0.05505737355810206,
+          "max": 0.07862364603534
+        },
+        "roc_auc": {
+          "mean": 0.9715821321906247,
+          "std_ddof1": 0.00672382992496606,
+          "min": 0.9638431372549021,
+          "max": 0.9779509154655239
+        }
+      },
+      "strata": {
+        "missing_angle": {
+          "rows": 133,
+          "positives": 0,
+          "log_loss": 0.21298173497112347,
+          "brier_score": 0.06571134968621092,
+          "roc_auc": null
+        },
+        "known_angle": {
+          "rows": 1471,
+          "positives": 753,
+          "log_loss": 0.22376857061316457,
+          "brier_score": 0.06814571172596577,
+          "roc_auc": 0.9716750454079689
+        },
+        "ship": {
+          "rows": 851,
+          "positives": 0,
+          "log_loss": 0.20269489277160252,
+          "brier_score": 0.06103018812070232,
+          "roc_auc": null
+        },
+        "iceberg": {
+          "rows": 753,
+          "positives": 753,
+          "log_loss": 0.24567966052389206,
+          "brier_score": 0.07575731921174503,
+          "roc_auc": null
+        }
+      },
+      "seed_distribution": {
+        "log_loss": {
+          "mean": 0.23570677742663257,
+          "min": 0.23304920560245507,
+          "max": 0.23836434925081007,
+          "range": 0.005315143648355003,
+          "std_ddof1": 0.003758374116732429
+        },
+        "brier_score": {
+          "mean": 0.07143540489346298,
+          "min": 0.07021287185442894,
+          "max": 0.07265793793249702,
+          "range": 0.0024450660780680755,
+          "std_ddof1": 0.0017289228042511326
+        },
+        "roc_auc": {
+          "mean": 0.9682601361104739,
+          "min": 0.9680775526956023,
+          "max": 0.9684427195253456,
+          "range": 0.00036516682974330195,
+          "std_ddof1": 0.00025821194157588226
+        }
+      },
+      "known_angle_fold_metrics": [
+        {
+          "fold": 0,
+          "rows": 322,
+          "known_angle_rows": 304,
+          "all_row_log_loss": 0.20488195915693538,
+          "known_angle_log_loss": 0.2104499255128686
+        },
+        {
+          "fold": 1,
+          "rows": 320,
+          "known_angle_rows": 295,
+          "all_row_log_loss": 0.2488119235522673,
+          "known_angle_log_loss": 0.23819294813063827
+        },
+        {
+          "fold": 2,
+          "rows": 321,
+          "known_angle_rows": 292,
+          "all_row_log_loss": 0.19032253672542546,
+          "known_angle_log_loss": 0.19251582152842114
+        },
+        {
+          "fold": 3,
+          "rows": 320,
+          "known_angle_rows": 289,
+          "all_row_log_loss": 0.22502638207220507,
+          "known_angle_log_loss": 0.23416688559448653
+        },
+        {
+          "fold": 4,
+          "rows": 321,
+          "known_angle_rows": 291,
+          "all_row_log_loss": 0.2454715114825499,
+          "known_angle_log_loss": 0.2440928539326773
+        }
+      ],
+      "seed_fold_metrics": [
+        {
+          "seed": 1017,
+          "fold": 0,
+          "rows": 322,
+          "known_angle_rows": 304,
+          "all_row_log_loss": 0.21129298753786505,
+          "known_angle_log_loss": 0.21684998140340556
+        },
+        {
+          "seed": 1017,
+          "fold": 1,
+          "rows": 320,
+          "known_angle_rows": 295,
+          "all_row_log_loss": 0.26090929150538755,
+          "known_angle_log_loss": 0.24691499405846523
+        },
+        {
+          "seed": 1017,
+          "fold": 2,
+          "rows": 321,
+          "known_angle_rows": 292,
+          "all_row_log_loss": 0.21526913043021997,
+          "known_angle_log_loss": 0.22206063599157838
+        },
+        {
+          "seed": 1017,
+          "fold": 3,
+          "rows": 320,
+          "known_angle_rows": 289,
+          "all_row_log_loss": 0.2377055916450995,
+          "known_angle_log_loss": 0.249217802992115
+        },
+        {
+          "seed": 1017,
+          "fold": 4,
+          "rows": 321,
+          "known_angle_rows": 291,
+          "all_row_log_loss": 0.24023810069435791,
+          "known_angle_log_loss": 0.23734926964781994
+        },
+        {
+          "seed": 2027,
+          "fold": 0,
+          "rows": 322,
+          "known_angle_rows": 304,
+          "all_row_log_loss": 0.21830295822318593,
+          "known_angle_log_loss": 0.2249582736454788
+        },
+        {
+          "seed": 2027,
+          "fold": 1,
+          "rows": 320,
+          "known_angle_rows": 295,
+          "all_row_log_loss": 0.2574503629695239,
+          "known_angle_log_loss": 0.25059694025526785
+        },
+        {
+          "seed": 2027,
+          "fold": 2,
+          "rows": 321,
+          "known_angle_rows": 292,
+          "all_row_log_loss": 0.18988827484449103,
+          "known_angle_log_loss": 0.18871352541654643
+        },
+        {
+          "seed": 2027,
+          "fold": 3,
+          "rows": 320,
+          "known_angle_rows": 289,
+          "all_row_log_loss": 0.24847881287112647,
+          "known_angle_log_loss": 0.25872630850135514
+        },
+        {
+          "seed": 2027,
+          "fold": 4,
+          "rows": 321,
+          "known_angle_rows": 291,
+          "all_row_log_loss": 0.277854801110105,
+          "known_angle_log_loss": 0.2784513505199669
+        }
+      ],
+      "seed_results": [
+        {
+          "seed": 1017,
+          "pooled_oof": {
+            "log_loss": 0.23304920560245507,
+            "brier_score": 0.07021287185442894,
+            "roc_auc": 0.9684427195253456
+          },
+          "strata": {
+            "missing_angle": {
+              "rows": 133,
+              "positives": 0,
+              "log_loss": 0.21890466128329072,
+              "brier_score": 0.06802611576043595,
+              "roc_auc": null
+            },
+            "known_angle": {
+              "rows": 1471,
+              "positives": 753,
+              "log_loss": 0.23432808010581935,
+              "brier_score": 0.0704105867154086,
+              "roc_auc": 0.9694555112881806
+            },
+            "ship": {
+              "rows": 851,
+              "positives": 0,
+              "log_loss": 0.20533432069699709,
+              "brier_score": 0.06121885241830464,
+              "roc_auc": null
+            },
+            "iceberg": {
+              "rows": 753,
+              "positives": 753,
+              "log_loss": 0.26437107420078804,
+              "brier_score": 0.08037742768463053,
+              "roc_auc": null
+            }
+          }
+        },
+        {
+          "seed": 2027,
+          "pooled_oof": {
+            "log_loss": 0.23836434925081007,
+            "brier_score": 0.07265793793249702,
+            "roc_auc": 0.9680775526956023
+          },
+          "strata": {
+            "missing_angle": {
+              "rows": 133,
+              "positives": 0,
+              "log_loss": 0.21892788011230233,
+              "brier_score": 0.06755985782552784,
+              "roc_auc": null
+            },
+            "known_angle": {
+              "rows": 1471,
+              "positives": 753,
+              "log_loss": 0.24012169146387702,
+              "brier_score": 0.07311887923380694,
+              "roc_auc": 0.9686897720168537
+            },
+            "ship": {
+              "rows": 851,
+              "positives": 0,
+              "log_loss": 0.22012815439070715,
+              "brier_score": 0.06637433764815179,
+              "roc_auc": null
+            },
+            "iceberg": {
+              "rows": 753,
+              "positives": 753,
+              "log_loss": 0.25897391342869525,
+              "brier_score": 0.07975932417682345,
+              "roc_auc": null
+            }
+          }
+        }
+      ]
+    },
+    "image_and_angle_none": {
+      "rows": 1604,
+      "pooled_oof": {
+        "log_loss": 0.2093354396295076,
+        "brier_score": 0.06259905368797815,
+        "roc_auc": 0.9740918815923147
+      },
+      "fold_metrics": [
+        {
+          "fold": 0,
+          "rows": 322,
+          "log_loss": 0.19227161230142545,
+          "brier_score": 0.05878292943744274,
+          "roc_auc": 0.9802099066651175
+        },
+        {
+          "fold": 1,
+          "rows": 320,
+          "log_loss": 0.20613328993796332,
+          "brier_score": 0.06396515099520712,
+          "roc_auc": 0.9753725490196078
+        },
+        {
+          "fold": 2,
+          "rows": 321,
+          "log_loss": 0.18658411039139108,
+          "brier_score": 0.05390574395417653,
+          "roc_auc": 0.9798597584729256
+        },
+        {
+          "fold": 3,
+          "rows": 320,
+          "log_loss": 0.2122184230021052,
+          "brier_score": 0.0649112730782245,
+          "roc_auc": 0.9752549019607842
+        },
+        {
+          "fold": 4,
+          "rows": 321,
+          "log_loss": 0.24952192656764086,
+          "brier_score": 0.0714535181429022,
+          "roc_auc": 0.9649006622516557
+        }
+      ],
+      "fold_distribution": {
+        "log_loss": {
+          "mean": 0.20934587244010522,
+          "std_ddof1": 0.024709895432642872,
+          "min": 0.18658411039139108,
+          "max": 0.24952192656764086
+        },
+        "brier_score": {
+          "mean": 0.06260372312159061,
+          "std_ddof1": 0.006628545288188164,
+          "min": 0.05390574395417653,
+          "max": 0.0714535181429022
+        },
+        "roc_auc": {
+          "mean": 0.9751195556740182,
+          "std_ddof1": 0.006182420699354195,
+          "min": 0.9649006622516557,
+          "max": 0.9802099066651175
+        }
+      },
+      "strata": {
+        "missing_angle": {
+          "rows": 133,
+          "positives": 0,
+          "log_loss": 0.031235610777176726,
+          "brier_score": 0.0040622554192970926,
+          "roc_auc": null
+        },
+        "known_angle": {
+          "rows": 1471,
+          "positives": 753,
+          "log_loss": 0.22543827935578897,
+          "brier_score": 0.0678916397992865,
+          "roc_auc": 0.9702637916301369
+        },
+        "ship": {
+          "rows": 851,
+          "positives": 0,
+          "log_loss": 0.20185318418029954,
+          "brier_score": 0.061581487704334005,
+          "roc_auc": null
+        },
+        "iceberg": {
+          "rows": 753,
+          "positives": 753,
+          "log_loss": 0.2177914813124771,
+          "brier_score": 0.0637490518979133,
+          "roc_auc": null
+        }
+      },
+      "seed_distribution": {
+        "log_loss": {
+          "mean": 0.2196001028311028,
+          "min": 0.21392532964575578,
+          "max": 0.2252748760164498,
+          "range": 0.01134954637069402,
+          "std_ddof1": 0.008025341202108911
+        },
+        "brier_score": {
+          "mean": 0.06540050538422892,
+          "min": 0.0636303567810001,
+          "max": 0.06717065398745775,
+          "range": 0.0035402972064576543,
+          "std_ddof1": 0.0025033681621019982
+        },
+        "roc_auc": {
+          "mean": 0.972156029232073,
+          "min": 0.9711346544881969,
+          "max": 0.973177403975949,
+          "range": 0.0020427494877520713,
+          "std_ddof1": 0.001444442015054836
+        }
+      },
+      "known_angle_fold_metrics": [
+        {
+          "fold": 0,
+          "rows": 322,
+          "known_angle_rows": 304,
+          "all_row_log_loss": 0.19227161230142545,
+          "known_angle_log_loss": 0.20264453893896875
+        },
+        {
+          "fold": 1,
+          "rows": 320,
+          "known_angle_rows": 295,
+          "all_row_log_loss": 0.20613328993796332,
+          "known_angle_log_loss": 0.22050643998240949
+        },
+        {
+          "fold": 2,
+          "rows": 321,
+          "known_angle_rows": 292,
+          "all_row_log_loss": 0.18658411039139108,
+          "known_angle_log_loss": 0.20010032580453746
+        },
+        {
+          "fold": 3,
+          "rows": 320,
+          "known_angle_rows": 289,
+          "all_row_log_loss": 0.2122184230021052,
+          "known_angle_log_loss": 0.23262271476094715
+        },
+        {
+          "fold": 4,
+          "rows": 321,
+          "known_angle_rows": 291,
+          "all_row_log_loss": 0.24952192656764086,
+          "known_angle_log_loss": 0.2725398955301364
+        }
+      ],
+      "seed_fold_metrics": [
+        {
+          "seed": 1017,
+          "fold": 0,
+          "rows": 322,
+          "known_angle_rows": 304,
+          "all_row_log_loss": 0.2060544668214737,
+          "known_angle_log_loss": 0.21737417131246944
+        },
+        {
+          "seed": 1017,
+          "fold": 1,
+          "rows": 320,
+          "known_angle_rows": 295,
+          "all_row_log_loss": 0.21585687707550302,
+          "known_angle_log_loss": 0.23100328929715006
+        },
+        {
+          "seed": 1017,
+          "fold": 2,
+          "rows": 321,
+          "known_angle_rows": 292,
+          "all_row_log_loss": 0.21380244514855573,
+          "known_angle_log_loss": 0.2241995820957551
+        },
+        {
+          "seed": 1017,
+          "fold": 3,
+          "rows": 320,
+          "known_angle_rows": 289,
+          "all_row_log_loss": 0.2307225762605311,
+          "known_angle_log_loss": 0.25397191137548286
+        },
+        {
+          "seed": 1017,
+          "fold": 4,
+          "rows": 321,
+          "known_angle_rows": 291,
+          "all_row_log_loss": 0.2599855229085783,
+          "known_angle_log_loss": 0.2849205463555496
+        },
+        {
+          "seed": 2027,
+          "fold": 0,
+          "rows": 322,
+          "known_angle_rows": 304,
+          "all_row_log_loss": 0.2039879398597972,
+          "known_angle_log_loss": 0.21492297298663365
+        },
+        {
+          "seed": 2027,
+          "fold": 1,
+          "rows": 320,
+          "known_angle_rows": 295,
+          "all_row_log_loss": 0.21867639312594314,
+          "known_angle_log_loss": 0.23415298296391504
+        },
+        {
+          "seed": 2027,
+          "fold": 2,
+          "rows": 321,
+          "known_angle_rows": 292,
+          "all_row_log_loss": 0.17703430764660305,
+          "known_angle_log_loss": 0.1916323753278493
+        },
+        {
+          "seed": 2027,
+          "fold": 3,
+          "rows": 320,
+          "known_angle_rows": 289,
+          "all_row_log_loss": 0.2173211177953494,
+          "known_angle_log_loss": 0.23727610693774875
+        },
+        {
+          "seed": 2027,
+          "fold": 4,
+          "rows": 321,
+          "known_angle_rows": 291,
+          "all_row_log_loss": 0.2526632270017583,
+          "known_angle_log_loss": 0.2748699000035467
+        }
+      ],
+      "seed_results": [
+        {
+          "seed": 1017,
+          "pooled_oof": {
+            "log_loss": 0.2252748760164498,
+            "brier_score": 0.06717065398745775,
+            "roc_auc": 0.9711346544881969
+          },
+          "strata": {
+            "missing_angle": {
+              "rows": 133,
+              "positives": 0,
+              "log_loss": 0.040128897442071786,
+              "brier_score": 0.007452664221374391,
+              "roc_auc": null
+            },
+            "known_angle": {
+              "rows": 1471,
+              "positives": 753,
+              "log_loss": 0.24201479114248128,
+              "brier_score": 0.07257003715461553,
+              "roc_auc": 0.9670121741446471
+            },
+            "ship": {
+              "rows": 851,
+              "positives": 0,
+              "log_loss": 0.2173437527488463,
+              "brier_score": 0.06632824799573417,
+              "roc_auc": null
+            },
+            "iceberg": {
+              "rows": 753,
+              "positives": 753,
+              "log_loss": 0.2342382039058662,
+              "brier_score": 0.06812269581874165,
+              "roc_auc": null
+            }
+          }
+        },
+        {
+          "seed": 2027,
+          "pooled_oof": {
+            "log_loss": 0.21392532964575578,
+            "brier_score": 0.0636303567810001,
+            "roc_auc": 0.973177403975949
+          },
+          "strata": {
+            "missing_angle": {
+              "rows": 133,
+              "positives": 0,
+              "log_loss": 0.031638538253588366,
+              "brier_score": 0.0037614476441938114,
+              "roc_auc": null
+            },
+            "known_angle": {
+              "rows": 1471,
+              "positives": 753,
+              "log_loss": 0.23040673226652958,
+              "brier_score": 0.06904338527535443,
+              "roc_auc": 0.9692095129232374
+            },
+            "ship": {
+              "rows": 851,
+              "positives": 0,
+              "log_loss": 0.20855655030844428,
+              "brier_score": 0.06191179550838789,
+              "roc_auc": null
+            },
+            "iceberg": {
+              "rows": 753,
+              "positives": 753,
+              "log_loss": 0.21999283458075197,
+              "brier_score": 0.0655725820704994,
+              "roc_auc": null
+            }
+          }
+        }
+      ]
+    }
+  },
+  "paired_comparisons": [
+    {
+      "hypothesis": "Add angle branch, four-flip inference fixed",
+      "before": "image_only_flips",
+      "after": "image_and_angle_flips",
+      "all_row_log_loss_delta": -0.015503340770209956,
+      "known_angle_log_loss_delta": -0.0008383990407878905,
+      "per_seed_all_row_deltas": [
+        {
+          "seed": 1017,
+          "delta": -0.013581881802398138
+        },
+        {
+          "seed": 2027,
+          "delta": -0.017711145130365785
+        }
+      ],
+      "per_seed_known_angle_deltas": [
+        {
+          "seed": 1017,
+          "delta": 0.001235634856265877
+        },
+        {
+          "seed": 2027,
+          "delta": -0.002776355927225055
+        }
+      ],
+      "per_seed_fold_known_angle_deltas": [
+        {
+          "seed": 1017,
+          "fold": 0,
+          "known_angle_rows": 304,
+          "delta": 0.0008390652078168748
+        },
+        {
+          "seed": 1017,
+          "fold": 1,
+          "known_angle_rows": 295,
+          "delta": -0.015629335519132426
+        },
+        {
+          "seed": 1017,
+          "fold": 2,
+          "known_angle_rows": 292,
+          "delta": 0.006821037961534188
+        },
+        {
+          "seed": 1017,
+          "fold": 3,
+          "known_angle_rows": 289,
+          "delta": -0.0035992291985608438
+        },
+        {
+          "seed": 1017,
+          "fold": 4,
+          "known_angle_rows": 291,
+          "delta": 0.017943749766841766
+        },
+        {
+          "seed": 2027,
+          "fold": 0,
+          "known_angle_rows": 304,
+          "delta": -0.009983306135703696
+        },
+        {
+          "seed": 2027,
+          "fold": 1,
+          "known_angle_rows": 295,
+          "delta": -0.02237459121525684
+        },
+        {
+          "seed": 2027,
+          "fold": 2,
+          "known_angle_rows": 292,
+          "delta": 0.014820682746708363
+        },
+        {
+          "seed": 2027,
+          "fold": 3,
+          "known_angle_rows": 289,
+          "delta": -0.0026030544186013693
+        },
+        {
+          "seed": 2027,
+          "fold": 4,
+          "known_angle_rows": 291,
+          "delta": 0.006790561064411227
+        }
+      ],
+      "fold_known_angle_deltas": [
+        {
+          "fold": 0,
+          "known_angle_rows": 304,
+          "delta": -0.005401581816553064
+        },
+        {
+          "fold": 1,
+          "known_angle_rows": 295,
+          "delta": -0.018756661013329623
+        },
+        {
+          "fold": 2,
+          "known_angle_rows": 292,
+          "delta": 0.011062447980549395
+        },
+        {
+          "fold": 3,
+          "known_angle_rows": 289,
+          "delta": -0.004341411364830905
+        },
+        {
+          "fold": 4,
+          "known_angle_rows": 291,
+          "delta": 0.01363039160234053
+        }
+      ],
+      "fold_all_row_deltas": [
+        {
+          "fold": 0,
+          "delta": -0.010454582599694923
+        },
+        {
+          "fold": 1,
+          "delta": -0.04228774683521122
+        },
+        {
+          "fold": 2,
+          "delta": -0.0024799786782372657
+        },
+        {
+          "fold": 3,
+          "delta": -0.014460330033003232
+        },
+        {
+          "fold": 4,
+          "delta": -0.007929985186206384
+        }
+      ]
+    },
+    {
+      "hypothesis": "Add four-flip inference, image-only weights fixed",
+      "before": "image_only_none",
+      "after": "image_only_flips",
+      "all_row_log_loss_delta": -0.002578356241260543,
+      "known_angle_log_loss_delta": -0.002285381920085261,
+      "per_seed_all_row_deltas": [
+        {
+          "seed": 1017,
+          "delta": -0.007939532542452998
+        },
+        {
+          "seed": 2027,
+          "delta": -0.013616363408975651
+        }
+      ],
+      "per_seed_known_angle_deltas": [
+        {
+          "seed": 1017,
+          "delta": -0.0076801025612133755
+        },
+        {
+          "seed": 2027,
+          "delta": -0.014190724104039487
+        }
+      ],
+      "per_seed_fold_known_angle_deltas": [
+        {
+          "seed": 1017,
+          "fold": 0,
+          "known_angle_rows": 304,
+          "delta": -0.012656901751544242
+        },
+        {
+          "seed": 1017,
+          "fold": 1,
+          "known_angle_rows": 295,
+          "delta": -0.008128960938239144
+        },
+        {
+          "seed": 1017,
+          "fold": 2,
+          "known_angle_rows": 292,
+          "delta": -0.033410403522874804
+        },
+        {
+          "seed": 1017,
+          "fold": 3,
+          "known_angle_rows": 289,
+          "delta": -0.006798452337727412
+        },
+        {
+          "seed": 1017,
+          "fold": 4,
+          "known_angle_rows": 291,
+          "delta": 0.022917186584150484
+        },
+        {
+          "seed": 2027,
+          "fold": 0,
+          "known_angle_rows": 304,
+          "delta": -0.006150977907562527
+        },
+        {
+          "seed": 2027,
+          "fold": 1,
+          "known_angle_rows": 295,
+          "delta": -0.02043692551668963
+        },
+        {
+          "seed": 2027,
+          "fold": 2,
+          "known_angle_rows": 292,
+          "delta": -0.015166372383951632
+        },
+        {
+          "seed": 2027,
+          "fold": 3,
+          "known_angle_rows": 289,
+          "delta": -0.018766532737399644
+        },
+        {
+          "seed": 2027,
+          "fold": 4,
+          "known_angle_rows": 291,
+          "delta": -0.010734213568719342
+        }
+      ],
+      "fold_known_angle_deltas": [
+        {
+          "fold": 0,
+          "known_angle_rows": 304,
+          "delta": -0.0032979924610727074
+        },
+        {
+          "fold": 1,
+          "known_angle_rows": 295,
+          "delta": -0.008317352198483036
+        },
+        {
+          "fold": 2,
+          "known_angle_rows": 292,
+          "delta": -0.014834717820692678
+        },
+        {
+          "fold": 3,
+          "known_angle_rows": 289,
+          "delta": 0.00108410168249079
+        },
+        {
+          "fold": 4,
+          "known_angle_rows": 291,
+          "delta": 0.014133484603696539
+        }
+      ],
+      "fold_all_row_deltas": [
+        {
+          "fold": 0,
+          "delta": -0.003019154250927303
+        },
+        {
+          "fold": 1,
+          "delta": -0.009139491474589062
+        },
+        {
+          "fold": 2,
+          "delta": -0.011732538200440512
+        },
+        {
+          "fold": 3,
+          "delta": -0.00012420176665811633
+        },
+        {
+          "fold": 4,
+          "delta": 0.011112183356252886
+        }
+      ]
+    },
+    {
+      "hypothesis": "Add four-flip inference, metadata weights fixed",
+      "before": "image_and_angle_none",
+      "after": "image_and_angle_flips",
+      "all_row_log_loss_delta": -0.0045429856913992706,
+      "known_angle_log_loss_delta": -0.00479348970349755,
+      "per_seed_all_row_deltas": [
+        {
+          "seed": 1017,
+          "delta": -0.013747084758845868
+        },
+        {
+          "seed": 2027,
+          "delta": -0.006888488934287146
+        }
+      ],
+      "per_seed_known_angle_deltas": [
+        {
+          "seed": 1017,
+          "delta": -0.014131178741609435
+        },
+        {
+          "seed": 2027,
+          "delta": -0.007252120833917103
+        }
+      ],
+      "per_seed_fold_known_angle_deltas": [
+        {
+          "seed": 1017,
+          "fold": 0,
+          "known_angle_rows": 304,
+          "delta": -0.012342026452791255
+        },
+        {
+          "seed": 1017,
+          "fold": 1,
+          "known_angle_rows": 295,
+          "delta": -0.007846591696056393
+        },
+        {
+          "seed": 1017,
+          "fold": 2,
+          "known_angle_rows": 292,
+          "delta": -0.028728311665517342
+        },
+        {
+          "seed": 1017,
+          "fold": 3,
+          "known_angle_rows": 289,
+          "delta": -0.015151789919656128
+        },
+        {
+          "seed": 1017,
+          "fold": 4,
+          "known_angle_rows": 291,
+          "delta": -0.006710340356737399
+        },
+        {
+          "seed": 2027,
+          "fold": 0,
+          "known_angle_rows": 304,
+          "delta": -0.006098983384421081
+        },
+        {
+          "seed": 2027,
+          "fold": 1,
+          "known_angle_rows": 295,
+          "delta": -0.026367559440593658
+        },
+        {
+          "seed": 2027,
+          "fold": 2,
+          "known_angle_rows": 292,
+          "delta": -0.003264539548546136
+        },
+        {
+          "seed": 2027,
+          "fold": 3,
+          "known_angle_rows": 289,
+          "delta": 8.061440760537275e-05
+        },
+        {
+          "seed": 2027,
+          "fold": 4,
+          "known_angle_rows": 291,
+          "delta": -0.00036220198788794455
+        }
+      ],
+      "fold_known_angle_deltas": [
+        {
+          "fold": 0,
+          "known_angle_rows": 304,
+          "delta": -0.0008941877037259294
+        },
+        {
+          "fold": 1,
+          "known_angle_rows": 295,
+          "delta": -0.009387505063583879
+        },
+        {
+          "fold": 2,
+          "known_angle_rows": 292,
+          "delta": -0.0113567741162596
+        },
+        {
+          "fold": 3,
+          "known_angle_rows": 289,
+          "delta": -0.001713138848800727
+        },
+        {
+          "fold": 4,
+          "known_angle_rows": 291,
+          "delta": -0.000683165391422047
+        }
+      ],
+      "fold_all_row_deltas": [
+        {
+          "fold": 0,
+          "delta": -0.0008633899951122903
+        },
+        {
+          "fold": 1,
+          "delta": -0.008748604695496293
+        },
+        {
+          "fold": 2,
+          "delta": -0.010474090544643405
+        },
+        {
+          "fold": 3,
+          "delta": -0.0017765727295614708
+        },
+        {
+          "fold": 4,
+          "delta": -0.0008682169150444619
+        }
+      ]
+    }
+  ],
+  "interpretation": {
+    "primary_cohort": "Known-angle rows, matching test metadata availability; all rows also retained.",
+    "variability": "Two training seeds on identical folds; descriptive sensitivity, not confidence intervals. Split-seed variation is not measured here.",
+    "component_scope": "Adding the angle branch changes architecture and parameter count; this measures the branch as implemented, not a causal estimate of angle information alone.",
+    "selection": "All four conditions are reported. These post-development ablations are diagnostic, not an untouched final evaluation or a new leaderboard submission.",
+    "budget": "Both trained conditions use 5 folds x 2 seeds x 30 fixed epochs, identical training data/assignments/optimizer/augmentation. Metadata CV used two concurrent workers; image-only CV used one, with four threads per fit. Inference variants reuse identical weights."
+  },
+  "verification": {
+    "independent_metrics": {
+      "status": "passed",
+      "method": "Independent NumPy binary cross-entropy from private OOF CSVs, joined to raw JSON targets, missingness and frozen fold IDs; not the package metric helper",
+      "rows_per_seed": 1604,
+      "known_angle_rows": 1471,
+      "missing_angle_rows": 133,
+      "comparisons_checked": 3,
+      "metric_reconciliations": 76,
+      "maximum_absolute_error": 8.326672684688674e-17,
+      "script": "scripts/verify_ablation.py"
+    },
+    "verification_script_sha256": "ae3d8a3bb297a291785cc8c6cc0899e0bc9bd8e2c7fdc94df93344e40262aee0",
+    "notebook": {
+      "path": "notebooks/02-controlled-ablations.ipynb",
+      "execution": "passed top-to-bottom with nbconvert",
+      "executed_code_cells": 5,
+      "rendered_figures": 2,
+      "visual_review": "Both saved PNG outputs inspected: readable labels, common paired-effect scale, full legends and no clipping",
+      "sha256": "2bdcfb0512d3a6481e24b0d427d66ebc0d3d6ae420e2c7589720f0f2d12b404b"
+    },
+    "public_comparison_recipe": {
+      "path": "configs/image-only-flips.json",
+      "scientific_settings_match_producer": true,
+      "difference": "Descriptive name only after resolving device to cpu"
+    }
+  }
+}
