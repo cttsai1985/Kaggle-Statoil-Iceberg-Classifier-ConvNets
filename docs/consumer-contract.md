@@ -2,6 +2,14 @@
 
 The solution owns the modeling question, validation method and acceptance criteria. It consumes shared execution, tracking and storage services. Its scientific claims do not become stronger merely because a run appears in MLflow.
 
+## Why scientific completion and delivery completion are separate
+
+The controlled saved-model drill supplies the reason for this boundary. Model verification and evaluation completed before an intentionally unavailable dependency blocked prediction and delivery. The evaluation remained valid: the failure concerned readiness for the next stage, not model fitting.
+
+After repair, the runner reused that evaluation, produced all 8,424 predictions in sample-submission ID order and verified the downloaded checkpoint hash. A separate rejecting quality gate preserved the measured loss while preventing delivery. The lesson is to give evaluation, readiness and delivery separate states: an external retry must not silently become a new experiment, and a rejected candidate needs a different diagnosis from unavailable infrastructure.
+
+The [recorded drill](https://github.com/cttsai1985/mlops-platform/blob/main/docs/batch-verification.json) reports one successful evaluation attempt across recovery. It is an isolated fault exercise around a real saved model, rather than an observed production outage. These are the consumer guarantees the shared runner must supply.
+
 ## From scientific evidence to an executable job
 
 | Boundary | This solution supplies | What it expects from shared services |
