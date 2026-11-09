@@ -37,6 +37,12 @@ A separate model-development experiment uses the original **256-record holdout**
 
 The historical public score **0.19348** corresponds to approximately **top 49.8%** of the downloaded public leaderboard; the modern rerun's **0.21463** corresponds to **top 59.5%**. [Percentile method and snapshot](docs/results.md#leaderboard-percentile-context). These are score-equivalent positions, separate from official late-entry ranks.
 
+## Use the saved model
+
+The [model packaging and serving guide](docs/serving.md) explains the actual input/output contract, export from saved artifacts and the shared HTTP parity check. A canary release retains the tested source, dependency lock and aggregate verification evidence; private model weights and request rows are not release assets.
+
+[Real-model canary verification](docs/canary-validation.json) records the source, package/runtime identity, native-to-HTTP parity and rejected invalid request.
+
 ## Which observations drive the improvement
 
 A lower aggregate loss initially makes the angle branch look useful. Checking where that improvement comes from changes what the result can support: **95% of the all-row gain comes from 133 missing-angle ships**, while test observations have known angles. On known-angle rows, the small benefit reverses sign between training seeds.
@@ -129,10 +135,6 @@ uv sync --locked --group dev --group serving --group tracking --group tracking-t
 ```
 
 Data, trained weights, credentials and prediction rows are excluded from Git.
-
-## Use the saved model
-
-The [model packaging and serving guide](docs/serving.md) explains the actual input/output contract, export from saved artifacts and the shared HTTP parity check. A canary release retains the tested source, dependency lock and aggregate verification evidence; private model weights and request rows are not release assets.
 
 ## License
 
