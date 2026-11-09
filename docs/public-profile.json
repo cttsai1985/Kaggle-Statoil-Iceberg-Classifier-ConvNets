@@ -1,10 +1,10 @@
 {
   "repository": "cttsai1985/kaggle-statoil-iceberg-solution",
-  "verified_utc": "2026-11-09T18:18:18.554743+00:00",
+  "verified_utc": "2026-11-09T19:36:22.743866+00:00",
   "metadata": {
-    "description": "Radar ship/iceberg solution. Historical public log loss 0.19348: 1,657/3,330 (Top 49.76%); modern CNN 0.21463: 1,980/3,330 (Top 59.46%). Public score-equivalent ranks, 2026-11-09 snapshot.",
+    "description": "Radar ship/iceberg solution. Historical log loss: public 0.19348 / private 0.19311 (public Top 49.76%); modern CNN: 0.21463 / 0.19855 (public Top 59.46%). Public reference: 2026-11-09.",
     "name": "kaggle-statoil-iceberg-solution",
     "url": "https://github.com/cttsai1985/kaggle-statoil-iceberg-solution"
   },
-  "scope": "Public score-equivalent rank against the dated official snapshot; not an awarded final rank."
+  "scope": "Public and private scores are paired per submission; Top % refers only to the dated public reference. Rank/team counts are retained in detailed evidence."
 }

@@ -9,7 +9,7 @@ from decimal import Decimal
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-STANDARD_SHA256 = "11f69b97cda5a44b188cacdf9b496721c2b462ee451f58161a8c50f3e6147ae7"
+STANDARD_SHA256 = "39802103af834f8e3856bd49892b888c03870194d4ca8718ba986b39c1d226fc"
 START = "<!-- portfolio-results:start -->"
 END = "<!-- portfolio-results:end -->"
 
@@ -41,11 +41,25 @@ def public_results(context):
                 f"Historical submission {submission['ref']} ({submission['date'][:10]})",
             )
             score = submission["publicScore"]
+            private = submission["privateScore"]
             position = item["score_equivalent_start_position"]
             equal = item["tied_reference_teams"]
             top = item["top_percent"]
         else:
             label, score = item["label"], item["public_score"]
+            private = item["private_score"]
+            provenance = item["private_score_source"]
+            source_path = ROOT / provenance["path"]
+            if source_path.suffix == ".json":
+                paired = json.loads(source_path.read_text())
+                for key in provenance["pointer"].split("/")[1:]:
+                    paired = paired[int(key)] if isinstance(paired, list) else paired[key]
+                if paired["publicScore"] != score or paired["privateScore"] != private:
+                    raise ValueError("Public/private scores differ from the paired submission")
+            elif f"**{score}**" not in source_path.read_text() or (
+                f"**{private}**" not in source_path.read_text()
+            ):
+                raise ValueError("Historical score pair missing from its retained source")
             position = item["score_equivalent_best_position"]
             equal = item["teams_with_equal_displayed_score"]
             top = item["top_percent_by_best_position"]
@@ -66,41 +80,31 @@ def public_results(context):
             and last != item["score_equivalent_last_tied_position"]
         ):
             raise ValueError("Tie interval differs from reference count")
-        display = f"{position:,}" if position == last else f"{position:,}–{last:,}"
+        if not Decimal(private).is_finite():
+            raise ValueError("Invalid private leaderboard score")
         label = label.replace("|", "/").replace("\n", " ")
-        rows.append(
-            f"| {label} | {score} | {display} / {count:,} | **{calculated:.2f}%** | {equal} |"
-        )
+        rows.append(f"| {label} | {score} | {private} | **{calculated:.2f}%** |")
     if not rows:
         raise ValueError("Missing scored comparisons")
     text = [
         START,
         "## Results",
         "",
-        f"**Public leaderboard — {metric_label}.**",
+        f"**Leaderboard scores — {metric_label}.**",
         "",
-        (
-            "| Model / submission | Public score | Public reference rank / teams | "
-            "Top % | Reference ties |"
-        ),
-        "|---|---:|---:|---:|---:|",
+        "| Model / submission | Public LB | Private LB | Public Top % |",
+        "|---|---:|---:|---:|",
         *rows,
         "",
         (
-            f"Reference: **{snapshot}**, **{count:,} unique scored teams**. "
-            "Ranks are score-equivalent comparisons with the dated public export, "
-            "not awarded final ranks. "
-            "Lower Top % is better. A zero tie count denotes an insertion position; "
-            "ties occupy the shown interval."
+            f"Public Top % uses the **{snapshot[:10]} public leaderboard snapshot** "
+            "(score-equivalent comparison, not an awarded final rank). "
+            "[Detailed results](docs/results.md) · "
+            "[Reference ranks, ties and calculation](docs/leaderboard-context.json)."
         ),
         "",
-        (
-            "**OOF/holdout rank and Top %: not applicable. Private leaderboard rank and Top %: "
-            "unavailable without a matching private reference population.** "
-            "Internal validation and private scores remain separately reported in "
-            "[detailed results](docs/results.md). "
-            "[Reference data and calculation](docs/leaderboard-context.json)."
-        ),
+        "Private Top % is unavailable without a matched private leaderboard; "
+        "OOF/holdout results have no leaderboard percentile.",
         END,
     ]
     return "\n".join(text)

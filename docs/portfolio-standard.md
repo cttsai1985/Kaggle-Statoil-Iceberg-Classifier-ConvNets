@@ -1,6 +1,6 @@
 # ML solution portfolio standard
 
-Version: **1.0** · Established: **2026-11-09**
+Version: **1.1** · Established: **2026-11-09**
 
 This is the accumulated acceptance standard for the solution portfolio and its
 shared infrastructure. New branding, prose, tools or deployment work must preserve
@@ -18,8 +18,8 @@ without evidence. A canary proves only its recorded scope.
 |---|---|---|
 | R01 | P0 | Maintain the full accumulated requirements across branding, implementation and release changes. Each repository maps requirements to evidence or an explicit open item. |
 | R02 | P0 | Lead with a complete ML solution: problem, useful output, measured model decisions, validation, and an executable path from supported inputs to predictions. |
-| R03 | P0 | Keep score and ranking context visibly paired in the primary README results display and GitHub description; surface historical and current results without selective omission. |
-| R04 | P0 | Every reported score identifies its metric, direction, model/run, evaluation population and protocol. Leaderboard scores additionally carry matched reference position/N, top share, ties and snapshot. |
+| R03 | P0 | Pair public and private leaderboard scores with clearly scoped Top % in the primary README and GitHub description. Keep rank/team counts and ties in detailed evidence rather than repeating them in the main display; retain historical and current results. |
+| R04 | P0 | Every reported score identifies its metric, direction, model/run, evaluation population and protocol. Primary leaderboard results show public score, private score and public Top %. Matched reference position/N, ties and the dated source remain in linked detailed evidence. Private Top % requires its own private reference population. |
 | R05 | P0 | Distinguish official awarded rank from score-equivalent reference position, public from private, historical account results from source-reproduced models, and OOF from leaderboard evaluation. |
 | R06 | P0 | Show substantive ML insights: hypothesis → controlled comparison → effect/variation → practical decision → remaining question. Modern tooling alone is not model improvement. |
 | R07 | P0 | Show project-specific error analysis and hard cases, including the path from input characteristics through representation/prediction to failure. State what is already measured and what still needs analysis. |
@@ -28,7 +28,7 @@ without evidence. A canary proves only its recorded scope.
 | R10 | P0 | Preserve a real evaluated model and its preprocessing, tokenizer/features, inference policy, dependencies and provenance; it must predict after reload. |
 | R11 | P0 | Test the actual model-to-application interface end to end: native output → exported MLflow package → fresh-workspace HTTP inference → numerical parity, invalid-request rejection and cleanup. |
 | R12 | P0 | Declare the actual input boundary and make upstream preprocessing reproducible. A feature-vector endpoint must not be marketed as a raw-data service. |
-| R13 | P0 | Preserve local CLI, Docker/dev environment and offline Kaggle workflows around the same maintained code; notebooks explain or invoke that code. |
+| R13 | P0 | Keep reproducible local, Docker/dev and offline Kaggle paths around the same maintained scientific functions. A small script, module or notebook can be the entry point; a bespoke CLI per project is not required. Preserve working execution contracts while simplifying redundant wrappers. |
 | R14 | P0 | Use generic shared infrastructure and one-way solution→platform dependency. Clients own names, model packages, environments and evaluation; the platform has no hardcoded client catalog. |
 | R15 | P0 | Keep deployment UX lightweight and explicit: protected state, stable target identity, safe reuse, useful status/logs, no heavy host SDK install merely to start infrastructure. |
 | R16 | P0 | Preserve existing live services, volumes, ports, credentials, experiments, artifacts and historical evidence through code/repository renames. |
@@ -46,17 +46,21 @@ without evidence. A canary proves only its recorded scope.
 ## Mandatory result presentation
 
 The README contains a **Results** section immediately after the brief problem and
-approach opening, before architecture, reproduction or infrastructure detail. A
-public result carries its named model/run, metric/direction, score, reference
-position and team denominator, Top %, ties, and dated source. The GitHub description
-also retains a clearly scoped score/position/Top % summary. Both historical and
-modern results remain visible, including weaker modern results.
+approach opening. The compact table shows model/submission, **Public LB** score,
+**Private LB** score and **Public Top %**, with metric and direction identified.
+Pair public/private values from the same submission; a missing value is explicitly
+unavailable or not submitted. The GitHub description uses the same scoped summary.
+Historical and modern results remain visible, including weaker modern results.
 
-Reference position = 1 + strictly better displayed reference scores. Top % =
+Rank/team counts, tie intervals and arithmetic belong in linked detailed results
+and source evidence, rather than repeated table columns or About text. The README
+briefly identifies the dated public reference. Top % is score-equivalent context,
+not an awarded final rank; private scores never inherit public percentiles.
+
+Reference position = 1 + strictly better displayed reference scores. Public Top % =
 100 × starting position / unique scored reference teams. Use exact decimal score
-comparisons and the correct metric direction. Show a tie interval when needed;
-a score absent from the snapshot has an insertion position, not an awarded rank.
-Outperformed percentile and Top % are different measures and must not be interchanged.
+comparisons and the correct metric direction; retain tie intervals in detailed
+evidence. Outperformed percentile and Top % are different measures.
 
 Public, private, OOF and holdout are separate populations. OOF/holdout leaderboard
 rank and Top % are **not applicable**. A private score without a matching private
@@ -91,7 +95,9 @@ Do not manufacture stochastic evidence by changing seeds of a deterministic fit.
 
 The standard fixes coverage and evidence, not model families, notebook layouts,
 identical folder trees or compulsory deployment features in every solution.
-Runnable scripts own reusable implementation; Markdown and executed notebooks
+Scientific functions own reusable implementation; thin scripts or existing command entry points
+invoke them. Do not build a project-specific command framework merely for portfolio
+uniformity. Markdown and executed notebooks
 explain its rationale and results. Tool names are supporting implementation detail.
 Problem/value claims use primary sources; proposed ROI or operational outcomes
 remain hypotheses until measured in the intended workflow.
@@ -106,7 +112,7 @@ acceptance evidence and open production requirements take their place.
 
 Each repository maintains `docs/requirements-audit.md`, mapping every requirement
 to evidence, an applicability decision or an open item. Before merge, review the
-entire matrix, the README Results display and the GitHub description. The local
+entire matrix, the README public/private scores and Top % display, and the GitHub description. The local
 portfolio check guards source-backed ranking visibility; it does not replace
 scientific or editorial review.
 
@@ -122,6 +128,11 @@ Changes to this standard require a version/change-log update and a complete
 compatibility review; a wording or branding request cannot silently weaken it.
 
 ## Change log
+
+- **1.1 — 2026-11-09:** user-approved compact display: public/private leaderboard
+  scores plus public Top %, with rank/N and ties retained in linked evidence.
+  Reproducibility does not require a bespoke CLI in every solution. Existing
+  working entry points need not be replaced merely to change presentation.
 
 - **1.0 — 2026-11-09:** freezes accumulated requirements after a ranking-visibility
   regression; restores score/rank/Top % as a non-negotiable primary display and
