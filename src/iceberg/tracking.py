@@ -41,7 +41,8 @@ def track(run_dir: Path, tracking_uri: str, *, resume: bool = False) -> dict:
     experiment = client.get_experiment_by_name(experiment_name)
     if experiment is None:
         raise ValueError(
-            f"Experiment {experiment_name} must be provisioned by mlops-platform first"
+            f"Experiment {experiment_name} must be provisioned by an authorized MLflow operator "
+            "using the client-owned namespace before import"
         )
     return import_verified(
         client,
@@ -86,7 +87,8 @@ def track_cv(run_dir: Path, tracking_uri: str, *, resume: bool = False) -> dict:
     experiment = client.get_experiment_by_name(MLFLOW_EXPERIMENT)
     if experiment is None:
         raise ValueError(
-            f"Experiment {MLFLOW_EXPERIMENT} must be provisioned by mlops-platform first"
+            f"Experiment {MLFLOW_EXPERIMENT} must be provisioned by an authorized MLflow operator "
+            "using the client-owned namespace before import"
         )
     protocol = manifest["protocol"]
 

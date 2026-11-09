@@ -19,9 +19,9 @@ The shared [mlops-platform](https://github.com/cttsai1985/mlops-platform) reposi
 | MLflow experiment | `kaggle/iceberg` |
 | Reserved model-registry name | `kaggle-iceberg` |
 | Prefect flow/deployment convention | `kaggle-iceberg/local` |
-| Portable platform artifact namespace | `projects/iceberg` |
+| Client-owned artifact namespace | `projects/iceberg` |
 
-The platform's project registry is the naming authority. Run tags include `project_id`, `logical_run_id`, source revision and source fingerprint. Model registration/promotion and Prefect deployment are explicit operations; this client does not perform them during training.
+This repository owns the identities above; they are client configuration, not entries required in a shared infrastructure catalog. Run tags include `project_id`, `logical_run_id`, source revision and source fingerprint. Model registration/promotion and Prefect deployment are explicit operations; this client does not perform them during training.
 
 Existing quant-research storage and historical experiments retain their identities during adoption. The portable platform configuration is not an instruction to migrate existing buckets or volumes.
 
@@ -37,7 +37,7 @@ export MLFLOW_TRACKING_URI=http://127.0.0.1:5500
 
 Port 5500 is the audited existing quant-research MLflow endpoint. Configure the URI for your deployment. Supply authentication through runtime environment variables when required; keep credentials outside tracking URLs and Git.
 
-Provision the canonical experiment through the platform bootstrap first; the client refuses to create a differently routed experiment implicitly. The adapter verifies artifact/configuration/split checksums before upload. The logical run UUID and manifest fingerprint make repeated imports idempotent; conflicting imports are rejected and incomplete imports require explicit recovery. Training remains usable when tracking is unavailable.
+Before importing, an authorized operator creates the client-declared experiment through MLflow with artifact location `mlflow-artifacts:/projects/iceberg`. The client requires that experiment and refuses to create a differently routed experiment implicitly; no platform project registration is needed. The adapter verifies artifact/configuration/split checksums before upload. The logical run UUID and manifest fingerprint make repeated imports idempotent; conflicting imports are rejected and incomplete imports require explicit recovery. Training remains usable when tracking is unavailable.
 
 An isolated SQLite-backed integration test verifies upload, byte-identical retrieval, duplicate import and conflict rejection. Install the `tracking-test` dependency group to run it. The results receipt records any separately verified shared-service import.
 
