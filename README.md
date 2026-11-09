@@ -1,25 +1,22 @@
 # Iceberg and Ship Classification
 
-A modern revisit of a 2017 Kaggle radar classifier: **the main result is an explicit test of what the model learns, how much results vary, and how to reproduce that evidence.** Two radar bands distinguish icebergs from ships; the engineering work makes each prediction traceable to its data, code, preprocessing and saved model.
+A historical Kaggle baseline used as a **case study in reliable ML engineering**: keep evaluation honest, preserve an experiment across runtimes, and recover delivery without silently creating a different experiment. The model is a practical workload for these controls; research novelty is not the contribution.
 
-| What matters | What the evidence says |
-|---|---|
-| Competition context | The modern public score **0.21463** corresponds to approximately **top 59.5%** of the downloaded public leaderboard; the historical 0.19348 corresponds to **top 49.8%**. These are score-equivalent positions, not new official competition ranks. |
-| Controlled ablation | Adding angle metadata changes known-angle ensemble loss by only **−0.00084**, with opposite effects across the two seeds. Most all-row improvement comes from missing-angle ships, which are absent from test. |
-| More consistent component | Four-flip inference improves known-angle loss for both retained seeds in each architecture, though not every fold. |
-| Main limitation | All 133 missing-angle training records are ships, while test records have known angles. Known-angle OOF loss (**0.2206**) is more relevant to the test cohort than the more flattering all-row loss (**0.2048**). |
+The historical public score **0.19348** corresponds to approximately **top 49.8%** of the downloaded public leaderboard; the modern rerun's **0.21463** corresponds to **top 59.5%**. [Percentile method and snapshot](docs/results.md#leaderboard-percentile-context). These are score-equivalent positions, separate from official late-entry ranks.
 
-The modern model does not beat the strongest historical submission. The contribution is a clear account of the modeling hypothesis, component contributions, variability and remaining uncertainty, followed by an experiment another person can inspect and operate. [Leaderboard percentile method and snapshot](docs/results.md#leaderboard-percentile-context) · [Executed walkthrough](notebooks/01-method-and-rerun.ipynb).
+## An evaluation gate needs the right population
 
-The [matched ablation study](docs/modeling-study.md) separates component contribution, training-seed sensitivity and cohort effects. It does **not** establish that the metadata branch is superior. [Executed ablation notebook](notebooks/02-controlled-ablations.ipynb).
+A lower aggregate loss initially makes the angle branch look useful. Checking where that improvement comes from changes what the result can support: **95% of the all-row gain comes from 133 missing-angle ships**, while test observations have known angles. On known-angle rows, the small benefit reverses sign between training seeds.
 
-## From applied science to an operated experiment
+The engineering lesson is to make the evaluation population part of the acceptance contract. A single favorable number would approve a broader claim than the evidence supports. The report therefore retains known-angle and all-row results, both seeds and every fold; the metadata recipe stays a frozen reference alongside the simpler comparison. [Evidence and reasoning](docs/modeling-study.md) · [Executed checks](notebooks/02-controlled-ablations.ipynb).
 
-[Consumer contract](docs/consumer-contract.md) · [Controlled modeling study](docs/modeling-study.md)
+## A completed model is not yet a completed delivery
 
-The package supports the same training and inference path locally, in Docker and in an offline Kaggle notebook. Saved runs retain their split, fitted preprocessing and model fingerprints. The [shared operations case study](https://github.com/cttsai1985/mlops-platform/blob/main/docs/batch-operations.md) covers workflow execution, logs, quality gates and recovery; [the capability assessment](https://github.com/cttsai1985/mlops-platform/blob/main/docs/mlops-assessment.md) separates demonstrated controls from remaining production requirements.
+In the [controlled batch drill](https://github.com/cttsai1985/mlops-platform/blob/main/docs/batch-operations.md), model verification and evaluation completed before an unavailable dependency blocked prediction and delivery. Repeating the entire job would mix an external failure with already completed scientific computation.
 
-This solution is a **consumer of MLOps capabilities** for batch research. Containerization and MLflow tracking are supporting components; neither alone establishes production MLOps. There is no live maritime service, continuously arriving sensor feed or automatic production retraining.
+The runner instead preserves stage identities and output hashes. After the dependency is repaired, it reuses the evaluation, produces all **8,424** predictions in the expected ID order and verifies model bytes retrieved from storage. A separately rejected quality gate blocks delivery while retaining the original evaluation. This explains the separate evaluation, readiness and delivery states—and why retries must have an explicit scope.
+
+This solution consumes shared orchestration, tracking and storage services. The evidence is a saved-model batch drill and client recovery tests, rather than a deployed maritime service. [Consumer contract](docs/consumer-contract.md) · [Capability boundaries](https://github.com/cttsai1985/mlops-platform/blob/main/docs/mlops-assessment.md) · [Original walkthrough](notebooks/01-method-and-rerun.ipynb).
 
 ## Problem and data
 
