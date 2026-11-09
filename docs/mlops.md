@@ -1,6 +1,6 @@
 # Experiment tracking and shared storage
 
-The shared [mlops-platform](https://github.com/cttsai1985/mlops-platform) repository owns service configuration and operations. Quant research and the competition solutions are clients. This repository owns the model, experiment recipe, portable artifacts and tracking adapter.
+The shared [ML infrastructure](https://github.com/cttsai1985/ml-infrastructure) repository owns service configuration and operations. Quant research and the competition solutions are clients. This repository owns the model, experiment recipe, portable artifacts and tracking adapter.
 
 | Service | Role |
 |---|---|
@@ -15,7 +15,7 @@ The shared [mlops-platform](https://github.com/cttsai1985/mlops-platform) reposi
 | Identifier | Value |
 |---|---|
 | Stable project ID | `iceberg` |
-| GitHub repository | `cttsai1985/kaggle-iceberg-solution-mlops` |
+| GitHub repository | `cttsai1985/kaggle-statoil-iceberg` |
 | MLflow experiment | `kaggle/iceberg` |
 | Reserved model-registry name | `kaggle-iceberg` |
 | Prefect flow/deployment convention | `kaggle-iceberg/local` |

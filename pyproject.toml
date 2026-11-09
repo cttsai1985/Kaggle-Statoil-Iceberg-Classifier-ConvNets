@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "iceberg-classifier"
-version = "0.1.0"
-description = "Modern radar classification with grouped cross-validation and portable MLOps"
+version = "0.2.0.dev1"
+description = "Ship and iceberg classification from dual-polarization radar imagery"
 readme = "README.md"
 license = "MIT"
 authors = [{name = "Chia-Ta Tsai"}]
@@ -20,6 +20,7 @@ dev = ["pytest>=8,<10", "ruff>=0.11,<1"]
 lab = ["jupyterlab>=4,<5", "nbclient>=0.10,<1", "nbconvert>=7,<8", "matplotlib>=3.10,<4"]
 data = ["kaggle>=2,<3", "py7zr>=1,<2"]
 tracking = ["mlflow-skinny>=3,<4"]
+serving = ["mlflow==3.18.0"]
 tracking-test = ["sqlalchemy>=2,<3", "alembic>=1.15,<2"]
 
 [tool.uv.sources]
