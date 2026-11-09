@@ -1,6 +1,20 @@
 # Requirements audit
 
-Audited **2026-11-09** against [portfolio standard 1.0](portfolio-standard.md).
+## Presentation update — standard 1.1
+
+The current primary display pairs **Public LB** and **Private LB** scores with
+**Public Top %**. Rank/team counts and ties remain in detailed source evidence;
+they are no longer repeated in the README table or GitHub description. Private
+scores do not inherit public percentiles. This supersedes the canary-2 presentation
+format reviewed below; its historical regression and source-preservation review
+remain dated evidence. Local reproducibility may use scientific functions, a
+notebook, script or existing thin command entry point; no bespoke CLI is required.
+The existing canary-2 releases and completed merge/branch cleanup remain intact.
+The original profile/standard are retained at `v0.2.0-canary.2`; the current
+profile receipt records the latest approved compact description.
+
+
+Audited **2026-11-09** against [portfolio standard 1.1](portfolio-standard.md).
 The standard contains the accumulated requirements; this audit records their
 project-specific applicability, evidence and remaining work. **Pass** means the
 cited scope is supported. **Open** is accepted work, not a waiver. Older execution
@@ -16,7 +30,7 @@ was on **line 38**, below the opening and model discussion. The numbers survived
 but the required primary visibility did not. The domain-focused GitHub description
 also dropped score/rank/Top-% context during the branding change.
 
-The current correction restores a primary **Results** section immediately after
+The canary-2 correction restores a primary **Results** section immediately after
 the opening, with historical scores **0.19348** and **0.20507** and modern score
 **0.21463**, metric/direction, matched reference positions, denominator, Top %,
 ties and snapshot. The live description was read back during this audit with
@@ -32,8 +46,8 @@ and [detailed results](results.md).
 |---|---|---|
 | R01 | Full portfolio requirements apply. | **Pass for the review artifact:** this matrix covers R01–R26 and links the versioned [standard](portfolio-standard.md). Open execution/release items remain visible below. |
 | R02 | A radar-classification solution is the presentation unit. | **Pass:** README opening → primary Results → model, controlled comparison, runnable CLI and saved-model use. [Problem/value](problem-and-value.md), [runbook](reproduction.md) and [serving](serving.md) connect useful output to implementation. |
-| R03 | Historical and current public results need primary visibility. | **Restored:** README Results and the read-back live description pair scores with rank/N and Top %. Both historical single-model scores and the weaker modern public result remain visible. The regression is documented above. |
-| R04 | Log loss is minimized; every population must be identified. | **Pass:** Results names submissions/models and metric direction; [reference JSON](leaderboard-context.json) records snapshot, tie treatment and scored-team population. [CV](cv.md) and [modeling study](modeling-study.md) identify folds, seeds, known/missing-angle populations and inference policy. |
+| R03 | Verified compact presentation | Primary README and description retain public/private scores and public Top %. Rank/N and ties stay in linked detailed evidence. |
+| R04 | Verified source scope | The metric/direction and submission are identified; private scores are paired with the same public submission. Detailed evidence retains reference counts, ties and snapshot. |
 | R05 | Public, private, holdout and grouped OOF are different claims. | **Pass:** README explicitly distinguishes reference positions from awards and marks unavailable/non-applicable ranks. [Results](results.md) separates historical submissions, modern holdout, private score and grouped CV. |
 | R06 | Modern model decisions need controlled evidence. | **Pass:** [study](modeling-study.md) retains image-only/metadata and no-flip/four-flip comparisons, both seeds, every fold, effect direction, runtime cost and next hypothesis. A metadata aggregate gain is not presented as a universal improvement. |
 | R07 | Project-specific high-loss cases and input/model path apply. | **Pass for retained-OOF diagnostics:** [error analysis](error-analysis.md) traces known/missing-angle input strata through the recorded model/TTA probabilities to high-loss cohorts and seed overlap. The [receipt](error-analysis.json) independently reconciles the full OOF metric. Pixel-level mechanisms and true scene-held-out evaluation remain unmeasured questions. |
@@ -64,7 +78,7 @@ Two comparisons were performed using `git show <commit>:<path>` and byte equalit
 1. **Pre-canary → merged canary/editorial:**
    `cdcca1e9de6e7d328bdff5b52662f48e7f413b13` →
    `bea08768b13f9ec90dac257c11d055e402ab076b`.
-2. **Merged canary/editorial → current correction working tree.**
+2. **Merged canary/editorial → canary-2 correction working tree.**
 
 The following enumerated files are byte-identical in both comparisons:
 
@@ -78,14 +92,14 @@ The following enumerated files are byte-identical in both comparisons:
 
 `docs/canary-validation.json`, `docs/serving.md` and `src/iceberg/serving.py` were
 added by the canary work. They are byte-identical between the merged canary and
-the current correction. For inspectable anchors, the current SHA-256 values are:
+the canary-2 correction. For inspectable anchors, the current SHA-256 values are:
 
 - Modeling-study JSON: `e12c2a14962a3d48ec64e68f2d106c21c52dd0a5883caa811a292f01581ca06b`.
 - Canary receipt: `1ced67759c888253acd0f0d356d3dafeaccbab71b21a065c9bcb63cc3c47a251`.
 - Training/runtime module: `a7dcc940aa37e6c5ae694f6e6b01706e6bca63a1c4721fb639ce1fe645f14715`.
 
 `docs/results.md` is **not** included in the byte-identical claim. The pre-canary
-to canary diff changed its infrastructure link/label; the current correction also
+to canary diff changed its infrastructure link/label; the canary-2 correction also
 adds explicit score/rank context. README, package/version/URL metadata, exporter
 metadata and new portfolio/error-analysis files are likewise outside the preserved
 file set. `LICENSE` and every tracked `legacy/` file were also compared byte-for-byte across both transitions and matched. New diagnostics supplement the old evaluation; they do not overwrite

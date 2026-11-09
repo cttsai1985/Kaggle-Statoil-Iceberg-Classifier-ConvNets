@@ -48,7 +48,12 @@
       "score_equivalent_last_tied_position": 1657,
       "top_percent_by_best_position": 49.75975975975976,
       "strictly_outperformed_percent": 50.270270270270274,
-      "weak_percentile_including_ties": 50.270270270270274
+      "weak_percentile_including_ties": 50.270270270270274,
+      "private_score": "0.19311",
+      "private_score_source": {
+        "path": "docs/validation.json",
+        "pointer": "/historical_submissions/records/0"
+      }
     },
     {
       "id": "historical-single-model-2",
@@ -62,7 +67,12 @@
       "score_equivalent_last_tied_position": 1863,
       "top_percent_by_best_position": 55.945945945945944,
       "strictly_outperformed_percent": 44.08408408408408,
-      "weak_percentile_including_ties": 44.08408408408408
+      "weak_percentile_including_ties": 44.08408408408408,
+      "private_score": "0.20730",
+      "private_score_source": {
+        "path": "docs/validation.json",
+        "pointer": "/historical_submissions/records/1"
+      }
     },
     {
       "id": "modern-metadata-cnn",
@@ -76,7 +86,12 @@
       "score_equivalent_last_tied_position": 1980,
       "top_percent_by_best_position": 59.45945945945946,
       "strictly_outperformed_percent": 40.570570570570574,
-      "weak_percentile_including_ties": 40.570570570570574
+      "weak_percentile_including_ties": 40.570570570570574,
+      "private_score": "0.19855",
+      "private_score_source": {
+        "path": "docs/validation.json",
+        "pointer": "/model_development_run/kaggle_submission"
+      }
     }
   ]
 }

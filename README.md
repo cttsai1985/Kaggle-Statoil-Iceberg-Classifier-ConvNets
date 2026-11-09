@@ -11,17 +11,17 @@ The potential operating role is to support an analyst's candidate-review queue. 
 <!-- portfolio-results:start -->
 ## Results
 
-**Public leaderboard — log loss ↓.**
+**Leaderboard scores — log loss ↓.**
 
-| Model / submission | Public score | Public reference rank / teams | Top % | Reference ties |
-|---|---:|---:|---:|---:|
-| Historical single model, 2017-10-30 | 0.19348 | 1,657 / 3,330 | **49.76%** | 0 |
-| Historical second single model, 2017-10-30 | 0.20507 | 1,863 / 3,330 | **55.95%** | 0 |
-| Modern metadata CNN with four-flip inference | 0.21463 | 1,980 / 3,330 | **59.46%** | 0 |
+| Model / submission | Public LB | Private LB | Public Top % |
+|---|---:|---:|---:|
+| Historical single model, 2017-10-30 | 0.19348 | 0.19311 | **49.76%** |
+| Historical second single model, 2017-10-30 | 0.20507 | 0.20730 | **55.95%** |
+| Modern metadata CNN with four-flip inference | 0.21463 | 0.19855 | **59.46%** |
 
-Reference: **2026-11-09T00:02:25Z**, **3,330 unique scored teams**. Ranks are score-equivalent comparisons with the dated public export, not awarded final ranks. Lower Top % is better. A zero tie count denotes an insertion position; ties occupy the shown interval.
+Public Top % uses the **2026-11-09 public leaderboard snapshot** (score-equivalent comparison, not an awarded final rank). [Detailed results](docs/results.md) · [Reference ranks, ties and calculation](docs/leaderboard-context.json).
 
-**OOF/holdout rank and Top %: not applicable. Private leaderboard rank and Top %: unavailable without a matching private reference population.** Internal validation and private scores remain separately reported in [detailed results](docs/results.md). [Reference data and calculation](docs/leaderboard-context.json).
+Private Top % is unavailable without a matched private leaderboard; OOF/holdout results have no leaderboard percentile.
 <!-- portfolio-results:end -->
 
 ## Concentrated, repeatable errors
@@ -55,8 +55,6 @@ The original single-model submissions scored **0.19348** and **0.20507** on the 
 
 A separate model-development experiment uses the original **256-record holdout**. Its metadata CNN scored **0.2012 holdout log loss**, followed by **0.21463 public / 0.19855 private** on Kaggle. It does not beat the best historical result; these scores are reported separately from the grouped CV.
 
-The historical public score **0.19348** corresponds to approximately **top 49.8%** of the downloaded public leaderboard; the modern rerun's **0.21463** corresponds to **top 59.5%**. [Percentile method and snapshot](docs/results.md#leaderboard-percentile-context). These are score-equivalent positions, separate from official late-entry ranks.
-
 ## Use the saved model
 
 The [model packaging and serving guide](docs/serving.md) explains the actual input/output contract, export from saved artifacts and the shared HTTP parity check. A canary release retains the tested source, dependency lock and aggregate verification evidence; private model weights and request rows are not release assets.
@@ -77,9 +75,12 @@ See the [competition data description](https://www.kaggle.com/competitions/stato
 
 ## Run it yourself
 
-The command below reproduces the **frozen metadata reference**, rather than selecting a winner from the ablation. `configs/image-only-flips.json` provides the equally budgeted image-only comparison; use a separate run directory.
+Start with the [executed walkthrough](notebooks/01-method-and-rerun.ipynb) for the data, model decisions and measured results. The [reproduction guide](docs/reproduction.md) contains the complete download, training, evaluation and artifact recipe.
 
-Install Python 3.12 and [uv](https://docs.astral.sh/uv/), then run from the repository root:
+Use Python 3.12 or 3.13, authorized competition inputs and a fresh run directory.
+
+<details>
+<summary>Command-line reproduction</summary>
 
 ```bash
 uv sync --locked --group dev --group lab --group data
@@ -97,7 +98,7 @@ export ICEBERG_DATA_DIR=/absolute/path/outside/git/iceberg
   --data "$ICEBERG_DATA_DIR/test.json" --output .local/my-cv/submission.csv
 ```
 
-Download requires Kaggle authentication and accepted competition rules. Each training invocation needs a new run directory. The [runbook](docs/reproduction.md) covers profiles, runtime requirements and saved artifacts.
+</details>
 
 ### Docker JupyterLab and dev container
 
@@ -113,6 +114,7 @@ Open http://127.0.0.1:8890/lab using the token in the ignored `.local/jupyter_to
 ### Kaggle notebook
 
 The [Kaggle entry notebook](notebooks/kaggle/rerun.ipynb) runs the package from an attached code wheel and saves predictions and experiment artifacts. See [Kaggle execution](docs/kaggle.md) for packaging, execution and scoring instructions.
+
 
 ## Analysis notebook
 
