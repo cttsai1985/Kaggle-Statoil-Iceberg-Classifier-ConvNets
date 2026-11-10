@@ -63,7 +63,7 @@ A separate model-development experiment uses the original **256-record holdout**
 
 The [model packaging and serving guide](docs/serving.md) explains the actual input/output contract, export from saved artifacts and the shared HTTP parity check. A canary release retains the tested source, dependency lock and aggregate verification evidence; private model weights and request rows are not release assets.
 
-[Real-model canary verification](docs/canary-validation.json) records the source, package/runtime identity, native-to-HTTP parity and rejected invalid request.
+[Current real-model compatibility verification](docs/zoom-serving-validation.json) records the source, package/runtime identity, native-to-HTTP parity and rejected invalid request.
 
 ## Which observations drive the improvement
 

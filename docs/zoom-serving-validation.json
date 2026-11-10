@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "scope": "canary",
+  "status": "verified",
+  "engine": "MLflow Model Serving",
+  "started_at": "2026-11-10T14:10:55.362000+00:00",
+  "model_package_sha256": "b575a99b61414af58b168c6a9e7a3a409185b4ccbc7576cf8892546c92ce0209",
+  "request_sha256": "89568fc5fe8170fe5b87a29f6aad89eb7e2e692793edd3457f3ae6cbd290baf4",
+  "expected_sha256": "22e3b1acaf3823f9225e07518deaaef1df6aa0842a659b5cd996921096f551b5",
+  "controller_sha256": "c217c809003ea189485f127bbe305d57c2e0e6695335eb905156fdb49019fe5a",
+  "runtime": {
+    "python": "3.12.16",
+    "mlflow": "3.18.0"
+  },
+  "runtime_packages_sha256": "fb50a5550b69d5bd89173117cc11ed58ebe92a89ea926a287a206d69654c3810",
+  "prediction_rows": 4,
+  "schema_rejection": {
+    "status": 400,
+    "scope": "client_supplied_invalid_request"
+  },
+  "parity": {
+    "numeric_values": 4,
+    "maximum_absolute_error": 0.0,
+    "atol": 1e-06,
+    "rtol": 1e-05
+  },
+  "prediction_parity": true,
+  "package_integrity_verified": true,
+  "cleanup_complete": true,
+  "production_ingress_verified": false,
+  "container_image_verified": false,
+  "zero_downtime_claimed": false,
+  "shared_services_modified": false,
+  "finished_at": "2026-11-10T14:11:04.763819+00:00",
+  "release": "v0.2.0-canary.3",
+  "package_version": "0.2.0.dev3",
+  "native_source": {
+    "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+    "git_commit": "b764dfc4485c1cad188610aa1bd48b42dabfd1bb",
+    "git_dirty": false,
+    "python_source_sha256": "73ca26d857bef60f780961eb7b3b04461cbe17ac7c9a1520420fcb90c7c9910b"
+  },
+  "packaging_source": {
+    "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+    "git_commit": "b764dfc4485c1cad188610aa1bd48b42dabfd1bb",
+    "git_dirty": false,
+    "python_source_sha256": "73ca26d857bef60f780961eb7b3b04461cbe17ac7c9a1520420fcb90c7c9910b"
+  },
+  "producer_source": {
+    "legacy_commit": "d7f9f46145f067a82d3ddf3a9e6ca134bd098083",
+    "git_commit": "897bd39d8ba81bc96da623e694a929fbab15eb3f",
+    "git_dirty": false,
+    "python_source_sha256": "c63dc9393577ef600dec00d0c9b8f0307a29bccf859c5dbdb0064a052115c8fe"
+  },
+  "producer_checkpoint_sha256": "b31e3a261d6f720885e67a987697e9ded96b428404708401ff181999141f0317",
+  "producer_manifest_sha256": "c48c426e5e3d137f9844f46e0272222e97d5ab391f240fd8b639d273f8830c2e",
+  "max_native_difference_from_prior_reference": 0.0,
+  "controller_source_commit": "a6bd181adb9bf7c2b0e59e975cb6caadd643ef33",
+  "scope_note": "Backward compatibility of the previously evaluated reference model, not deployment/promotion of a zoom-study checkpoint. Four real-input rows test interface parity; full quality evidence is the separate OOF study.",
+  "private_inputs_weights_predictions_or_logs_published": false
+}

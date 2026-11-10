@@ -69,3 +69,7 @@ The [protocol](zoom-study-protocol.md) gives the fitting command. A fresh output
 ```
 
 The executed notebook reads only the public aggregate JSON and needs neither competition images nor weights. Raw images, IDs, probabilities, checkpoints and logs remain in ignored local artifacts. No Kaggle submission or shared-service operation was performed.
+
+## Keep the existing model usable
+
+The [separate compatibility canary](zoom-serving-validation.json) reloads the previously evaluated reference checkpoint and compares native predictions with its prior reference, then exports the updated code and verifies fresh-workspace MLflow HTTP prediction. Four real-input rows match exactly; missing-field input is rejected with HTTP 400 and the private runtime is cleaned up. The package/lock/installed version is 0.2.0.dev3. This is backward compatibility of the existing model, not promotion of a study candidate, a load test or production ingress acceptance. Original canary-1 evidence remains unchanged.
