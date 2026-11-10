@@ -77,3 +77,7 @@ These are **score-equivalent placements**, not awarded final ranks for late subm
 The matched angle-branch and inference-augmentation study keeps the same five grouped folds, two training seeds and 30-epoch budget. Adding angle metadata lowers known-angle ensemble loss by only 0.000838 and reverses sign between seeds; its much larger all-row gain is dominated by missing-angle ships absent from test. Four-flip inference improves known-angle loss for both seeds in each architecture, while some folds still worsen.
 
 These are post-development diagnostics, not a new leaderboard result or an automatic model-selection rule. [The study](modeling-study.md) reports every condition, paired seed/fold effect and stratum; [the executed notebook](../notebooks/02-controlled-ablations.ipynb) visualizes the comparisons.
+
+## Matched zoom-policy follow-up
+
+Extreme zoom raises the paired ensemble known-angle OOF log loss by **0.004056** versus mild zoom. The two seed deltas are **+0.006397** and **+0.003993**; **8/10** paired seed/fold deltas worsen and **2/10** improve. These results retain all observations and do not replace the leaderboard scores or frozen reference recipe. [Protocol, source and limits](zoom-study.md).

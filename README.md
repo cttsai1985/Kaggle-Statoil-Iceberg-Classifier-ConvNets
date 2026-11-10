@@ -28,6 +28,10 @@ Private Top % is unavailable without a matched private leaderboard; OOF/holdout 
 
 The hardest 161 of 1,604 retained OOF examples contribute 73.02% of total log loss; 134 remain in the hardest cohort across both training seeds. Most have known incidence angles, so missing metadata alone does not explain the failures. This motivates inspecting image and acquisition conditions before adding model capacity. [Hard-case concentration, angle slices and next experiment](docs/error-analysis.md).
 
+## What the zoom comparison shows
+
+Extreme zoom raises the paired ensemble known-angle OOF log loss by **0.004056** versus mild zoom. The two seed deltas are **+0.006397** and **+0.003993**; **8/10** paired seed/fold deltas worsen and **2/10** improve. The default remains unchanged; this is a matched research comparison, not a new leaderboard result. [Study and limits](docs/zoom-study.md) · [Executed notebook](notebooks/03-zoom-severity.ipynb).
+
 ## Model
 
 A compact convolutional network learns spatial features from both radar bands together. Four progressively downsampled stages feed global average and maximum pooling; a dense head produces an iceberg probability. Native batch normalization, LayerNorm and AdamW replace the historical training implementation.
