@@ -122,17 +122,46 @@ def spatial_affine(
     )
 
 
-def augment(image: np.ndarray, rng: np.random.Generator) -> np.ndarray:
+ZOOM_POLICIES = {"current", "none", "mild_5pct", "extreme_5pct"}
+
+
+def keras_zoom(image: np.ndarray, scales: np.ndarray) -> np.ndarray:
+    """Keras-2 zoom geometry: centered output-to-input map, nearest sampling/fill."""
+    center = np.asarray(image.shape[-2:], dtype=float) / 2.0 + 0.5
+    matrix = np.diag(scales)
+    offset = center - matrix @ center
+    return np.stack(
+        [affine_transform(band, matrix, offset, order=0, mode="nearest") for band in image]
+    )
+
+
+def augment(
+    image: np.ndarray, rng: np.random.Generator, *, zoom_policy: str = "current"
+) -> np.ndarray:
+    if zoom_policy not in ZOOM_POLICIES:
+        raise ValueError(f"Unknown zoom policy: {zoom_policy}")
     image = image.copy()
     if rng.random() < 0.5:
         radians = np.deg2rad(rng.uniform(-15, 15))
-        inverse_scale = 1.0 / rng.uniform(0.9, 1.1)
+        sampled_scale = rng.uniform(0.9, 1.1)
+        inverse_scale = 1.0 / sampled_scale if zoom_policy == "current" else 1.0
         image = spatial_affine(
             image,
             inverse_scale
             * np.array([[np.cos(radians), -np.sin(radians)], [np.sin(radians), np.cos(radians)]]),
             rng.uniform(-0.05, 0.05, size=2) * np.asarray(image.shape[-2:]),
         )
+    if zoom_policy != "current":
+        # Consume the same random draws in all study arms, including the no-zoom control.
+        apply_zoom = rng.random() < 0.05
+        scale_draw = rng.random(2)
+        scales = {
+            "none": np.ones(2),
+            "mild_5pct": 0.9 + 0.2 * scale_draw,
+            "extreme_5pct": np.full(2, 0.1),
+        }[zoom_policy]
+        if apply_zoom:
+            image = keras_zoom(image, scales)
     image = np.rot90(image, k=int(rng.integers(0, 4)), axes=(1, 2))
     if rng.random() < 0.5:
         image = np.flip(image, axis=2)
@@ -150,10 +179,12 @@ class RadarDataset(Dataset):
         *,
         augment_images=False,
         seed=1017,
+        zoom_policy="current",
     ):
         self.data = data
         self.indices = np.asarray(indices)
         self.augment_images = augment_images
+        self.zoom_policy = zoom_policy
         self.rng = np.random.default_rng(seed)
         self.preprocessing = preprocessing
         self.angles = preprocessing.metadata(data.angles)
@@ -165,7 +196,7 @@ class RadarDataset(Dataset):
         index = self.indices[position]
         image = self.data.images[index]
         if self.augment_images:
-            image = augment(image, self.rng)
+            image = augment(image, self.rng, zoom_policy=self.zoom_policy)
         image = self.preprocessing.image(image)
         target = self.data.targets[index] if self.data.targets is not None else 0.0
         return torch.from_numpy(image), torch.from_numpy(self.angles[index]), target

@@ -33,3 +33,7 @@ The historical source does not fully specify all random states or preserve train
 The original files remain under [`legacy/`](../legacy/), including their relative directory structure. Their provenance is [commit d7f9f46](https://github.com/cttsai1985/kaggle-statoil-iceberg-solution/tree/d7f9f46145f067a82d3ddf3a9e6ca134bd098083/scripts).
 
 [Benchmark results](results.md) · [Experiment runbook](reproduction.md)
+
+## Measured zoom-policy follow-up
+
+The [matched zoom study](zoom-study.md) distinguishes the legal but extreme historical transform from its measured modern-model effect and unknown author intent. It does not replay the old Keras model or alter the normal default.

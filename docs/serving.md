@@ -41,6 +41,6 @@ This canary is a tested prerelease, not a split of live customer traffic. Endpoi
 
 ## Verified canary
 
-[The aggregate receipt](canary-validation.json) records this release's real-model package, producing model identity, locked runtime fingerprint, native-reference comparison, invalid-request rejection and cleanup. The checked request sample is an interface/parity test; full model evaluation remains in [results](results.md).
+[The original canary receipt](canary-validation.json) retains its canary-1 source and runtime. [The zoom follow-up compatibility receipt](zoom-serving-validation.json) separately verifies the retained reference model with the canary-3 code: four real-input rows, exact native/HTTP parity, HTTP 400 schema rejection, package identity and cleanup. It does not promote a study checkpoint or replace the original evidence. The checked request sample is an interface/parity test; full model evaluation remains in [results](results.md).
 
 After verification, use the same package with [MLflow's foreground serving command](https://github.com/cttsai1985/ml-infrastructure/blob/main/docs/serving.md#use-the-verified-model) to expose `/invocations` to an application. The canary verifier is intentionally bounded; the application endpoint has an explicitly managed lifetime.

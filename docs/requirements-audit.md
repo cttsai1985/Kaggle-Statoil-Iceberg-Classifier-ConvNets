@@ -107,3 +107,7 @@ its metric population or producer receipts. This audit does not compare every
 untracked private artifact or claim a fresh model-training reproduction.
 
 The published canary asset inventory was read through GitHub during this audit; release archives were not newly downloaded or unpacked. No new training or HTTP canary was executed by this requirements review.
+
+## Zoom study follow-up — 2026-11-10
+
+The optional training zoom policies change `data.py` and `runtime.py` in a new, source-pinned scientific study. Earlier byte-preservation statements above refer to the enumerated canary-2 comparisons, not these later module bytes. [Protocol](zoom-study-protocol.md), [results](zoom-study.md) and [aggregate evidence](zoom-study.json) retain all folds/seeds and independent reload checks. Default-function equivalence is measured separately on the same current stack; public/private leaderboard values remain unchanged. This does not close the production operations requirements.

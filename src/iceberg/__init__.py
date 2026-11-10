@@ -1,6 +1,6 @@
 """Maintained implementation; original 2017 scripts remain an immutable reference."""
 
-__version__ = "0.2.0.dev2"
+__version__ = "0.2.0.dev3"
 
 PROJECT_ID = "iceberg"
 REPOSITORY = "cttsai1985/kaggle-statoil-iceberg-solution"
