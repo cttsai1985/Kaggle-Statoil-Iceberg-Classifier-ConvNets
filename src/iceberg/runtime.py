@@ -48,6 +48,7 @@ DEFAULTS = {
     "weight_decay": 0.0001,
     "gradient_clip": 1.0,
     "augment": True,
+    "zoom_policy": "current",
     "max_train_rows": None,
     "threads": 4,
     "device": "auto",
@@ -107,6 +108,8 @@ def resolve_config(config: dict) -> dict:
         raise ValueError("max_train_rows must be null or an integer >= 2")
     if config["device"] not in {"auto", "cpu", "cuda"}:
         raise ValueError("device must be auto, cpu, or cuda")
+    if config["zoom_policy"] not in {"current", "none", "mild_5pct", "extreme_5pct"}:
+        raise ValueError("Unknown zoom policy")
     if config["tta"] not in {"none", "flips"}:
         raise ValueError("tta must be none or flips")
     return config
@@ -319,7 +322,12 @@ def train(
         )
         write_json(run_dir / "manifest.json", manifest)
         train_set = RadarDataset(
-            data, train_idx, preprocessing, augment_images=config["augment"], seed=config["seed"]
+            data,
+            train_idx,
+            preprocessing,
+            augment_images=config["augment"],
+            seed=config["seed"],
+            zoom_policy=config["zoom_policy"],
         )
         validation = RadarDataset(data, valid_idx, preprocessing)
         loader = DataLoader(
